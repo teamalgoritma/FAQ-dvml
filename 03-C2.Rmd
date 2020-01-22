@@ -1,0 +1,173 @@
+# Classification 2
+
+```{r setup, include=FALSE}
+# clear-up the environment
+rm(list = ls())
+
+# chunk options
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  comment = "#>"
+)
+
+# scientific notation
+options(scipen = 9999)
+```
+
+```{r}
+# libraries
+library(tidyverse)
+library(e1071)
+library(tm)
+library(katadasaR)
+library(textclean)
+```
+
+1. Dari berbagai metode klasifikasi yang telah dipelajari (logistic regression, KNN, naive bayes, decision tree, dan random forest), bagaimana pemilihan dalam penggunaan metode tersebut?
+
+   Pemilihan metode klasifikasi bergantung pada tujuan analisis yang dilakukan. Secara umum tujuan pemodelan klasifikasi adalah melakukan analisa terkait hubungan prediktor dengan target variabel atau melakukan prediksi.
+
+   Jika tujuannya adalah untuk melakukan analisa terkait hubungan antara prediktor dan target variabel dapat menggunakan logistic regression atau decision tree. Berikut kelebihan dan kekurangan dari kedua metode tersebut.
+
+   **Logistic regression:**
+
++ model klasifikasi yang cukup sederhana dan komputasinya cepat (+)
++ interpretable (+)
++ tidak mengharuskan scaling data (+)
++ baseline yang baik sebelum mencoba model yang lebih kompleks (+)
+- memerlukan kejelian saat melakukan feature engineering karena sangat bergantung pada data yang fit
+- tidak dapat mengevaluasi hubungan yang tidak linier (-)
+- mengharuskan antar prediktornya tidak saling terkait (cukup kaku) (-)
+
+   **Decision tree:**
+
++ tidak mengharuskan scaling data (+)
++ dapat mengevaluasi hubungan yang tidak linier (+)
++ antar prediktornya boleh saling berkaitan (+)
++ interpretable (+)
+- decision tree yang terbentu cenderung tidak stabil (sedikit perubahan pada data akan merubah struktur pohon yang dihasilkan) (-)
+- komputasi relatif lebih lama (-)
+- cenderung overfitting (-)
+
+   Jika tujuannya adalah melakukan prediksi dengan harapan tingkat akurasi yang tinggi, bisa menggunakan random forest. Karena metode ini merupakan metode klasifikasi yang menggabungkan beberapa metode, sehingga cukup robust (tidak sensitif) terhadap outlier, antar prediktor boleh saling berkaitan, bahkan mengatasi overfitting. 
+
+   Naive bayes umumnya digunakan untuk masalah-masalah yang berkaitan dengan klasifikasi text. Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi [The Naive Bayes Classifier](https://towardsdatascience.com/the-naive-bayes-classifier-e92ea9f47523)
+
+2. Apakah k-fold cross validation dapat digunakan untuk metode klasifikasi lain (selain random forest)?
+
+k-fold cross validation dapat digunakan untuk semua metode klasifikasi bahkan di luar metode klasifikasi yang telah dipelajari. Namun, karena k-fold cross validation tidak memperlihatkan hasil pemodelan untuk semua subset data (hanya mengambil yang terbaik, yaitu tingkat akurasi tertinggi), maka tetap perlu dilakukan cross validation untuk melakukan evaluasi model. Berikut contoh k-fold cross validation untuk metode lain (selain random forest).
+```{r eval=FALSE}
+set.seed(417)
+ctrl <- trainControl(method = "repeatedcv", number = 5, repeats = 3)
+# parameter method dapat disesuaikan dengan metode klasifikasi yang digunakan
+model <- train(attrition ~ ., data = train, method = "ctree", trControl = ctrl)
+```
+
+3. Apakah pada metode KNN, naive bayes, decision tree, dan random forest hasilnya dapat berupa probability?
+
+   Pada dasarnya semua metode klasifikasi akan menghasilkan probability, bukan langsung kelas. Namun, kebanyakan metode klasifikasi secara default di R langsung menghasilkan kelas (threshold 0.5). Untuk menghasilkan probability dapat menambahkan parameter `type` saat mealukan `predict()`. Berikut beberapa `type` untuk metode klasifikasi yang dipelajari:
+
+- `response` untuk logistic regression
+- `raw` untuk naive bayes
+- `probability` untuk decision tree dan random forest
+
+4. Apakah metode naive bayes dapat diterapkan untuk prediktor bertipe numerik? peluang apa yang dihitung?
+
+Naive bayes dapat diterapkan pada berbagai permasalahan klasifikasi bukan hanya pada klasifikasi text. Jika prediktor yang digunakan bertipe numerik naive bayes akan menghitung peluang rata-rata (mean) dan standard deviation (sd) untuk setiap level target. Berikut contoh naive bayes pada data `iris`.
+```{r}
+naiveBayes(Species ~ ., iris)
+```
+
+5. Bagaimana cara menghapus `stopwords` dalam bahasa indonesia?
+
+Download terlebh dahulu file.txt (`stopwords id.txt`) yang berisi stopwords bahasa indonesia di internet. Kemudian import `stopwords id.txt` tersebut dengan menggunakan fungsi `readLines()`.
+```{r}
+# import Indonesia stopwords
+stop_id <- readLines("data/03-C2/stopwords_id.txt")
+
+# generate data frame
+text <- data.frame(sentence = c("saya tertarik belajar data science di @algoritma :)",
+                                "anda tinggal di Jakarta",
+                                "Ingin ku merat🔥 na👍",
+                                "selamat tahun baru #2020 !",
+                                "pingin makan yang kek gitu"))
+```
+
+Mengubah text dalam bentuk data frame ke bentuk corpus dengan menggunakan fungsi `VectorSource()` dan `VCorpus()` dari library `tm`. Setelah itu, baru dapat menghapus stopwords dengan menggabungkan fungsi `tm_map()` dan `removeWords()`.
+```{r}
+text_clean1 <- text %>%
+  pull(sentence) %>% 
+  VectorSource() %>% 
+  VCorpus() %>% 
+  tm_map(removeWords, stop_id)
+
+text_clean1[[1]]$content
+```
+
+6. Bagaimana cara mengubah kata berimbuhan mejadi kata dasarnya saja dalam bahasa Indonesia?
+
+Untuk mengubah kata berimbuhan menjadi kata dasar dalam bahasa Indonesia dapat menggunakan fungsi `katadasaR()` dari library `katadasaR`. Namun, fungsi tersebut hanya menerima 1 inputan (1 value) saja sehigga dibutuhkan fungsi `sapply()` untuk mengaplikasikan fungsi tersebut ke dalam 1 kalimat.
+```{r}
+# membuat fungsi untuk mengubah kata berimbuhan menjadi kata dasar
+kata_dasar <- function(x) {
+  paste(sapply(words(x), katadasaR), collapse = " ")
+  }
+```
+
+Menggunakan fungsi di atas dengan menggabungkan fungsi `tm_map()` dan `content_transformer()`.
+```{r}
+text_clean2 <- text %>%
+  pull(sentence) %>% 
+  VectorSource() %>% 
+  VCorpus() %>% 
+  tm_map(content_transformer(kata_dasar))
+
+text_clean2[[1]]$content
+```
+
+7. Bagaiamana cara menghapus emoticon dan emoji?
+
+Untuk menghapus emoticon dan emoji dapat menggunakan fungsi `replace_emoji()` dan `replace_emoticon()` dari library `textclean`. Namun, fungsi tersebut hanya menerima tipe data berupa karakter sehingga harus diubah terlebih dahulu tipe datanya jika masih belum karakter. 
+```{r}
+text_clean3 <- text %>%
+  mutate(sentence = as.character(sentence)) %>% 
+  pull(sentence) %>% 
+  replace_emoji() %>% 
+  replace_emoticon()
+
+text_clean3
+```
+
+8. Bagaimana cara menghapus mention dan hashtag?
+
+Untuk menghapus mention dan hashtag dapat menggunakan fungsi `replace_hash()` dan `replace_tag()` dari library `textclean`.
+```{r}
+text_clean4 <- text %>%
+  mutate(sentence = as.character(sentence)) %>% 
+  pull(sentence) %>% 
+  replace_hash() %>% 
+  replace_tag()
+
+text_clean4
+```
+
+9. Bagaimana cara menghapus slang words?
+
+Untuk menghapus slang words dapat menggunakan fungsi `replace_internet_slang()` dari library `textclean`.
+```{r}
+slang_id <- read.csv("data/03-C2/colloquial-indonesian-lexicon.csv") 
+
+text_clean5 <- text %>%
+  mutate(sentence = as.character(sentence)) %>% 
+  pull(sentence) %>%
+  replace_internet_slang(slang = paste0('\\b', slang_id$slang, '\\b') , 
+                         replacement = slang_id$formal, 
+                         ignore.case = T)
+
+text_clean5
+```
+
+Berikut link eksternal yang dapat dijadikan sebagai bahan referensi dalam melakukan cleaning text [TEXT CLEANING BAHASA INDONESIA](hthttps://algotech.netlify.com/blog/text-cleaning-bahasa/) dan [TEXT CLEANING BAHASA INGGRIS](https://algotech.netlify.com/blog/textclean/)
+

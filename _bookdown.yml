@@ -1,0 +1,14 @@
+book_filename: "FAQ"
+rmd_files:
+  - "index.Rmd"
+  - "01-RM.Rmd"
+  - "02-C1.Rmd"
+  - "03-C2.Rmd"
+  - "04-UL.Rmd"
+  - "05-TS.Rmd"
+  - "06-NN.Rmd"
+output_dir: "book"
+new_session: true
+language:
+  ui:
+    chapter_name: "Chapter "
