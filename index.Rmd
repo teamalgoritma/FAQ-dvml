@@ -5,10 +5,6 @@ date: "`r format(Sys.Date(), '%B %e, %Y')`"
 documentclass: book
 ---
 
-# Forewords {-}
+# Pendahuluan {-}
 
-Algoritma providing workshop to help working professionals and students to achieve basic and advanced skill in various data science sub-fields, including: data visualization, machine learning, data modeling, statistical inference etc.
-
-# Disclaimer {-}
-
-This coursebook is produced by Team [Algoritma](algorit.ma){target="_blank"} for its Data Science Academy workshops. No part of this coursebook may be reproduced in any form without permission from the author, and is inteded for restricted audiences that participate on the workshop. 
+Algoritma menyediakan pelatihan untuk membantu para pekerja profesional maupun pelajar untuk mencapai keterampilan dasar dalam berbagi bidang data science yang terdiri dari: Data Visualization, Machine Learning, Data Modelling, Inferensial Statistik, dll. Kumpulan FAQ ini diproduksi oleh tim [Algoritma](algorit.ma) untuk membantu para peserta `Data Science Academy` atau khalayak umum mengenai pertanyaan pertanyaan yang sering ditemukan mengenai topik machine learning. 

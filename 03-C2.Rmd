@@ -23,6 +23,9 @@ library(e1071)
 library(tm)
 library(katadasaR)
 library(textclean)
+library(rsample)
+library(caret)
+library(recipes)
 ```
 
 1. Dari berbagai metode klasifikasi yang telah dipelajari (logistic regression, KNN, naive bayes, decision tree, dan random forest), bagaimana pemilihan dalam penggunaan metode tersebut?
@@ -82,7 +85,7 @@ naiveBayes(Species ~ ., iris)
 
 5. Bagaimana cara menghapus `stopwords` dalam bahasa indonesia?
 
-Download terlebh dahulu file.txt (`stopwords id.txt`) yang berisi stopwords bahasa indonesia di internet. Kemudian import `stopwords id.txt` tersebut dengan menggunakan fungsi `readLines()`.
+File stopwords dapat di download terlebih dahulu di [link](https://github.com/stopwords-iso/stopwords-id) berikut. Kemudian import `stopwords id.txt` tersebut dengan menggunakan fungsi `readLines()`.
 ```{r}
 # import Indonesia stopwords
 stop_id <- readLines("data/03-C2/stopwords_id.txt")
@@ -105,6 +108,7 @@ text_clean1 <- text %>%
 
 text_clean1[[1]]$content
 ```
+
 
 6. Bagaimana cara mengubah kata berimbuhan mejadi kata dasarnya saja dalam bahasa Indonesia?
 
@@ -170,4 +174,85 @@ text_clean5
 ```
 
 Berikut link eksternal yang dapat dijadikan sebagai bahan referensi dalam melakukan cleaning text [TEXT CLEANING BAHASA INDONESIA](hthttps://algotech.netlify.com/blog/text-cleaning-bahasa/) dan [TEXT CLEANING BAHASA INGGRIS](https://algotech.netlify.com/blog/textclean/)
+
+10. Bagaimana penanganan terhadap data missing values?
+
+Terdapat berbagai cara menangani data yang mengandung missing value. Cara yang paling serig digunkan untuk menangani data yang mengandung missing value, yaitu deletion, full analysis, dan imputation.
+
+## Deletion
+
+Deletion adalah membuang variabel/kolom pada data yang memiliki jumlah missing value (`NA`) melebihi 50% dari jumlah observasi. Hal ini menganggap bahwa variabel tersebut tidak banyak memberikan informasi pada data (variansinya mendekati 0). Ketika membuang variabel perlu memperhatikan business case dari data tersebut, apakah variabel yang dibuang akan menghilangkan informasi yang cukup signfikan atau tidak ? Apakah ketika variabel tersebut dibuang ada informasi yang berkurang dari data tersebut atau tidak ?
+
+## Full analysis
+
+Full analysis adalah membuang observasi/baris yang mengandung missing value. Cara ini dilakukan jika jumlah observasi yang mengandung missing value `NA` tidak melebihi 5% dari total observasi data. 
+
+Sebagai contoh akan digunakan data `credit_data`:
+```{r}
+load("data/03-C2/credit_data.RData")
+
+head(credit_data, 5)
+
+# cek missing value pada data
+anyNA(credit_data)
+
+# cek missing value terdapat pada variabel/kolom yang mana
+colSums(is.na(credit_data))
+```
+
+Untuk menangani missing value pada data di atas dapat melakukan full analysis dengan menggunakan function `na.omit`:
+
+```{r}
+credit_full <- credit_data %>%
+                na.omit()
+
+colSums(is.na(credit_full))
+```
+
+Dari output di atas diketahui bahwa data `credit_data` sudah tidak mengandung missing value. Namun, jika diperhatikan jumlah observasi/baris pada data menjadi berkurang yang pada awalnya terdapat 4454 observasi setelah dilakukan full analysis menjadi 4039 observasi dengan variabel/kolom yang jumlahnya tetap sama.
+
+## Imputation
+
+Jika jumlah missing value pada data cukup banyak (melebihi 5% jumlah observasi), kita dapat melakukan imputation yaitu mengisi missing value tersebut dengan sutu nilai tertentu. Biasanya imputation dilakukan bedasarkan business knowledge dari variabel tersebut, misalkan variabel jumlah pengunjung per jam pada sebuah restoran. Seharusnya terdapat jumlah visitor yang bernilai 0 pada jam-jam tertentu karena pasti terdapat kemungkinan pada jam-jam tertentu tidak terdapat pengunjung. Tetapi, jika secara business knowledge seharusnya observasi tersebut memiliki suatu nilai, kita bisa melakukan imputation dengan menggunakan pusat datanya seperti mean/median untuk variabel numerik dan modus untuk variabel kategorik.
+
+Sebelum melakukan imputation untuk mengisi data yang mengandung missing value terlebih dahulu dilakukan cross validation, yaitu membagi data menjadi **training set** untuk proses pemodelan dan **testing set** untuk melakukan evaluasi. Jika pada data test terdapat missing value, imputation akan dilakukan dengan memanfaatkan informasi dari data train. Data train dan data test tidak langsung dimasukkan ke dalam suatu objek melainkan dilakukan tahapan data pre-paration terlebih dahulu yang di dalamnya termasuk melakukan tahapan imputation. 
+
+Cross validation akan dilakukan dengan menggunakan fungsi `initial_split()` dari library `rsample`. Fungsi tersebut akan melakukan proses sampling untuk cross validation dengan metode **stratified random sampling**, sehingga proporsi target variabel pada data awal, akan dipertahankan baik pada training set maupun testing set.
+```{r}
+set.seed(417)
+
+splitted <- initial_split(data = credit_data, prop = 0.8, strata = "Status")
+
+splitted
+```
+
+Imputation dilakukan dengan menggunakan Step Functions - Imputation dari library `recipes` yang didefinisikan dalam sebuah **recipe**.
+```{r}
+rec <- recipe(Status ~ ., training(splitted)) %>%
+  # `step_meanimpute()` dapat diganti dengan Step Functions - Imputation lain
+  step_meanimpute(Income, Assets, Debt) %>%
+  prep()
+```
+
+Setelah mendefinisikan proses data preparation pada objek `rec`, selanjutnya proses tersebut diterapkan ke data train menggunakan fungsi `juice()` dan ke data test menggunakan fungsi `bake()` dari library `recipes`.
+```{r}
+# membuat data train dengan fungsi `juice()`
+train <- juice(rec)
+
+# membuat data test dengan fungsi `bake()`
+test <- bake(rec, testing(splitted))
+```
+
+```{r}
+colSums(is.na(train))
+colSums(is.na(test))
+```
+
+Dari output di atas diketahui bahwa variabel `Income`, `Assets`, dan `Debt` sudah tidak mengandung missing value. 
+
+- Link artikel mengenai missing value [6 Different Ways to Compensate for Missing Values In a Dataset (Data Imputation with examples)](https://towardsdatascience.com/6-different-ways-to-compensate-for-missing-values-data-imputation-with-examples-6022d9ca0779)
+
+- Link mengenai Step Functions - Imputation dari library `recipes` [Step Functions - Imputation](https://tidymodels.github.io/recipes/reference/index.html#section-step-functions-imputation)
+
+
 

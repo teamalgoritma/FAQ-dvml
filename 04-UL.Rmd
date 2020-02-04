@@ -20,6 +20,9 @@ options(scipen = 9999)
 # libraries
 library(tidyverse)
 library(FactoMineR)
+library(factoextra)
+library(rsample)
+library(recipes)
 library(plotly)
 ```
 
@@ -71,7 +74,21 @@ biplot(pca_us, choices = 2:3)
 
 6. Bagaimana best practice dalam penentuan jumlah cluster?
 
-   Penentuan jumlah cluster yang akan dibuat bergantung pada kebutuhan bisnis dalam industri. Namun, secara statistik penentuan jumlah cluster dapat dilakukan berdasarkan penurunan wss seperti yang telah dijelaskan pada pertanyaan sebelumnya. Hal yang perlu diperhatikan, yaitu jumlah cluster yang dipilih adalah jumlah cluster yang ketika dilakukan penambahan cluster sudah tidak mengakibatkan penurunan wss yang signifikan (pada grafik berbentuk landai), kemudian disesuaikan dengan kebutuhan bisnis pada industri. Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi [10 Tips for Choosing the Optimal Number of Clusters](https://towardsdatascience.com/10-tips-for-choosing-the-optimal-number-of-clusters-277e93d72d92)
+   Fungsi `kmeans()` tidak dapat menentukan jumlah cluster secara otomatis. Jumlah cluster tetap ditentukan oleh user berdasarkan kebutuhan bisnis. Namun, secara statistik penentuan jumlah cluster dapat dilakukan berdasarkan penurunan wss. Secara sederhana, penurunan wss dapat divisualisasikan dengan menggunakan fungsi `fviz_nbclust()` dari library `factoextra`. Berikut contoh memvisualisasikan penurunan wss dengan menggunakan data `USArrests`:
+```{r}
+head(USArrests, 6)
+
+# scaling data
+USArrests_scale <- scale(USArrests)
+```
+
+Melakukan visualisasi penurunan wss dengan menggunakan fungsi `fviz_nbclust()` dari library `factoextra`.
+```{r}
+set.seed(100)
+fviz_nbclust(USArrests_scale, method = "wss", kmeans)
+```
+
+Jumlah cluster yang dipilih adalah jumlah cluster yang ketika dilakukan penambahan cluster sudah tidak mengakibatkan penurunan wss yang signifikan (pada grafik bentuknya landai), kemudian disesuaikan dengan kebutuhan bisnis pada industri.
 
 7. Apakah kita dapat memvisualisasikan biplot dengan 3 dimensi?
 
@@ -100,3 +117,153 @@ Langkah berikutnya adalah memvisualisasikan PC dan membedakan warna observasi be
 ```{r eval=FALSE}
 plot_ly(df_pca,x = ~Dim.1, y = ~Dim.2, z = ~Dim.3, color = ~cluster)
 ```
+
+8. Bagaimana implementasi PCA pada data pre-processing?
+
+Berikut ini aku dilakukan implementasi PCA pada tahapan data pre-processing dengan menggunakan data `attrition`.
+```{r}
+attrition <- read.csv("data/04-UL/attrition.csv")
+
+head(attrition, 5)
+```
+
+Sebelum melakukan PCA terlebih dahulu dilakukan cross validation, yaitu membagi data menjadi **training set** untuk proses pemodelan dan **testing set** untuk melakukan evaluasi. Namun, data train dan data test tidak langsung dimasukkan ke dalam sebuah objek melainkan dilakukan PCA terlebih dahulu.
+
+Cross validation akan dilakukan dengan menggunakan fungsi `initial_split()` dari library `rsample`. Fungsi tersebut akan melakukan proses sampling untuk cross validation dengan metode **stratified random sampling**, sehingga proporsi target variabel pada data awal, akan dipertahankan baik pada training set maupun testing set.
+```{r}
+set.seed(417)
+splitted <- initial_split(data = attrition, prop = 0.8, strata = "attrition")
+
+splitted
+```
+
+Melakukan tahapan data preparation yang didalamnya termasuk melakukan PCA. Data preparation yang akan dilakukan adalah menghapus variabel yang dianggap tidak berpengaruh, membuang variabel yang variansinya mendekati 0 (tidak informatif), melakukan scaling, dan melakukan PCA. Proses yang dilakukan pada tahapan data preparation akan dilakukan dengan menggunakan fungsi dari library `recipes`, yaitu `step_rm()` untuk menghapus variabel, `step_nzv()` untuk membuang variabel yang variansinya mendekati 0,`step_center()` dan `step_scale()` untuk melakukan scaling, terakhir `step_pca()` untuk melakukan PCA.
+```{r}
+rec <- recipe(attrition ~ ., training(splitted)) %>% 
+  step_rm(employee_count, employee_number) %>%
+  step_nzv(all_predictors()) %>% 
+  step_center(all_numeric()) %>% 
+  step_scale(all_numeric()) %>% 
+  step_pca(all_numeric(), threshold = 0.8) %>% 
+  prep()
+```
+
+Setelah mendefinisikan proses data preparation pada objek `rec`, selanjutnya proses tersebut diterapkan ke data train menggunakan fungsi `juice()` dan ke data test menggunakan fungsi `bake()` dari library `recipes`.
+```{r}
+train <- juice(rec)
+
+# melihat hasil data train setelah dilakukan tahapan data preparation
+head(train, 5)
+```
+
+```{r}
+test <- bake(rec, testing(splitted))
+
+# melihat hasil data test setelah dilakukan tahapan data preparation
+head(test, 5)
+```
+
+Dari output di atas diketahui bahwa variabel numerik sudah berbentuk sebuah PC.
+
+9. Bagaimana penggunaan visualisasi PCA menggunakan package `factoextra`?
+
+## PCA
+
+Kita akan mencoba melakukan visualisasi pada data setelah dilakukan PCA dengan menggunakan data `loan`.
+```{r}
+loan <- read.csv("data/04-UL/loan2017Q4.csv")
+
+head(loan, 5)
+```
+
+Sebelum melakukan PCA kita akan melakukan tahapan data preparation terlebih dahulu dengan membuang variabel `initial_list_status`, `home_ownership`, dan `not_paid` karena visualisasi yang akan dibuat tidak memerlukan insight dari ketiga variabel tersebut.
+```{r}
+loan_clean <- loan %>% 
+  select(-c(initial_list_status, home_ownership, not_paid))
+```
+
+Membuat PCA dengan menggunakan fungsi `PCA()` dari library `FactoMiner`. Parameter yang digunakan adalah:
+
+- `ncp`: Jumlah PC yang akan dihasilkan. Secara default fungsi `PCA()` hanya akan menampilkan 5 PC awal (5 PC yang membawa informasi paling banyak).
+
+- `quali.sup`: Nomor kolom dari varaibel kategorik.
+
+- `graph`: Sebuah logical value. T akan menampilkan hasil visualisasi, F tidak menampilkan hasil visualisasi. Secara default fungsi `PCA()` akan langsung menampilkan hasil visualisasi.
+```{r}
+pca_loan <- PCA(loan_clean, ncp = 10, quali.sup = c(1, 6, 7), graph = F)
+```
+
+Setelah membuat PCA, selanjutnaya adalah membuat visualisasi dari hasil PCA. Kita akan membuat individual plot menggunakan fungsi `fviz_pca_ind()` dari library `factoextra`. Parameter yang digunakan adalah:
+
+- Hasil PCA
+
+- `habillage`: Variabel kategori yang dipilih, setiap individu akan dibedakan berdasarkan variabel kategori yang dipilih.
+
+- `select.ind`: Jumlah individu dengan kontribusi tertinggi yang ingin dilihat.
+```{r}
+fviz_pca_ind(pca_loan, habillage = 6, select.ind = list(contrib = 10))
+```
+
+Plot individu di atas hanya menampilkan 10 observasi yang memberikan informasi tertinggi terhadap PC1 dan PC2. Namun, terdapat lebih dari 10 titik observasi yang terdapat pada plot di atas karena terdapat titik observasi yang merupakan titik pusat dari tiap status verifikasi.
+
+## Cluster
+
+Kita akan mencoba melakukan visualisasi hasil clustering dengan menggunakan data `USArrests`.
+```{r}
+head(USArrests, 5)
+
+# scaling data `USArrests`
+USArrests_scale <- scale(USArrests)
+```
+
+Menentukan jumlah cluster yang akan dibuat berdasarkan penurunan wss. Supaya lebih mudah menentukan penurunan wss yang sudah tidak signifikan ketika menambah jumlah cluster, maka dibuat visualisasinya dengan menggunakan fungsi `fviz_nbclust()` dari library `factoextra`.
+```{r}
+set.seed(100)
+fviz_nbclust(USArrests_scale, method = "wss", kmeans)
+```
+
+Melakukan k-means clustering dengan jumlah cluster 5 berdasarkan hasil penurunan wss di atas menggunakan fungsi `kmeans()`. 
+```{r}
+set.seed(100)
+USArrests_cl <- kmeans(USArrests_scale, 5)
+```
+
+Membuat visualisasi hasil cluster dengan menggunakan fungsi `fviz_cluster()` dari library `factoextra`.
+```{r}
+# `USArrests` bisa diganti dengan yang sudah dilakukan scaling `USArrests_scale` 
+fviz_cluster(USArrests_cl, USArrests)
+```
+
+Mengkombinasikan visualisasi hasil clusterig dengan PCA. Untuk melakukan hal tersebut kita harus menambahkan kolom cluster pada data `USArrests`.
+```{r}
+USArrests_clean <- USArrests %>% 
+  mutate(cluster = USArrests_cl$cluster)
+
+head(USArrests_clean, 5)
+```
+
+Kita akan mengubah nama baris yang awalnya berupa indeks menjadi nama negara sesuai dengan data `USArrests`.
+```{r}
+rownames(USArrests_clean) <- rownames(USArrests)
+
+head(USArrests_clean, 5)
+```
+
+Membuat PCA terlebih dahulu untuk mengkombinasikan visualisasi hasil clustering dengan PCA dengan menggunakan `PCA()`.
+```{r}
+pca_USArrest <- PCA(USArrests_clean, quali.sup = 5, graph = F)
+```
+
+Mengkombinasikan visualisasi hasil clustering dan PCA menggunakan fungsi `fviz_pca_biplot()` dari library `factoextra`. Parameter yang digunakan adalah:
+
+- Hasil PCA
+
+- `habillage`: Variabel kategori yang dipilih, setiap individu akan dibedakan berdasarkan variabel kategori yang dipilih.
+
+- `addEllipses`: Sebuah logical value. T akan menambah elips untuk ssetiap cluster, F sebaliknya. Secara default fungsi `fviz_pca_biplot()` tidak akan menambah elips pada plot individu.
+```{r}
+fviz_pca_biplot(pca_USArrest, habillage = 5, addEllipses = T)
+```
+
+Dari plot di atas terlihat bahwa antar cluster saling tumpang tindih, namun kenyataannya antar cluster pasti memiliki observasi/individu yang unik. Hal tersebut terjadi karena kita mencoba untuk memvisualisasikan cluster yang dibentuk dari 4 variabel/dimensi mejadi 2 variabel/dimensi saja.
+
