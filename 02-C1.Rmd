@@ -51,7 +51,7 @@ Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi
 
    Parameter pada model logistik regression diperoleh dari pendekatan MLE. MLE merupakan pendekatan statistik untuk memperkirakan paramater pada model.
 
-7. Pada kasus klasifikasi, kenapa matrix accuracy tidak cukup menjelaskan seberapa baik model yang diperoleh?
+7. Pada kasus klasifikasi, kenapa pengukuran accuracy tidak cukup menjelaskan seberapa baik model yang diperoleh?
 
    Untuk mengetahui seberapa baik perfomance model klasifikasi, tidak cukup dengan melihat nilai accuracy nya saja, karena accuracy menganggap sama penting untuk nilai false positive dan false negative. Kita membutuhkan perhitungan lain seperti precision dan recall, contohnya untuk memprediksi pasien mengidap kanker jinak atau ganas. Tentunya akan lebih berbahaya jika kemampuan model yang kita miliki cenderung lebih baik memprediksi kanker ganas namun terprediksi menjadi jinak. Pada kasus ini karena kelas positif yang dimiliki adalah kanker ganas, maka kita akan mementingkan nilai recall lebih besar dibandingkan nilai pengukuran lainnya.
 
