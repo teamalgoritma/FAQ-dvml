@@ -41,7 +41,7 @@ library(recipes)
    Null deviance menunjukkan seberapa baik target variabel diprediksi oleh model berdasarkan nilai intercept. Sedangkan residual deviance menunjukkan seberapa baik target variabel diprediksi oleh model berdasarkan intercept dan semua variabel independen yang digunakan.
    
 Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi  
-[link](https://www.theanalysisfactor.com/r-glm-model-fit/)
+[Null deviance & Residual deviance](https://www.theanalysisfactor.com/r-glm-model-fit/)
 
 5. Apa itu `Fisher Scoring` pada output summary?
 
@@ -57,7 +57,7 @@ Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi
 
 8. Permasalahan apa yang paling sering ditemui pada kasus klasifikasi?
 
-   Permasalahan besar kasus klasifikasi adalah dataset yang tidak seimbang. Contohnya pada case churn telekomunikasi, employee attrition, prediksi kankes, fraud detection, dan sebagainya. Dalam hal tersebut, biasanya jumlah kelas positif jauh lebih sedikit dibandingkan kelas negatif. 
+   Permasalahan besar kasus klasifikasi adalah dataset yang tidak seimbang. Contohnya pada case churn telekomunikasi, employee attrition, prediksi kanker, fraud detection, dan sebagainya. Dalam hal tersebut, biasanya jumlah kelas positif jauh lebih sedikit dibandingkan kelas negatif. 
 
    Misalkan pada kasus fraud detection, dari 1000 transaksi yang dimiliki, 10 diantaranya fraud, sedangkan sisanya tidak fraud. Kemudian perfomance model yang diperoleh sekitar 85%, mungkin terdengar sangat baik, namun pada kenyatannya tidak. Kemungkinan besar model tersebut hanya mampu memprediksi salah satu kelas kelas mayoritas yaitu yang tidak fraud, sedangkan kelas positif yang kita miliki sangat sedikit data yang dimiliki.
 

@@ -186,7 +186,7 @@ Membuat PCA dengan menggunakan fungsi `PCA()` dari library `FactoMiner`. Paramet
 
 - `ncp`: Jumlah PC yang akan dihasilkan. Secara default fungsi `PCA()` hanya akan menampilkan 5 PC awal (5 PC yang membawa informasi paling banyak).
 
-- `quali.sup`: Nomor kolom dari variabel kategorik.
+- `quali.sup`: Nomor kolom dari varaibel kategorik.
 
 - `graph`: Sebuah logical value. T akan menampilkan hasil visualisasi, F tidak menampilkan hasil visualisasi. Secara default fungsi `PCA()` akan langsung menampilkan hasil visualisasi.
 ```{r}

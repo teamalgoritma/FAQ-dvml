@@ -1,9 +1,14 @@
 --- 
 title: "FAQ"
 author: "Team Algoritma"
-date: "February  4, 2020"
+date: "February  5, 2020"
 documentclass: book
 ---
+
+<style>
+body {
+text-align: justify}
+</style>
 
 # Pendahuluan {-}
 

@@ -28,7 +28,7 @@ library(keras)
 - Jumlah nodes biasanya semakin mengecil ketika hidden layers semakin dekat dengan output layer. Tujuannya adalah untuk melihat fitur dengan lebih spesifik. 
 - Kebanyakan orang menggunakan angka biner $2^{n}$ seperti 1, 2, 4, 8, 16, 32, 64, 128, 256, dst karena neural network merupakan metode yang berasal dari orang computer science dan mathematics yang biasa menggunakan angka biner.
 
-2. Fungsi aktivasi apa yang sering digunakan ketika membuat arsitektur neural network ?
+2. Fungsi aktivasi apa yang sering digunakan ketika membuat arsitktur neural network ?
 
 - Pada hidden layer biasa digunakan fungsi aktivasi `relu` karena `relu` melakukan transformasi data dengan mengubah nilai negatif menjadi 0 dan membiarkan nilai positif, sehingga semakin ke belakang informasi yang dibawa tidak banyak berkurang.
 - Pada output layer: jika casenya adalah regresi digunakan fungsi aktivasi `linear`, jika casenya adalah klasifikasi biner digunakan fungsi aktivasi `sigmoid`, dan jika casenya adalah klasifikasi multiclass digunakan fungsi aktivasi `softmax`.
@@ -36,8 +36,8 @@ library(keras)
 3. Bagaimana menentukan batch size dan jumlah epoch ?
 
 - Batch size biasanya menggunakan angka yang dapat membagi habis jumlah data, supaya data yang tersedia dapat digunakan secara keseluruhan (tidak ada yang tidak terpakai). Contoh:
-Jika data train terdiri dari 800 observasi, kita bisa menggunakan batch size 200 yang dapat membagi habis 80 observasi.
-- Jumlah epoch dimulai dari angka yang kecil terlebih dahulu supaya komputasi yang dilakukan tidak terlalu lama, kemudian dilihat apakah error dan accuracy yang dhasilkan sudah konvergen atau belum. Jika belum bisa menambahkan jumlah epoch sedikit demi sedikit, dan sebaliknya.
+Jika data train terdiri dari 800 observasi, kita bisa menggunakan batch size 200 yang dapat embagai habis 80 observasi.
+- Jumlah epoch dimulai dari angka yang kecil terlebih dahulu supaya komputasi yang dilakukan tidak terlalu lama, kemudian dilihat apakah error dan accuracy yang dhasilkan sudah konvergen atau belum. Jika belum bisa menambaha jumlah epoch sedikit demi sedikit, dan sebaliknya.
 
 4. Bagaimana menentukan learning rate yang tepat ?
 

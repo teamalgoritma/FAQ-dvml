@@ -64,9 +64,13 @@ dat %>%
 
 7. Jika hasil decomposition pada trend masih membentuk pola berulang, apa yang terjadi?
 
-   Ketika hasil decomposition yang diperoleh pada trend masih membentuk pola berulang, itu artinya masih terdapat pola seasonal yang belum tertangkap, kemungkinan data yang digunakan memiliki multiple seasonal, untuk membuat object ts pada pola data multiple seasonal dapat menggunakan function msts(). Untuk penanganan multiple seasonal lebih lengkap nya dapat di cek pada link berikut ini. [multiple seasonal](https://algotech.netlify.com/blog/multiple-seasonal/)
+   Ketika hasil decomposition yang diperoleh pada trend masih membentuk pola berulang, itu artinya masih terdapat pola seasonal yang belum tertangkap, kemungkinan data yang digunakan memiliki multiple seasonal, untuk membuat object ts pada pola data multiple seasonal dapat menggunakan function msts(). 
+   
+   Berikut merupakan link eksternal untuk penanganan [Multiple Seasonal](https://www.researchgate.net/post/How_many_components_can_I_retrieve_in_principal_component_analysis).  
+   
+   Untuk penanganan multiple seasonal lebih lengkap nya dapat di cek pada link berikut ini. [multiple seasonal](https://algotech.netlify.com/blog/multiple-seasonal/)
 
-8. Apakah pada metode arima kita dapat menambahkan variable prediktor pada analis?
+8. Apakah pada metode arima kita dapat menambahkan variable prediktor pada analisis?
 
 Untuk analisis time series dengan variabel prediktor lainnya dapat menggunakan parameter `xreg` pada function `Arima()` dan `auto.arima()`.
 ```{r}
@@ -76,9 +80,9 @@ Arima(y = uschange[,1], xreg = uschange[,2], order = c(1,1,0))
 auto.arima(y = uschange[,1], xreg = uschange[,2])
 ```
 
-Untuk detail lengkapnya dapat di lihat pada link berikut ini: [link](https://otexts.com/fpp2/regarima.html)
+Untuk detail lengkapnya dapat di lihat pada link berikut ini: [Regression ARIMA](https://otexts.com/fpp2/regarima.html)
 
-9. Nilai error yang harus dilihat dan diperhatikan ? Kapan menggunakan MAE/RMSE/MAPE ?
+9. Nilai error yang harus dilihat dan diperhatikan? Kapan menggunakan MAE/RMSE/MAPE?
 
    Tidak ada jawaban pasti untuk mengetahui penggunaan ketiga error tersebut. Tentunya setiap indikator memiliki memiliki kelebihan dan kekurangan masing-masing. Berikut ringkasan dari ketiga error tersebut:
 

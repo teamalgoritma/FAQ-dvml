@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>FAQ</title>
   <meta name="description" content="FAQ" />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
 
   <meta property="og:title" content="FAQ" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Team Algoritma" />
 
 
-<meta name="date" content="2020-02-04" />
+<meta name="date" content="2020-02-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -168,8 +168,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">FAQ</h1>
 <p class="author"><em>Team Algoritma</em></p>
-<p class="date"><em>February 4, 2020</em></p>
+<p class="date"><em>February 5, 2020</em></p>
 </div>
+<style>
+body {
+text-align: justify}
+</style>
 <div id="pendahuluan" class="section level1 unnumbered">
 <h1>Pendahuluan</h1>
 <p>Algoritma menyediakan pelatihan untuk membantu para pekerja profesional maupun pelajar untuk mencapai keterampilan dasar dalam berbagi bidang data science yang terdiri dari: Data Visualization, Machine Learning, Data Modelling, Inferensial Statistik, dll. Kumpulan FAQ ini diproduksi oleh tim <a href="algorit.ma">Algoritma</a> untuk membantu para peserta <code>Data Science Academy</code> atau khalayak umum mengenai pertanyaan pertanyaan yang sering ditemukan mengenai topik machine learning.</p>
@@ -252,7 +256,7 @@ Karena ingin melihat kecocokan model. Error yang tidak berdistribusi normal dise
 <p>Null deviance menunjukkan seberapa baik target variabel diprediksi oleh model berdasarkan nilai intercept. Sedangkan residual deviance menunjukkan seberapa baik target variabel diprediksi oleh model berdasarkan intercept dan semua variabel independen yang digunakan.</p></li>
 </ol>
 <p>Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi<br />
-<a href="https://www.theanalysisfactor.com/r-glm-model-fit/">link</a></p>
+<a href="https://www.theanalysisfactor.com/r-glm-model-fit/">Null deviance &amp; Residual deviance</a></p>
 <ol start="5" style="list-style-type: decimal">
 <li><p>Apa itu <code>Fisher Scoring</code> pada output summary?</p>
 <p>Fisher scoring adalah turunan dari metode Newton untuk mengatasi Maximum Likelihood. Fisher scoring memberikan informasi berapa banyak iterasi yang dilakukan pada model sehingga diperoleh nilai parameter.</p></li>
@@ -261,7 +265,7 @@ Karena ingin melihat kecocokan model. Error yang tidak berdistribusi normal dise
 <li><p>Pada kasus klasifikasi, kenapa matrix accuracy tidak cukup menjelaskan seberapa baik model yang diperoleh?</p>
 <p>Untuk mengetahui seberapa baik perfomance model klasifikasi, tidak cukup dengan melihat nilai accuracy nya saja, karena accuracy menganggap sama penting untuk nilai false positive dan false negative. Kita membutuhkan perhitungan lain seperti precision dan recall, contohnya untuk memprediksi pasien mengidap kanker jinak atau ganas. Tentunya akan lebih berbahaya jika kemampuan model yang kita miliki cenderung lebih baik memprediksi kanker ganas namun terprediksi menjadi jinak. Pada kasus ini karena kelas positif yang dimiliki adalah kanker ganas, maka kita akan mementingkan nilai recall lebih besar dibandingkan nilai pengukuran lainnya.</p></li>
 <li><p>Permasalahan apa yang paling sering ditemui pada kasus klasifikasi?</p>
-<p>Permasalahan besar kasus klasifikasi adalah dataset yang tidak seimbang. Contohnya pada case churn telekomunikasi, employee attrition, prediksi kankes, fraud detection, dan sebagainya. Dalam hal tersebut, biasanya jumlah kelas positif jauh lebih sedikit dibandingkan kelas negatif.</p>
+<p>Permasalahan besar kasus klasifikasi adalah dataset yang tidak seimbang. Contohnya pada case churn telekomunikasi, employee attrition, prediksi kanker, fraud detection, dan sebagainya. Dalam hal tersebut, biasanya jumlah kelas positif jauh lebih sedikit dibandingkan kelas negatif.</p>
 <p>Misalkan pada kasus fraud detection, dari 1000 transaksi yang dimiliki, 10 diantaranya fraud, sedangkan sisanya tidak fraud. Kemudian perfomance model yang diperoleh sekitar 85%, mungkin terdengar sangat baik, namun pada kenyatannya tidak. Kemungkinan besar model tersebut hanya mampu memprediksi salah satu kelas kelas mayoritas yaitu yang tidak fraud, sedangkan kelas positif yang kita miliki sangat sedikit data yang dimiliki.</p></li>
 </ol>
 <div id="imbalance-target-variable" class="section level2">
@@ -388,7 +392,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>interpretable (+)</li>
 <li>tidak mengharuskan scaling data (+)</li>
 <li>baseline yang baik sebelum mencoba model yang lebih kompleks (+)</li>
-<li>memerlukan kejelian saat melakukan feature engineering karena sangat bergantung pada data yang fit</li>
+<li>memerlukan ketelitian saat melakukan feature engineering karena sangat bergantung pada data yang fit</li>
 <li>tidak dapat mengevaluasi hubungan yang tidak linier (-)</li>
 <li><p>mengharuskan antar prediktornya tidak saling terkait (cukup kaku) (-)</p>
 <p><strong>Decision tree:</strong></p></li>
@@ -396,7 +400,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>dapat mengevaluasi hubungan yang tidak linier (+)</li>
 <li>antar prediktornya boleh saling berkaitan (+)</li>
 <li>interpretable (+)</li>
-<li>decision tree yang terbentu cenderung tidak stabil (sedikit perubahan pada data akan merubah struktur pohon yang dihasilkan) (-)</li>
+<li>decision tree yang terbentuk cenderung tidak stabil (sedikit perubahan pada data akan merubah struktur pohon yang dihasilkan) (-)</li>
 <li>komputasi relatif lebih lama (-)</li>
 <li><p>cenderung overfitting (-)</p>
 <p>Jika tujuannya adalah melakukan prediksi dengan harapan tingkat akurasi yang tinggi, bisa menggunakan random forest. Karena metode ini merupakan metode klasifikasi yang menggabungkan beberapa metode, sehingga cukup robust (tidak sensitif) terhadap outlier, antar prediktor boleh saling berkaitan, bahkan mengatasi overfitting.</p>
@@ -412,7 +416,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <a class="sourceLine" id="cb24-4" title="4">model &lt;-<span class="st"> </span><span class="kw">train</span>(attrition <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train, <span class="dt">method =</span> <span class="st">&quot;ctree&quot;</span>, <span class="dt">trControl =</span> ctrl)</a></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li><p>Apakah pada metode KNN, naive bayes, decision tree, dan random forest hasilnya dapat berupa probability?</p>
-<p>Pada dasarnya semua metode klasifikasi akan menghasilkan probability, bukan langsung kelas. Namun, kebanyakan metode klasifikasi secara default di R langsung menghasilkan kelas (threshold 0.5). Untuk menghasilkan probability dapat menambahkan parameter <code>type</code> saat mealukan <code>predict()</code>. Berikut beberapa <code>type</code> untuk metode klasifikasi yang dipelajari:</p></li>
+<p>Pada dasarnya semua metode klasifikasi akan menghasilkan probability, bukan langsung kelas. Namun, kebanyakan metode klasifikasi secara default di R langsung menghasilkan kelas (threshold 0.5). Untuk menghasilkan probability dapat menambahkan parameter <code>type</code> saat melakukan <code>predict()</code>. Berikut beberapa <code>type</code> untuk metode klasifikasi yang dipelajari:</p></li>
 </ol>
 <ul>
 <li><code>response</code> untuk logistic regression</li>
@@ -549,14 +553,14 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; [3] &quot;Ingin ku merat&lt;untuk+0001F525&gt; nya&lt;untuk+0001F44D&gt;&quot; 
 #&gt; [4] &quot;selamat tahun baru #2020 !&quot;                         
 #&gt; [5] &quot;pengin makan yang kayak begitu&quot;</code></pre>
-<p>Berikut link eksternal yang dapat dijadikan sebagai bahan referensi dalam melakukan cleaning text <a href="hthttps://algotech.netlify.com/blog/text-cleaning-bahasa/">TEXT CLEANING BAHASA INDONESIA</a> dan <a href="https://algotech.netlify.com/blog/textclean/">TEXT CLEANING BAHASA INGGRIS</a></p>
+<p>Berikut link eksternal yang dapat dijadikan sebagai bahan referensi dalam melakukan cleaning text <a href="hthttps://algotech.netlify.com/blog/text-cleaning-bahasa/">Text Cleaning Bahasa Indonesia</a> dan <a href="https://algotech.netlify.com/blog/textclean/">Text Cleaning Bahasa Inggris</a></p>
 <ol start="10" style="list-style-type: decimal">
 <li>Bagaimana penanganan terhadap data missing values?</li>
 </ol>
-<p>Terdapat berbagai cara menangani data yang mengandung missing value. Cara yang paling serig digunkan untuk menangani data yang mengandung missing value, yaitu deletion, full analysis, dan imputation.</p>
+<p>Terdapat berbagai cara menangani data yang mengandung missing value. Cara yang paling sering digunakan untuk menangani data yang mengandung missing value, yaitu deletion, full analysis, dan imputation.</p>
 <div id="deletion" class="section level2">
 <h2><span class="header-section-number">3.1</span> Deletion</h2>
-<p>Deletion adalah membuang variabel/kolom pada data yang memiliki jumlah missing value (<code>NA</code>) melebihi 50% dari jumlah observasi. Hal ini menganggap bahwa variabel tersebut tidak banyak memberikan informasi pada data (variansinya mendekati 0). Ketika membuang variabel perlu memperhatikan business case dari data tersebut, apakah variabel yang dibuang akan menghilangkan informasi yang cukup signfikan atau tidak ? Apakah ketika variabel tersebut dibuang ada informasi yang berkurang dari data tersebut atau tidak ?</p>
+<p>Deletion adalah membuang variabel/kolom pada data yang memiliki jumlah missing value (<code>NA</code>) melebihi 50% dari jumlah observasi. Hal ini menganggap bahwa variabel tersebut tidak banyak memberikan informasi pada data (variansinya mendekati 0). Ketika membuang variabel perlu memperhatikan business case dari data tersebut, apakah variabel yang dibuang akan menghilangkan informasi yang cukup signfikan atau tidak? Apakah ketika variabel tersebut dibuang ada informasi yang berkurang dari data tersebut atau tidak?</p>
 </div>
 <div id="full-analysis" class="section level2">
 <h2><span class="header-section-number">3.2</span> Full analysis</h2>
@@ -599,7 +603,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 </div>
 <div id="imputation" class="section level2">
 <h2><span class="header-section-number">3.3</span> Imputation</h2>
-<p>Jika jumlah missing value pada data cukup banyak (melebihi 5% jumlah observasi), kita dapat melakukan imputation yaitu mengisi missing value tersebut dengan sutu nilai tertentu. Biasanya imputation dilakukan bedasarkan business knowledge dari variabel tersebut, misalkan variabel jumlah pengunjung per jam pada sebuah restoran. Seharusnya terdapat jumlah visitor yang bernilai 0 pada jam-jam tertentu karena pasti terdapat kemungkinan pada jam-jam tertentu tidak terdapat pengunjung. Tetapi, jika secara business knowledge seharusnya observasi tersebut memiliki suatu nilai, kita bisa melakukan imputation dengan menggunakan pusat datanya seperti mean/median untuk variabel numerik dan modus untuk variabel kategorik.</p>
+<p>Jika jumlah missing value pada data cukup banyak (melebihi 5% jumlah observasi), kita dapat melakukan imputation yaitu mengisi missing value tersebut dengan suatu nilai tertentu. Biasanya imputation dilakukan bedasarkan business knowledge dari variabel tersebut, misalkan variabel jumlah pengunjung per jam pada sebuah restoran. Seharusnya terdapat jumlah visitor yang bernilai 0 pada jam-jam tertentu karena pasti terdapat kemungkinan pada jam-jam tertentu tidak terdapat pengunjung. Tetapi, jika secara business knowledge seharusnya observasi tersebut memiliki suatu nilai, kita bisa melakukan imputation dengan menggunakan pusat datanya seperti mean/median untuk variabel numerik dan modus untuk variabel kategorik.</p>
 <p>Sebelum melakukan imputation untuk mengisi data yang mengandung missing value terlebih dahulu dilakukan cross validation, yaitu membagi data menjadi <strong>training set</strong> untuk proses pemodelan dan <strong>testing set</strong> untuk melakukan evaluasi. Jika pada data test terdapat missing value, imputation akan dilakukan dengan memanfaatkan informasi dari data train. Data train dan data test tidak langsung dimasukkan ke dalam suatu objek melainkan dilakukan tahapan data pre-paration terlebih dahulu yang di dalamnya termasuk melakukan tahapan imputation.</p>
 <p>Cross validation akan dilakukan dengan menggunakan fungsi <code>initial_split()</code> dari library <code>rsample</code>. Fungsi tersebut akan melakukan proses sampling untuk cross validation dengan metode <strong>stratified random sampling</strong>, sehingga proporsi target variabel pada data awal, akan dipertahankan baik pada training set maupun testing set.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">set.seed</span>(<span class="dv">417</span>)</a>
@@ -816,12 +820,12 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <pre><code>#&gt; # A tibble: 5 x 21
 #&gt;   business_travel department education_field gender job_role marital_status
 #&gt;   &lt;fct&gt;           &lt;fct&gt;      &lt;fct&gt;           &lt;fct&gt;  &lt;fct&gt;    &lt;fct&gt;         
-#&gt; 1 travel_rarely   sales      life_sciences   female sales_e~ single        
-#&gt; 2 travel_frequen~ research_~ life_sciences   male   researc~ married       
-#&gt; 3 travel_rarely   research_~ other           male   laborat~ single        
-#&gt; 4 travel_frequen~ research_~ life_sciences   female researc~ married       
-#&gt; 5 travel_rarely   research_~ medical         male   laborat~ married       
-#&gt; # ... with 15 more variables: over_time &lt;fct&gt;, attrition &lt;fct&gt;, PC01 &lt;dbl&gt;,
+#&gt; 1 travel_rarely   sales      life_sciences   female sales_e… single        
+#&gt; 2 travel_frequen… research_… life_sciences   male   researc… married       
+#&gt; 3 travel_rarely   research_… other           male   laborat… single        
+#&gt; 4 travel_frequen… research_… life_sciences   female researc… married       
+#&gt; 5 travel_rarely   research_… medical         male   laborat… married       
+#&gt; # … with 15 more variables: over_time &lt;fct&gt;, attrition &lt;fct&gt;, PC01 &lt;dbl&gt;,
 #&gt; #   PC02 &lt;dbl&gt;, PC03 &lt;dbl&gt;, PC04 &lt;dbl&gt;, PC05 &lt;dbl&gt;, PC06 &lt;dbl&gt;, PC07 &lt;dbl&gt;,
 #&gt; #   PC08 &lt;dbl&gt;, PC09 &lt;dbl&gt;, PC10 &lt;dbl&gt;, PC11 &lt;dbl&gt;, PC12 &lt;dbl&gt;, PC13 &lt;dbl&gt;</code></pre>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">test &lt;-<span class="st"> </span><span class="kw">bake</span>(rec, <span class="kw">testing</span>(splitted))</a>
@@ -831,12 +835,12 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <pre><code>#&gt; # A tibble: 5 x 21
 #&gt;   business_travel department education_field gender job_role marital_status
 #&gt;   &lt;fct&gt;           &lt;fct&gt;      &lt;fct&gt;           &lt;fct&gt;  &lt;fct&gt;    &lt;fct&gt;         
-#&gt; 1 travel_rarely   research_~ medical         female laborat~ married       
-#&gt; 2 travel_rarely   research_~ life_sciences   male   laborat~ divorced      
-#&gt; 3 travel_rarely   research_~ medical         male   healthc~ married       
-#&gt; 4 travel_rarely   research_~ medical         male   laborat~ divorced      
-#&gt; 5 travel_rarely   research_~ life_sciences   male   laborat~ single        
-#&gt; # ... with 15 more variables: over_time &lt;fct&gt;, attrition &lt;fct&gt;, PC01 &lt;dbl&gt;,
+#&gt; 1 travel_rarely   research_… medical         female laborat… married       
+#&gt; 2 travel_rarely   research_… life_sciences   male   laborat… divorced      
+#&gt; 3 travel_rarely   research_… medical         male   healthc… married       
+#&gt; 4 travel_rarely   research_… medical         male   laborat… divorced      
+#&gt; 5 travel_rarely   research_… life_sciences   male   laborat… single        
+#&gt; # … with 15 more variables: over_time &lt;fct&gt;, attrition &lt;fct&gt;, PC01 &lt;dbl&gt;,
 #&gt; #   PC02 &lt;dbl&gt;, PC03 &lt;dbl&gt;, PC04 &lt;dbl&gt;, PC05 &lt;dbl&gt;, PC06 &lt;dbl&gt;, PC07 &lt;dbl&gt;,
 #&gt; #   PC08 &lt;dbl&gt;, PC09 &lt;dbl&gt;, PC10 &lt;dbl&gt;, PC11 &lt;dbl&gt;, PC12 &lt;dbl&gt;, PC13 &lt;dbl&gt;</code></pre>
 <p>Dari output di atas diketahui bahwa variabel numerik sudah berbentuk sebuah PC.</p>
@@ -873,7 +877,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <p>Membuat PCA dengan menggunakan fungsi <code>PCA()</code> dari library <code>FactoMiner</code>. Parameter yang digunakan adalah:</p>
 <ul>
 <li><p><code>ncp</code>: Jumlah PC yang akan dihasilkan. Secara default fungsi <code>PCA()</code> hanya akan menampilkan 5 PC awal (5 PC yang membawa informasi paling banyak).</p></li>
-<li><p><code>quali.sup</code>: Nomor kolom dari varaibel kategorik.</p></li>
+<li><p><code>quali.sup</code>: Nomor kolom dari variabel kategorik.</p></li>
 <li><p><code>graph</code>: Sebuah logical value. T akan menampilkan hasil visualisasi, F tidak menampilkan hasil visualisasi. Secara default fungsi <code>PCA()</code> akan langsung menampilkan hasil visualisasi.</p></li>
 </ul>
 <div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">pca_loan &lt;-<span class="st"> </span><span class="kw">PCA</span>(loan_clean, <span class="dt">ncp =</span> <span class="dv">10</span>, <span class="dt">quali.sup =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">7</span>), <span class="dt">graph =</span> F)</a></code></pre></div>
@@ -992,8 +996,10 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; [1] 3.00 3.25 3.50 3.75 4.00 5.00</code></pre>
 <ol start="7" style="list-style-type: decimal">
 <li><p>Jika hasil decomposition pada trend masih membentuk pola berulang, apa yang terjadi?</p>
-<p>Ketika hasil decomposition yang diperoleh pada trend masih membentuk pola berulang, itu artinya masih terdapat pola seasonal yang belum tertangkap, kemungkinan data yang digunakan memiliki multiple seasonal, untuk membuat object ts pada pola data multiple seasonal dapat menggunakan function msts(). Untuk penanganan multiple seasonal lebih lengkap nya dapat di cek pada link berikut ini. <a href="https://algotech.netlify.com/blog/multiple-seasonal/">multiple seasonal</a></p></li>
-<li><p>Apakah pada metode arima kita dapat menambahkan variable prediktor pada analis?</p></li>
+<p>Ketika hasil decomposition yang diperoleh pada trend masih membentuk pola berulang, itu artinya masih terdapat pola seasonal yang belum tertangkap, kemungkinan data yang digunakan memiliki multiple seasonal, untuk membuat object ts pada pola data multiple seasonal dapat menggunakan function msts().</p>
+<p>Berikut merupakan link eksternal untuk penanganan <a href="https://www.researchgate.net/post/How_many_components_can_I_retrieve_in_principal_component_analysis">Multiple Seasonal</a>.</p>
+<p>Untuk penanganan multiple seasonal lebih lengkap nya dapat di cek pada link berikut ini. <a href="https://algotech.netlify.com/blog/multiple-seasonal/">multiple seasonal</a></p></li>
+<li><p>Apakah pada metode arima kita dapat menambahkan variable prediktor pada analisis?</p></li>
 </ol>
 <p>Untuk analisis time series dengan variabel prediktor lainnya dapat menggunakan parameter <code>xreg</code> pada function <code>Arima()</code> dan <code>auto.arima()</code>.</p>
 <div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw">library</span>(fpp2)</a>
@@ -1020,9 +1026,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; 
 #&gt; sigma^2 estimated as 0.3219:  log likelihood=-156.95
 #&gt; AIC=325.91   AICc=326.37   BIC=345.29</code></pre>
-<p>Untuk detail lengkapnya dapat di lihat pada link berikut ini: <a href="https://otexts.com/fpp2/regarima.html">link</a></p>
+<p>Untuk detail lengkapnya dapat di lihat pada link berikut ini: <a href="https://otexts.com/fpp2/regarima.html">Regression ARIMA</a></p>
 <ol start="9" style="list-style-type: decimal">
-<li><p>Nilai error yang harus dilihat dan diperhatikan ? Kapan menggunakan MAE/RMSE/MAPE ?</p>
+<li><p>Nilai error yang harus dilihat dan diperhatikan? Kapan menggunakan MAE/RMSE/MAPE?</p>
 <p>Tidak ada jawaban pasti untuk mengetahui penggunaan ketiga error tersebut. Tentunya setiap indikator memiliki memiliki kelebihan dan kekurangan masing-masing. Berikut ringkasan dari ketiga error tersebut:</p></li>
 </ol>
 <ul>
@@ -1050,7 +1056,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Kebanyakan orang menggunakan angka biner <span class="math inline">\(2^{n}\)</span> seperti 1, 2, 4, 8, 16, 32, 64, 128, 256, dst karena neural network merupakan metode yang berasal dari orang computer science dan mathematics yang biasa menggunakan angka biner.</li>
 </ul>
 <ol start="2" style="list-style-type: decimal">
-<li>Fungsi aktivasi apa yang sering digunakan ketika membuat arsitktur neural network ?</li>
+<li>Fungsi aktivasi apa yang sering digunakan ketika membuat arsitektur neural network ?</li>
 </ol>
 <ul>
 <li>Pada hidden layer biasa digunakan fungsi aktivasi <code>relu</code> karena <code>relu</code> melakukan transformasi data dengan mengubah nilai negatif menjadi 0 dan membiarkan nilai positif, sehingga semakin ke belakang informasi yang dibawa tidak banyak berkurang.</li>
@@ -1061,8 +1067,8 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 </ol>
 <ul>
 <li>Batch size biasanya menggunakan angka yang dapat membagi habis jumlah data, supaya data yang tersedia dapat digunakan secara keseluruhan (tidak ada yang tidak terpakai). Contoh:
-Jika data train terdiri dari 800 observasi, kita bisa menggunakan batch size 200 yang dapat embagai habis 80 observasi.</li>
-<li>Jumlah epoch dimulai dari angka yang kecil terlebih dahulu supaya komputasi yang dilakukan tidak terlalu lama, kemudian dilihat apakah error dan accuracy yang dhasilkan sudah konvergen atau belum. Jika belum bisa menambaha jumlah epoch sedikit demi sedikit, dan sebaliknya.</li>
+Jika data train terdiri dari 800 observasi, kita bisa menggunakan batch size 200 yang dapat membagi habis 80 observasi.</li>
+<li>Jumlah epoch dimulai dari angka yang kecil terlebih dahulu supaya komputasi yang dilakukan tidak terlalu lama, kemudian dilihat apakah error dan accuracy yang dhasilkan sudah konvergen atau belum. Jika belum bisa menambahkan jumlah epoch sedikit demi sedikit, dan sebaliknya.</li>
 </ul>
 <ol start="4" style="list-style-type: decimal">
 <li><p>Bagaimana menentukan learning rate yang tepat ?</p>
@@ -1166,14 +1172,14 @@ Jika data train terdiri dari 800 observasi, kita bisa menggunakan batch size 200
 <a class="sourceLine" id="cb109-3" title="3"></a>
 <a class="sourceLine" id="cb109-4" title="4"><span class="kw">head</span>(data_train, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt; # A tibble: 5 x 45
-#&gt;        age daily_rate distance_from_h~ education environment_sat~ hourly_rate
+#&gt;        age daily_rate distance_from_h… education environment_sat… hourly_rate
 #&gt;      &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;       &lt;dbl&gt;
 #&gt; 1  4.41e-1      0.747           -1.02    -0.899            -0.633       1.37 
 #&gt; 2  8.41e-4      1.42            -0.895   -0.899             1.19        1.27 
 #&gt; 3 -1.10e+0     -0.528           -0.895   -1.88             -1.55       -1.28 
 #&gt; 4 -5.49e-1      0.505           -0.895   -0.899             1.19        0.633
 #&gt; 5  2.42e+0      1.30            -0.772    0.0789            0.281       0.731
-#&gt; # ... with 39 more variables: job_involvement &lt;dbl&gt;, job_level &lt;dbl&gt;,
+#&gt; # … with 39 more variables: job_involvement &lt;dbl&gt;, job_level &lt;dbl&gt;,
 #&gt; #   job_satisfaction &lt;dbl&gt;, monthly_income &lt;dbl&gt;, monthly_rate &lt;dbl&gt;,
 #&gt; #   num_companies_worked &lt;dbl&gt;, percent_salary_hike &lt;dbl&gt;,
 #&gt; #   performance_rating &lt;dbl&gt;, relationship_satisfaction &lt;dbl&gt;,
