@@ -170,9 +170,9 @@ Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi [t
 
 9. Apa yang dimaksud dengan false positive dan false negative?
 
-- False positive adalah kasus dimana sisi negatif terprediksi sebagai positif. Contohnya, pasien terprediksi mengidap kanker ganas, namun data actual nya pasien tersebut mengidap kanker jinak.
+  -  False positive adalah kasus dimana sisi negatif terprediksi sebagai positif. Contohnya, pasien terprediksi mengidap kanker ganas, namun data actual nya pasien tersebut mengidap kanker jinak.
 
-- False negative adalah kasus dimana sisi positif terprediksi sebagai negatif.
+  -  False negative adalah kasus dimana sisi positif terprediksi sebagai negatif.
 Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien tersebut mengidap kanker ganas.
 
 10. Bagaimana model regresi logistic regression menangani data kategorik?
