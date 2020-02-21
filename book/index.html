@@ -24,7 +24,7 @@
 <meta name="author" content="Team Algoritma" />
 
 
-<meta name="date" content="2020-02-09" />
+<meta name="date" content="2020-02-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -168,7 +168,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">FAQ</h1>
 <p class="author"><em>Team Algoritma</em></p>
-<p class="date"><em>February 9, 2020</em></p>
+<p class="date"><em>February 21, 2020</em></p>
 </div>
 <style>
 body {
@@ -394,24 +394,39 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <p>Sama seperti kasus linear regression, pada logistic regression akan mengubah variabel kategorik menjadi dummy variabel.</p></li>
 <li><p>Apa maksud dari nilai AIC?</p>
 <p>AIC (Akaike Information Criterion) menggambarkan seberapa banyak informasi yang hilang pada model tersebut. AIC biasa digunakan untuk membandingkan beberapa model, karena berbeda dengan R-squared yang memiliki range semakin mendekati 1 semakin baik, AIC tidak memiliki batasan, jadi kita perlu membandingkannya dengan model lain.</p></li>
-<li><p>Jelaskan kegunaan dari ROC dan AUC?</p>
-<p>Kurva ROC (Receiver Operating Characteristic) menggambarkan seberapa baik kinerja model klasifikasi biner. Kurva ROC dibentuk dari nilai TPR (True Positive Rate) dan FPR (False Positive Rate) untuk semua nilai threshold dari 0 hingga 1. AUC (Area Under the Curve) adalah luas daerah dari kurva ROC. Nilai AUC mendekati 1 artinya model sangat baik, ketika nilai AUC berada di sekitar 0.5 maka model tersebut memiliki performance yang tidak baik dan cenderung hanya menebak secara acak.</p></li>
+<li><p>Bagaimana cara untuk mengindikasi adanya perfect separation pada model?</p></li>
 </ol>
+<p>Indikasi perfect separation dapat dilihat dari beberapa point berikut:</p>
+<ul>
+<li><p>tidak ada prediktor yang signifikan padahal aic sangat kecil</p></li>
+<li><p>terdapat 1 koefisien yang nilainya cukup besar dibandingkan yang lain</p></li>
+<li><p>gunakan parameter <code>detect_separation</code> untuk mengetahui adanya perefect separation pada model:</p></li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">honors &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/02-C1/sample.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">library</span>(brglm2)</a>
+<a class="sourceLine" id="cb28-2" title="2"><span class="kw">glm</span>(hon <span class="op">~</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>read <span class="op">+</span><span class="st"> </span>math <span class="op">+</span><span class="st"> </span>write, <span class="dt">data=</span>honors, <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;detect_separation&quot;</span>)</a></code></pre></div>
+<pre><code>#&gt; Separation: TRUE 
+#&gt; Existence of maximum likelihood estimates
+#&gt; (Intercept)      female        read        math       write 
+#&gt;        -Inf        -Inf        -Inf        -Inf         Inf 
+#&gt; 0: finite value, Inf: infinity, -Inf: -infinity</code></pre>
+<p>Parameter <code>detect_separation</code> akan menghasilkan output <code>TRUE</code> or <code>FALSE</code>. Ketika <code>TRUE</code> artinya terdapat perfect separation pada model. Untuk mengetahui detail variabel mana yang merupakan perfect separtion, kita perlu amati dari output <code>summary()</code> model.</p>
 
 </div>
 </div>
 </div>
 <div id="classification-2" class="section level1">
 <h1><span class="header-section-number">Bab 3</span> Classification 2</h1>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># libraries</span></a>
-<a class="sourceLine" id="cb27-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb27-3" title="3"><span class="kw">library</span>(e1071)</a>
-<a class="sourceLine" id="cb27-4" title="4"><span class="kw">library</span>(tm)</a>
-<a class="sourceLine" id="cb27-5" title="5"><span class="kw">library</span>(katadasaR)</a>
-<a class="sourceLine" id="cb27-6" title="6"><span class="kw">library</span>(textclean)</a>
-<a class="sourceLine" id="cb27-7" title="7"><span class="kw">library</span>(rsample)</a>
-<a class="sourceLine" id="cb27-8" title="8"><span class="kw">library</span>(caret)</a>
-<a class="sourceLine" id="cb27-9" title="9"><span class="kw">library</span>(recipes)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="co"># libraries</span></a>
+<a class="sourceLine" id="cb30-2" title="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb30-3" title="3"><span class="kw">library</span>(e1071)</a>
+<a class="sourceLine" id="cb30-4" title="4"><span class="kw">library</span>(tm)</a>
+<a class="sourceLine" id="cb30-5" title="5"><span class="kw">library</span>(katadasaR)</a>
+<a class="sourceLine" id="cb30-6" title="6"><span class="kw">library</span>(textclean)</a>
+<a class="sourceLine" id="cb30-7" title="7"><span class="kw">library</span>(rsample)</a>
+<a class="sourceLine" id="cb30-8" title="8"><span class="kw">library</span>(caret)</a>
+<a class="sourceLine" id="cb30-9" title="9"><span class="kw">library</span>(MLmetrics)</a>
+<a class="sourceLine" id="cb30-10" title="10"><span class="kw">library</span>(recipes)</a></code></pre></div>
 <ol style="list-style-type: decimal">
 <li><p>Dari berbagai metode klasifikasi yang telah dipelajari (logistic regression, KNN, naive bayes, decision tree, dan random forest), bagaimana pemilihan dalam penggunaan metode tersebut?</p>
 <p>Pemilihan metode klasifikasi bergantung pada tujuan analisis yang dilakukan. Secara umum tujuan pemodelan klasifikasi adalah melakukan analisa terkait hubungan prediktor dengan target variabel atau melakukan prediksi.</p>
@@ -441,10 +456,10 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Apakah k-fold cross validation dapat digunakan untuk metode klasifikasi lain (selain random forest)?</li>
 </ol>
 <p>k-fold cross validation dapat digunakan untuk semua metode klasifikasi bahkan di luar metode klasifikasi yang telah dipelajari. Namun, karena k-fold cross validation tidak memperlihatkan hasil pemodelan untuk semua subset data (hanya mengambil yang terbaik, yaitu tingkat akurasi tertinggi), maka tetap perlu dilakukan cross validation untuk melakukan evaluasi model. Berikut contoh k-fold cross validation untuk metode lain (selain random forest).</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">set.seed</span>(<span class="dv">417</span>)</a>
-<a class="sourceLine" id="cb28-2" title="2">ctrl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, <span class="dt">number =</span> <span class="dv">5</span>, <span class="dt">repeats =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb28-3" title="3"><span class="co"># parameter method dapat disesuaikan dengan metode klasifikasi yang digunakan</span></a>
-<a class="sourceLine" id="cb28-4" title="4">model &lt;-<span class="st"> </span><span class="kw">train</span>(attrition <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train, <span class="dt">method =</span> <span class="st">&quot;ctree&quot;</span>, <span class="dt">trControl =</span> ctrl)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">set.seed</span>(<span class="dv">417</span>)</a>
+<a class="sourceLine" id="cb31-2" title="2">ctrl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, <span class="dt">number =</span> <span class="dv">5</span>, <span class="dt">repeats =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb31-3" title="3"><span class="co"># parameter method dapat disesuaikan dengan metode klasifikasi yang digunakan</span></a>
+<a class="sourceLine" id="cb31-4" title="4">model &lt;-<span class="st"> </span><span class="kw">train</span>(attrition <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train, <span class="dt">method =</span> <span class="st">&quot;ctree&quot;</span>, <span class="dt">trControl =</span> ctrl)</a></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li><p>Apakah pada metode KNN, naive bayes, decision tree, dan random forest hasilnya dapat berupa probability?</p>
 <p>Pada dasarnya semua metode klasifikasi akan menghasilkan probability, bukan langsung kelas. Namun, kebanyakan metode klasifikasi secara default di R langsung menghasilkan kelas (threshold 0.5). Untuk menghasilkan probability dapat menambahkan parameter <code>type</code> saat melakukan <code>predict()</code>. Berikut beberapa <code>type</code> untuk metode klasifikasi yang dipelajari:</p></li>
@@ -458,7 +473,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Apakah metode naive bayes dapat diterapkan untuk prediktor bertipe numerik? peluang apa yang dihitung?</li>
 </ol>
 <p>Naive bayes dapat diterapkan pada berbagai permasalahan klasifikasi bukan hanya pada klasifikasi text. Jika prediktor yang digunakan bertipe numerik naive bayes akan menghitung peluang rata-rata (mean) dan standard deviation (sd) untuk setiap level target. Berikut contoh naive bayes pada data <code>iris</code>.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">naiveBayes</span>(Species <span class="op">~</span><span class="st"> </span>., iris)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">naiveBayes</span>(Species <span class="op">~</span><span class="st"> </span>., iris)</a></code></pre></div>
 <pre><code>#&gt; 
 #&gt; Naive Bayes Classifier for Discrete Predictors
 #&gt; 
@@ -498,52 +513,52 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Bagaimana cara menghapus <code>stopwords</code> dalam bahasa indonesia?</li>
 </ol>
 <p>File stopwords dapat di download terlebih dahulu di <a href="https://github.com/stopwords-iso/stopwords-id">link</a> berikut. Kemudian import <code>stopwords id.txt</code> tersebut dengan menggunakan fungsi <code>readLines()</code>.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="co"># import Indonesia stopwords</span></a>
-<a class="sourceLine" id="cb31-2" title="2">stop_id &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="st">&quot;data/03-C2/stopwords_id.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb31-3" title="3"></a>
-<a class="sourceLine" id="cb31-4" title="4"><span class="co"># generate data frame</span></a>
-<a class="sourceLine" id="cb31-5" title="5">text &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">sentence =</span> <span class="kw">c</span>(<span class="st">&quot;saya tertarik belajar data science di @algoritma :)&quot;</span>,</a>
-<a class="sourceLine" id="cb31-6" title="6">                                <span class="st">&quot;anda tinggal di Jakarta&quot;</span>,</a>
-<a class="sourceLine" id="cb31-7" title="7">                                <span class="st">&quot;Ingin ku merat🔥 na👍&quot;</span>,</a>
-<a class="sourceLine" id="cb31-8" title="8">                                <span class="st">&quot;selamat tahun baru #2020 !&quot;</span>,</a>
-<a class="sourceLine" id="cb31-9" title="9">                                <span class="st">&quot;pingin makan yang kek gitu&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="co"># import Indonesia stopwords</span></a>
+<a class="sourceLine" id="cb34-2" title="2">stop_id &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="st">&quot;data/03-C2/stopwords_id.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb34-3" title="3"></a>
+<a class="sourceLine" id="cb34-4" title="4"><span class="co"># generate data frame</span></a>
+<a class="sourceLine" id="cb34-5" title="5">text &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">sentence =</span> <span class="kw">c</span>(<span class="st">&quot;saya tertarik belajar data science di @algoritma :)&quot;</span>,</a>
+<a class="sourceLine" id="cb34-6" title="6">                                <span class="st">&quot;anda tinggal di Jakarta&quot;</span>,</a>
+<a class="sourceLine" id="cb34-7" title="7">                                <span class="st">&quot;Ingin ku merat🔥 na👍&quot;</span>,</a>
+<a class="sourceLine" id="cb34-8" title="8">                                <span class="st">&quot;selamat tahun baru #2020 !&quot;</span>,</a>
+<a class="sourceLine" id="cb34-9" title="9">                                <span class="st">&quot;pingin makan yang kek gitu&quot;</span>))</a></code></pre></div>
 <p>Mengubah text dalam bentuk data frame ke bentuk corpus dengan menggunakan fungsi <code>VectorSource()</code> dan <code>VCorpus()</code> dari library <code>tm</code>. Setelah itu, baru dapat menghapus stopwords dengan menggabungkan fungsi <code>tm_map()</code> dan <code>removeWords()</code>.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">text_clean1 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb32-2" title="2"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb32-3" title="3"><span class="st">  </span><span class="kw">VectorSource</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb32-4" title="4"><span class="st">  </span><span class="kw">VCorpus</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb32-5" title="5"><span class="st">  </span><span class="kw">tm_map</span>(removeWords, stop_id)</a>
-<a class="sourceLine" id="cb32-6" title="6"></a>
-<a class="sourceLine" id="cb32-7" title="7">text_clean1[[<span class="dv">1</span>]]<span class="op">$</span>content</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">text_clean1 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb35-2" title="2"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-3" title="3"><span class="st">  </span><span class="kw">VectorSource</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-4" title="4"><span class="st">  </span><span class="kw">VCorpus</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-5" title="5"><span class="st">  </span><span class="kw">tm_map</span>(removeWords, stop_id)</a>
+<a class="sourceLine" id="cb35-6" title="6"></a>
+<a class="sourceLine" id="cb35-7" title="7">text_clean1[[<span class="dv">1</span>]]<span class="op">$</span>content</a></code></pre></div>
 <pre><code>#&gt; [1] &quot; tertarik belajar data science  @algoritma :)&quot;</code></pre>
 <ol start="6" style="list-style-type: decimal">
 <li>Bagaimana cara mengubah kata berimbuhan mejadi kata dasarnya saja dalam bahasa Indonesia?</li>
 </ol>
 <p>Untuk mengubah kata berimbuhan menjadi kata dasar dalam bahasa Indonesia dapat menggunakan fungsi <code>katadasaR()</code> dari library <code>katadasaR</code>. Namun, fungsi tersebut hanya menerima 1 inputan (1 value) saja sehigga dibutuhkan fungsi <code>sapply()</code> untuk mengaplikasikan fungsi tersebut ke dalam 1 kalimat.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="co"># membuat fungsi untuk mengubah kata berimbuhan menjadi kata dasar</span></a>
-<a class="sourceLine" id="cb34-2" title="2">kata_dasar &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb34-3" title="3">  <span class="kw">paste</span>(<span class="kw">sapply</span>(<span class="kw">words</span>(x), katadasaR), <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)</a>
-<a class="sourceLine" id="cb34-4" title="4">  }</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># membuat fungsi untuk mengubah kata berimbuhan menjadi kata dasar</span></a>
+<a class="sourceLine" id="cb37-2" title="2">kata_dasar &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb37-3" title="3">  <span class="kw">paste</span>(<span class="kw">sapply</span>(<span class="kw">words</span>(x), katadasaR), <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)</a>
+<a class="sourceLine" id="cb37-4" title="4">  }</a></code></pre></div>
 <p>Menggunakan fungsi di atas dengan menggabungkan fungsi <code>tm_map()</code> dan <code>content_transformer()</code>.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">text_clean2 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb35-2" title="2"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb35-3" title="3"><span class="st">  </span><span class="kw">VectorSource</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb35-4" title="4"><span class="st">  </span><span class="kw">VCorpus</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb35-5" title="5"><span class="st">  </span><span class="kw">tm_map</span>(<span class="kw">content_transformer</span>(kata_dasar))</a>
-<a class="sourceLine" id="cb35-6" title="6"></a>
-<a class="sourceLine" id="cb35-7" title="7">text_clean2[[<span class="dv">1</span>]]<span class="op">$</span>content</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">text_clean2 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb38-2" title="2"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-3" title="3"><span class="st">  </span><span class="kw">VectorSource</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-4" title="4"><span class="st">  </span><span class="kw">VCorpus</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb38-5" title="5"><span class="st">  </span><span class="kw">tm_map</span>(<span class="kw">content_transformer</span>(kata_dasar))</a>
+<a class="sourceLine" id="cb38-6" title="6"></a>
+<a class="sourceLine" id="cb38-7" title="7">text_clean2[[<span class="dv">1</span>]]<span class="op">$</span>content</a></code></pre></div>
 <pre><code>#&gt; [1] &quot;saya tarik ajar data science di @algoritma :)&quot;</code></pre>
 <ol start="7" style="list-style-type: decimal">
 <li>Bagaiamana cara menghapus emoticon dan emoji?</li>
 </ol>
 <p>Untuk menghapus emoticon dan emoji dapat menggunakan fungsi <code>replace_emoji()</code> dan <code>replace_emoticon()</code> dari library <code>textclean</code>. Namun, fungsi tersebut hanya menerima tipe data berupa karakter sehingga harus diubah terlebih dahulu tipe datanya jika masih belum karakter.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">text_clean3 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb37-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentence =</span> <span class="kw">as.character</span>(sentence)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-3" title="3"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-4" title="4"><span class="st">  </span><span class="kw">replace_emoji</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-5" title="5"><span class="st">  </span><span class="kw">replace_emoticon</span>()</a>
-<a class="sourceLine" id="cb37-6" title="6"></a>
-<a class="sourceLine" id="cb37-7" title="7">text_clean3</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">text_clean3 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb40-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentence =</span> <span class="kw">as.character</span>(sentence)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-3" title="3"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-4" title="4"><span class="st">  </span><span class="kw">replace_emoji</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-5" title="5"><span class="st">  </span><span class="kw">replace_emoticon</span>()</a>
+<a class="sourceLine" id="cb40-6" title="6"></a>
+<a class="sourceLine" id="cb40-7" title="7">text_clean3</a></code></pre></div>
 <pre><code>#&gt; [1] &quot;saya tertarik belajar data science di @algoritma smiley &quot;
 #&gt; [2] &quot;anda tinggal di Jakarta&quot;                                 
 #&gt; [3] &quot;Ingin ku merat&lt;U+0001F525&gt; na&lt;U+0001F44D&gt;&quot;               
@@ -553,13 +568,13 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Bagaimana cara menghapus mention dan hashtag?</li>
 </ol>
 <p>Untuk menghapus mention dan hashtag dapat menggunakan fungsi <code>replace_hash()</code> dan <code>replace_tag()</code> dari library <code>textclean</code>.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">text_clean4 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb39-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentence =</span> <span class="kw">as.character</span>(sentence)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-3" title="3"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-4" title="4"><span class="st">  </span><span class="kw">replace_hash</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-5" title="5"><span class="st">  </span><span class="kw">replace_tag</span>()</a>
-<a class="sourceLine" id="cb39-6" title="6"></a>
-<a class="sourceLine" id="cb39-7" title="7">text_clean4</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">text_clean4 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb42-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentence =</span> <span class="kw">as.character</span>(sentence)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb42-3" title="3"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb42-4" title="4"><span class="st">  </span><span class="kw">replace_hash</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb42-5" title="5"><span class="st">  </span><span class="kw">replace_tag</span>()</a>
+<a class="sourceLine" id="cb42-6" title="6"></a>
+<a class="sourceLine" id="cb42-7" title="7">text_clean4</a></code></pre></div>
 <pre><code>#&gt; [1] &quot;saya tertarik belajar data science di  :)&quot;
 #&gt; [2] &quot;anda tinggal di Jakarta&quot;                  
 #&gt; [3] &quot;Ingin ku merat&lt;U+0001F525&gt; na&lt;U+0001F44D&gt;&quot;
@@ -569,16 +584,16 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Bagaimana cara menghapus slang words?</li>
 </ol>
 <p>Untuk menghapus slang words dapat menggunakan fungsi <code>replace_internet_slang()</code> dari library <code>textclean</code>.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">slang_id &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/03-C2/colloquial-indonesian-lexicon.csv&quot;</span>) </a>
-<a class="sourceLine" id="cb41-2" title="2"></a>
-<a class="sourceLine" id="cb41-3" title="3">text_clean5 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb41-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentence =</span> <span class="kw">as.character</span>(sentence)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-5" title="5"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb41-6" title="6"><span class="st">  </span><span class="kw">replace_internet_slang</span>(<span class="dt">slang =</span> <span class="kw">paste0</span>(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">b&#39;</span>, slang_id<span class="op">$</span>slang, <span class="st">&#39;</span><span class="ch">\\</span><span class="st">b&#39;</span>) , </a>
-<a class="sourceLine" id="cb41-7" title="7">                         <span class="dt">replacement =</span> slang_id<span class="op">$</span>formal, </a>
-<a class="sourceLine" id="cb41-8" title="8">                         <span class="dt">ignore.case =</span> T)</a>
-<a class="sourceLine" id="cb41-9" title="9"></a>
-<a class="sourceLine" id="cb41-10" title="10">text_clean5</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">slang_id &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/03-C2/colloquial-indonesian-lexicon.csv&quot;</span>) </a>
+<a class="sourceLine" id="cb44-2" title="2"></a>
+<a class="sourceLine" id="cb44-3" title="3">text_clean5 &lt;-<span class="st"> </span>text <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb44-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentence =</span> <span class="kw">as.character</span>(sentence)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb44-5" title="5"><span class="st">  </span><span class="kw">pull</span>(sentence) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb44-6" title="6"><span class="st">  </span><span class="kw">replace_internet_slang</span>(<span class="dt">slang =</span> <span class="kw">paste0</span>(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">b&#39;</span>, slang_id<span class="op">$</span>slang, <span class="st">&#39;</span><span class="ch">\\</span><span class="st">b&#39;</span>) , </a>
+<a class="sourceLine" id="cb44-7" title="7">                         <span class="dt">replacement =</span> slang_id<span class="op">$</span>formal, </a>
+<a class="sourceLine" id="cb44-8" title="8">                         <span class="dt">ignore.case =</span> T)</a>
+<a class="sourceLine" id="cb44-9" title="9"></a>
+<a class="sourceLine" id="cb44-10" title="10">text_clean5</a></code></pre></div>
 <pre><code>#&gt; [1] &quot;saya tertarik belajar data science di @algoritma :)&quot;
 #&gt; [2] &quot;anda tinggal di Jakarta&quot;                            
 #&gt; [3] &quot;Ingin ku merat&lt;untuk+0001F525&gt; nya&lt;untuk+0001F44D&gt;&quot; 
@@ -597,9 +612,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <h2><span class="header-section-number">3.2</span> Full analysis</h2>
 <p>Full analysis adalah membuang observasi/baris yang mengandung missing value. Cara ini dilakukan jika jumlah observasi yang mengandung missing value <code>NA</code> tidak melebihi 5% dari total observasi data.</p>
 <p>Sebagai contoh akan digunakan data <code>credit_data</code>:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">load</span>(<span class="st">&quot;data/03-C2/credit_data.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb43-2" title="2"></a>
-<a class="sourceLine" id="cb43-3" title="3"><span class="kw">head</span>(credit_data, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="kw">load</span>(<span class="st">&quot;data/03-C2/credit_data.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb46-2" title="2"></a>
+<a class="sourceLine" id="cb46-3" title="3"><span class="kw">head</span>(credit_data, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt;   Status Seniority  Home Time Age Marital Records       Job Expenses Income
 #&gt; 1   good         9  rent   60  30 married      no freelance       73    129
 #&gt; 2   good        17  rent   60  58   widow      no     fixed       48    131
@@ -612,20 +627,20 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; 3   3000    0   2000  2985
 #&gt; 4   2500    0    900  1325
 #&gt; 5      0    0    310   910</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="co"># cek missing value pada data</span></a>
-<a class="sourceLine" id="cb45-2" title="2"><span class="kw">anyNA</span>(credit_data)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># cek missing value pada data</span></a>
+<a class="sourceLine" id="cb48-2" title="2"><span class="kw">anyNA</span>(credit_data)</a></code></pre></div>
 <pre><code>#&gt; [1] TRUE</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># cek missing value terdapat pada variabel/kolom yang mana</span></a>
-<a class="sourceLine" id="cb47-2" title="2"><span class="kw">colSums</span>(<span class="kw">is.na</span>(credit_data))</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co"># cek missing value terdapat pada variabel/kolom yang mana</span></a>
+<a class="sourceLine" id="cb50-2" title="2"><span class="kw">colSums</span>(<span class="kw">is.na</span>(credit_data))</a></code></pre></div>
 <pre><code>#&gt;    Status Seniority      Home      Time       Age   Marital   Records       Job 
 #&gt;         0         0         6         0         0         1         0         2 
 #&gt;  Expenses    Income    Assets      Debt    Amount     Price 
 #&gt;         0       381        47        18         0         0</code></pre>
 <p>Untuk menangani missing value pada data di atas dapat melakukan full analysis dengan menggunakan function <code>na.omit</code>:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">credit_full &lt;-<span class="st"> </span>credit_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb49-2" title="2"><span class="st">                </span><span class="kw">na.omit</span>()</a>
-<a class="sourceLine" id="cb49-3" title="3"></a>
-<a class="sourceLine" id="cb49-4" title="4"><span class="kw">colSums</span>(<span class="kw">is.na</span>(credit_full))</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">credit_full &lt;-<span class="st"> </span>credit_data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb52-2" title="2"><span class="st">                </span><span class="kw">na.omit</span>()</a>
+<a class="sourceLine" id="cb52-3" title="3"></a>
+<a class="sourceLine" id="cb52-4" title="4"><span class="kw">colSums</span>(<span class="kw">is.na</span>(credit_full))</a></code></pre></div>
 <pre><code>#&gt;    Status Seniority      Home      Time       Age   Marital   Records       Job 
 #&gt;         0         0         0         0         0         0         0         0 
 #&gt;  Expenses    Income    Assets      Debt    Amount     Price 
@@ -637,67 +652,102 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <p>Jika jumlah missing value pada data cukup banyak (melebihi 5% jumlah observasi), kita dapat melakukan imputation yaitu mengisi missing value tersebut dengan suatu nilai tertentu. Biasanya imputation dilakukan bedasarkan business knowledge dari variabel tersebut, misalkan variabel jumlah pengunjung per jam pada sebuah restoran. Seharusnya terdapat jumlah visitor yang bernilai 0 pada jam-jam tertentu karena pasti terdapat kemungkinan pada jam-jam tertentu tidak terdapat pengunjung. Tetapi, jika secara business knowledge seharusnya observasi tersebut memiliki suatu nilai, kita bisa melakukan imputation dengan menggunakan pusat datanya seperti mean/median untuk variabel numerik dan modus untuk variabel kategorik.</p>
 <p>Sebelum melakukan imputation untuk mengisi data yang mengandung missing value terlebih dahulu dilakukan cross validation, yaitu membagi data menjadi <strong>training set</strong> untuk proses pemodelan dan <strong>testing set</strong> untuk melakukan evaluasi. Jika pada data test terdapat missing value, imputation akan dilakukan dengan memanfaatkan informasi dari data train. Data train dan data test tidak langsung dimasukkan ke dalam suatu objek melainkan dilakukan tahapan data pre-paration terlebih dahulu yang di dalamnya termasuk melakukan tahapan imputation.</p>
 <p>Cross validation akan dilakukan dengan menggunakan fungsi <code>initial_split()</code> dari library <code>rsample</code>. Fungsi tersebut akan melakukan proses sampling untuk cross validation dengan metode <strong>stratified random sampling</strong>, sehingga proporsi target variabel pada data awal, akan dipertahankan baik pada training set maupun testing set.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">set.seed</span>(<span class="dv">417</span>)</a>
-<a class="sourceLine" id="cb51-2" title="2"></a>
-<a class="sourceLine" id="cb51-3" title="3">splitted &lt;-<span class="st"> </span><span class="kw">initial_split</span>(<span class="dt">data =</span> credit_data, <span class="dt">prop =</span> <span class="fl">0.8</span>, <span class="dt">strata =</span> <span class="st">&quot;Status&quot;</span>)</a>
-<a class="sourceLine" id="cb51-4" title="4"></a>
-<a class="sourceLine" id="cb51-5" title="5">splitted</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">set.seed</span>(<span class="dv">417</span>)</a>
+<a class="sourceLine" id="cb54-2" title="2"></a>
+<a class="sourceLine" id="cb54-3" title="3">splitted &lt;-<span class="st"> </span><span class="kw">initial_split</span>(<span class="dt">data =</span> credit_data, <span class="dt">prop =</span> <span class="fl">0.8</span>, <span class="dt">strata =</span> <span class="st">&quot;Status&quot;</span>)</a>
+<a class="sourceLine" id="cb54-4" title="4"></a>
+<a class="sourceLine" id="cb54-5" title="5">splitted</a></code></pre></div>
 <pre><code>#&gt; &lt;3565/889/4454&gt;</code></pre>
 <p>Imputation dilakukan dengan menggunakan Step Functions - Imputation dari library <code>recipes</code> yang didefinisikan dalam sebuah <strong>recipe</strong>.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(Status <span class="op">~</span><span class="st"> </span>., <span class="kw">training</span>(splitted)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-2" title="2"><span class="st">  </span><span class="co"># `step_meanimpute()` dapat diganti dengan Step Functions - Imputation lain</span></a>
-<a class="sourceLine" id="cb53-3" title="3"><span class="st">  </span><span class="kw">step_meanimpute</span>(Income, Assets, Debt) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb53-4" title="4"><span class="st">  </span><span class="kw">prep</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(Status <span class="op">~</span><span class="st"> </span>., <span class="kw">training</span>(splitted)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-2" title="2"><span class="st">  </span><span class="co"># `step_meanimpute()` dapat diganti dengan Step Functions - Imputation lain</span></a>
+<a class="sourceLine" id="cb56-3" title="3"><span class="st">  </span><span class="kw">step_meanimpute</span>(Income, Assets, Debt) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-4" title="4"><span class="st">  </span><span class="kw">prep</span>()</a></code></pre></div>
 <p>Setelah mendefinisikan proses data preparation pada objek <code>rec</code>, selanjutnya proses tersebut diterapkan ke data train menggunakan fungsi <code>juice()</code> dan ke data test menggunakan fungsi <code>bake()</code> dari library <code>recipes</code>.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co"># membuat data train dengan fungsi `juice()`</span></a>
-<a class="sourceLine" id="cb54-2" title="2">train &lt;-<span class="st"> </span><span class="kw">juice</span>(rec)</a>
-<a class="sourceLine" id="cb54-3" title="3"></a>
-<a class="sourceLine" id="cb54-4" title="4"><span class="co"># membuat data test dengan fungsi `bake()`</span></a>
-<a class="sourceLine" id="cb54-5" title="5">test &lt;-<span class="st"> </span><span class="kw">bake</span>(rec, <span class="kw">testing</span>(splitted))</a></code></pre></div>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="kw">colSums</span>(<span class="kw">is.na</span>(train))</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># membuat data train dengan fungsi `juice()`</span></a>
+<a class="sourceLine" id="cb57-2" title="2">train &lt;-<span class="st"> </span><span class="kw">juice</span>(rec)</a>
+<a class="sourceLine" id="cb57-3" title="3"></a>
+<a class="sourceLine" id="cb57-4" title="4"><span class="co"># membuat data test dengan fungsi `bake()`</span></a>
+<a class="sourceLine" id="cb57-5" title="5">test &lt;-<span class="st"> </span><span class="kw">bake</span>(rec, <span class="kw">testing</span>(splitted))</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">colSums</span>(<span class="kw">is.na</span>(train))</a></code></pre></div>
 <pre><code>#&gt; Seniority      Home      Time       Age   Marital   Records       Job  Expenses 
 #&gt;         0         5         0         0         1         0         1         0 
 #&gt;    Income    Assets      Debt    Amount     Price    Status 
 #&gt;         0         0         0         0         0         0</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="kw">colSums</span>(<span class="kw">is.na</span>(test))</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">colSums</span>(<span class="kw">is.na</span>(test))</a></code></pre></div>
 <pre><code>#&gt; Seniority      Home      Time       Age   Marital   Records       Job  Expenses 
 #&gt;         0         1         0         0         0         0         1         0 
 #&gt;    Income    Assets      Debt    Amount     Price    Status 
 #&gt;         0         0         0         0         0         0</code></pre>
 <p>Dari output di atas diketahui bahwa variabel <code>Income</code>, <code>Assets</code>, dan <code>Debt</code> sudah tidak mengandung missing value.</p>
-<ol start="11" style="list-style-type: decimal">
-<li>Bagaimana implementasi model regresi pada random forest?</li>
-</ol>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1">crime &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/03-C2/crime.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb59-2" title="2"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>X)</a>
-<a class="sourceLine" id="cb59-3" title="3"><span class="kw">names</span>(crime) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;percent_m&quot;</span>, <span class="st">&quot;is_south&quot;</span>, <span class="st">&quot;mean_education&quot;</span>, <span class="st">&quot;police_exp60&quot;</span>, <span class="st">&quot;police_exp59&quot;</span>, <span class="st">&quot;labour_participation&quot;</span>, <span class="st">&quot;m_per1000f&quot;</span>, <span class="st">&quot;state_pop&quot;</span>, <span class="st">&quot;nonwhites_per1000&quot;</span>, <span class="st">&quot;unemploy_m24&quot;</span>, <span class="st">&quot;unemploy_m39&quot;</span>, <span class="st">&quot;gdp&quot;</span>, <span class="st">&quot;inequality&quot;</span>, <span class="st">&quot;prob_prison&quot;</span>, <span class="st">&quot;time_prison&quot;</span>, <span class="st">&quot;crime_rate&quot;</span>)</a>
-<a class="sourceLine" id="cb59-4" title="4"></a>
-<a class="sourceLine" id="cb59-5" title="5">crime &lt;-<span class="st"> </span>crime <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb59-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">is_south =</span> <span class="kw">as.factor</span>(is_south))</a></code></pre></div>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb60-2" title="2">idx &lt;-<span class="st"> </span><span class="kw">initial_split</span>(crime, <span class="dt">prop =</span> <span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb60-3" title="3"></a>
-<a class="sourceLine" id="cb60-4" title="4"><span class="co"># check train dataset</span></a>
-<a class="sourceLine" id="cb60-5" title="5">train &lt;-<span class="st"> </span><span class="kw">training</span>(idx) </a>
-<a class="sourceLine" id="cb60-6" title="6"></a>
-<a class="sourceLine" id="cb60-7" title="7"><span class="co"># check test dataset</span></a>
-<a class="sourceLine" id="cb60-8" title="8">test &lt;-<span class="st"> </span><span class="kw">testing</span>(idx) </a></code></pre></div>
 <ul>
 <li><p>Link artikel mengenai missing value <a href="https://towardsdatascience.com/6-different-ways-to-compensate-for-missing-values-data-imputation-with-examples-6022d9ca0779">6 Different Ways to Compensate for Missing Values In a Dataset (Data Imputation with examples)</a></p></li>
 <li><p>Link mengenai Step Functions - Imputation dari library <code>recipes</code> <a href="https://tidymodels.github.io/recipes/reference/index.html#section-step-functions-imputation">Step Functions - Imputation</a></p></li>
 </ul>
+<ol start="11" style="list-style-type: decimal">
+<li>Bagaimana implementasi model regresi pada random forest?</li>
+</ol>
+<p>import data yang akan digunakan</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1">insurance &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/03-C2/insurance.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb62-2" title="2"><span class="kw">head</span>(insurance)</a></code></pre></div>
+<pre><code>#&gt;   age    sex    bmi children smoker    region   charges
+#&gt; 1  19 female 27.900        0    yes southwest 16884.924
+#&gt; 2  18   male 33.770        1     no southeast  1725.552
+#&gt; 3  28   male 33.000        3     no southeast  4449.462
+#&gt; 4  33   male 22.705        0     no northwest 21984.471
+#&gt; 5  32   male 28.880        0     no northwest  3866.855
+#&gt; 6  31 female 25.740        0     no southeast  3756.622</code></pre>
+<p>Lakukan cross validation</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb64-2" title="2">idx &lt;-<span class="st"> </span><span class="kw">initial_split</span>(insurance, <span class="dt">prop =</span> <span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb64-3" title="3"></a>
+<a class="sourceLine" id="cb64-4" title="4"><span class="co"># check train dataset</span></a>
+<a class="sourceLine" id="cb64-5" title="5">train &lt;-<span class="st"> </span><span class="kw">training</span>(idx) </a>
+<a class="sourceLine" id="cb64-6" title="6"></a>
+<a class="sourceLine" id="cb64-7" title="7"><span class="co"># check test dataset</span></a>
+<a class="sourceLine" id="cb64-8" title="8">test &lt;-<span class="st"> </span><span class="kw">testing</span>(idx) </a></code></pre></div>
+<p>Membuat model regresi dengan random forest tidak berbeda dengan kasus klasifikasi, ketika target variabel yang digunakan bertipe numerik, otomatis model akan menghasilkan model regresi.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb65-2" title="2">ctrl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>, <span class="dt">number=</span><span class="dv">5</span>, <span class="dt">repeats=</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb65-3" title="3">insurance_forest &lt;-<span class="st"> </span><span class="kw">train</span>(charges <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>train, <span class="dt">method=</span><span class="st">&quot;rf&quot;</span>, <span class="dt">trControl =</span> ctrl)</a>
+<a class="sourceLine" id="cb65-4" title="4">insurance_forest</a></code></pre></div>
+<pre><code>#&gt; Random Forest 
+#&gt; 
+#&gt; 857 samples
+#&gt;   6 predictor
+#&gt; 
+#&gt; No pre-processing
+#&gt; Resampling: Cross-Validated (5 fold, repeated 3 times) 
+#&gt; Summary of sample sizes: 685, 686, 685, 687, 685, 685, ... 
+#&gt; Resampling results across tuning parameters:
+#&gt; 
+#&gt;   mtry  RMSE      Rsquared   MAE     
+#&gt;   2     5478.898  0.8335458  3708.914
+#&gt;   5     4822.793  0.8433103  2729.368
+#&gt;   8     4944.418  0.8365218  2827.233
+#&gt; 
+#&gt; RMSE was used to select the optimal model using the smallest value.
+#&gt; The final value used for the model was mtry = 5.</code></pre>
+<p>Melakukan prediksi pada data test dan menghitung nilai RMSE</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1">test<span class="op">$</span>pred &lt;-<span class="st"> </span><span class="kw">predict</span>(<span class="dt">object =</span> insurance_forest,<span class="dt">newdata =</span> test)</a>
+<a class="sourceLine" id="cb67-2" title="2"><span class="kw">RMSE</span>(<span class="dt">y_pred =</span> test<span class="op">$</span>pred,<span class="dt">y_true =</span> test<span class="op">$</span>charges)</a></code></pre></div>
+<pre><code>#&gt; [1] 3891.623</code></pre>
+<ol start="12" style="list-style-type: decimal">
+<li><p>Jelaskan kegunaan dari ROC dan AUC?</p>
+<p>Kurva ROC (Receiver Operating Characteristic) menggambarkan seberapa baik kinerja model klasifikasi biner. Kurva ROC dibentuk dari nilai TPR (True Positive Rate) dan FPR (False Positive Rate) untuk semua nilai threshold dari 0 hingga 1. AUC (Area Under the Curve) adalah luas daerah dari kurva ROC. Nilai AUC mendekati 1 artinya model sangat baik, ketika nilai AUC berada di sekitar 0.5 maka model tersebut memiliki performance yang tidak baik dan cenderung hanya menebak secara acak.</p></li>
+</ol>
 
 </div>
 </div>
 <div id="unsupervised-learning" class="section level1">
 <h1><span class="header-section-number">Bab 4</span> Unsupervised Learning</h1>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># libraries</span></a>
-<a class="sourceLine" id="cb61-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb61-3" title="3"><span class="kw">library</span>(FactoMineR)</a>
-<a class="sourceLine" id="cb61-4" title="4"><span class="kw">library</span>(factoextra)</a>
-<a class="sourceLine" id="cb61-5" title="5"><span class="kw">library</span>(rsample)</a>
-<a class="sourceLine" id="cb61-6" title="6"><span class="kw">library</span>(recipes)</a>
-<a class="sourceLine" id="cb61-7" title="7"><span class="kw">library</span>(plotly)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co"># libraries</span></a>
+<a class="sourceLine" id="cb69-2" title="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb69-3" title="3"><span class="kw">library</span>(FactoMineR)</a>
+<a class="sourceLine" id="cb69-4" title="4"><span class="kw">library</span>(factoextra)</a>
+<a class="sourceLine" id="cb69-5" title="5"><span class="kw">library</span>(rsample)</a>
+<a class="sourceLine" id="cb69-6" title="6"><span class="kw">library</span>(recipes)</a>
+<a class="sourceLine" id="cb69-7" title="7"><span class="kw">library</span>(plotly)</a></code></pre></div>
 <ol style="list-style-type: decimal">
 <li><p>Bagaimana penerapan PCA di industri?</p>
 <p>PCA pada industri lebih sering digunakan untuk data preparation sama halnya seperti scaling, feature engineering, ataupun variable selection. PCA digunakan untuk mereduksi data besar menjadi data yang lebih kecil, secara sederhana dapat dikatakan mengurangi jumlah kolom pada data. Walaupun PCA mengurangi jumlah kolom pada data (mereduksi dimensi), PCA tetap mempertahankan semua variabel (menggunakan semua variabel). Sebelum mereduksi dimensi PCA akan merangkum terlebih dahulu semua informasi yang terdapat pada setiap variabel ke dalam bentuk PC, PC tersebut yang nantinya akan direduksi (dikurangi) dimensinya. Oleh karena itu, variabel yang digunakan jumlahnya tetap sama seperti data awal, hanya informasi (variansinya) saja yang berkurang. Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi <a href="https://web.cs.ucdavis.edu/~vemuri/papers/pcaVisualization.pdf">An Application of PCA</a>.</p>
@@ -705,7 +755,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li><p>Apakah biplot dapat menampilkan PC lain selain PC1 dan PC2?</p></li>
 </ol>
 <p>Bisa tetapi informasi yang dijelaskan menjadi berkurang, karena secara default pada R PC1 dan PC2 merangkum informasi paling banyak. Berikut contoh membuat biplot dengan menggunakan PC lain (selain PC1 dan PC2):</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="kw">head</span>(USArrests)</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="kw">head</span>(USArrests)</a></code></pre></div>
 <pre><code>#&gt;            Murder Assault UrbanPop Rape
 #&gt; Alabama      13.2     236       58 21.2
 #&gt; Alaska       10.0     263       48 44.5
@@ -714,10 +764,10 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; California    9.0     276       91 40.6
 #&gt; Colorado      7.9     204       78 38.7</code></pre>
 <p>Membuat PCA dari data <code>USArrests</code> dengan menggunakan fungsi <code>prcomp()</code>.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1">pca_us &lt;-<span class="st"> </span><span class="kw">prcomp</span>(USArrests, <span class="dt">scale =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1">pca_us &lt;-<span class="st"> </span><span class="kw">prcomp</span>(USArrests, <span class="dt">scale =</span> T)</a></code></pre></div>
 <p>Membuat visualisasi dari hasil PCA dengan menggunakan fungsi <code>biplot()</code>.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># parameter `choices` dapat diganti sesuai PC yang ingin dibuat, secara default menggunakan  PC1 dan PC2 (choices = 1:2)</span></a>
-<a class="sourceLine" id="cb65-2" title="2"><span class="kw">biplot</span>(pca_us, <span class="dt">choices =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># parameter `choices` dapat diganti sesuai PC yang ingin dibuat, secara default menggunakan  PC1 dan PC2 (choices = 1:2)</span></a>
+<a class="sourceLine" id="cb73-2" title="2"><span class="kw">biplot</span>(pca_us, <span class="dt">choices =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">3</span>)</a></code></pre></div>
 <p><img src="04-UL_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <ol start="3" style="list-style-type: decimal">
 <li>Dimensionality reduction mengatasi masalah high-dimensional data, permasalahan apa yang terdapat pada data berdimensi tinggi?</li>
@@ -742,7 +792,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li><p>Bagaimana best practice dalam penentuan jumlah cluster?</p>
 <p>Fungsi <code>kmeans()</code> tidak dapat menentukan jumlah cluster secara otomatis. Jumlah cluster tetap ditentukan oleh user berdasarkan kebutuhan bisnis. Namun, secara statistik penentuan jumlah cluster dapat dilakukan berdasarkan penurunan wss. Secara sederhana, penurunan wss dapat divisualisasikan dengan menggunakan fungsi <code>fviz_nbclust()</code> dari library <code>factoextra</code>. Berikut contoh memvisualisasikan penurunan wss dengan menggunakan data <code>USArrests</code>:</p></li>
 </ol>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="kw">head</span>(USArrests, <span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="kw">head</span>(USArrests, <span class="dv">6</span>)</a></code></pre></div>
 <pre><code>#&gt;            Murder Assault UrbanPop Rape
 #&gt; Alabama      13.2     236       58 21.2
 #&gt; Alaska       10.0     263       48 44.5
@@ -750,31 +800,31 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; Arkansas      8.8     190       50 19.5
 #&gt; California    9.0     276       91 40.6
 #&gt; Colorado      7.9     204       78 38.7</code></pre>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># scaling data</span></a>
-<a class="sourceLine" id="cb68-2" title="2">USArrests_scale &lt;-<span class="st"> </span><span class="kw">scale</span>(USArrests)</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="co"># scaling data</span></a>
+<a class="sourceLine" id="cb76-2" title="2">USArrests_scale &lt;-<span class="st"> </span><span class="kw">scale</span>(USArrests)</a></code></pre></div>
 <p>Melakukan visualisasi penurunan wss dengan menggunakan fungsi <code>fviz_nbclust()</code> dari library <code>factoextra</code>.</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb69-2" title="2"><span class="kw">fviz_nbclust</span>(USArrests_scale, <span class="dt">method =</span> <span class="st">&quot;wss&quot;</span>, kmeans)</a></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb77-2" title="2"><span class="kw">fviz_nbclust</span>(USArrests_scale, <span class="dt">method =</span> <span class="st">&quot;wss&quot;</span>, kmeans)</a></code></pre></div>
 <p><img src="04-UL_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Jumlah cluster yang dipilih adalah jumlah cluster yang ketika dilakukan penambahan cluster sudah tidak mengakibatkan penurunan wss yang signifikan (pada grafik bentuknya landai), kemudian disesuaikan dengan kebutuhan bisnis pada industri.</p>
 <ol start="7" style="list-style-type: decimal">
 <li>Apakah kita dapat memvisualisasikan biplot dengan 3 dimensi?</li>
 </ol>
 <p>Untuk menampilkan biplot dengan 3 dimensi dapat menggunakan function <code>plot_ly()</code> dari package <code>plotly</code>. Berikut ini akan dicontohkan memvisualisasikan biplot dari PC1, PC2, PC3 dan juga akan dibedakan setiap titik observasi dengan cluster nya. Sebelum masuk ke visualisasi, akan dicari terlebih dahulu cluster untuk setiap observasi.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># Read data in</span></a>
-<a class="sourceLine" id="cb70-2" title="2">whiskies &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/04-UL/whiskies.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb70-3" title="3"><span class="co"># Distillery column is the name of each whisky</span></a>
-<a class="sourceLine" id="cb70-4" title="4"><span class="kw">rownames</span>(whiskies) &lt;-<span class="st"> </span>whiskies[,<span class="st">&quot;Distillery&quot;</span>]</a>
-<a class="sourceLine" id="cb70-5" title="5"></a>
-<a class="sourceLine" id="cb70-6" title="6"><span class="co"># remove RowID, Postcode, Latitude and Longitude</span></a>
-<a class="sourceLine" id="cb70-7" title="7">whiskies &lt;-<span class="st"> </span>whiskies[,<span class="dv">3</span><span class="op">:</span><span class="dv">14</span>]</a>
-<a class="sourceLine" id="cb70-8" title="8"></a>
-<a class="sourceLine" id="cb70-9" title="9">whi_km &lt;-<span class="st"> </span><span class="kw">kmeans</span>(<span class="kw">scale</span>(whiskies), <span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="co"># Read data in</span></a>
+<a class="sourceLine" id="cb78-2" title="2">whiskies &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/04-UL/whiskies.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb78-3" title="3"><span class="co"># Distillery column is the name of each whisky</span></a>
+<a class="sourceLine" id="cb78-4" title="4"><span class="kw">rownames</span>(whiskies) &lt;-<span class="st"> </span>whiskies[,<span class="st">&quot;Distillery&quot;</span>]</a>
+<a class="sourceLine" id="cb78-5" title="5"></a>
+<a class="sourceLine" id="cb78-6" title="6"><span class="co"># remove RowID, Postcode, Latitude and Longitude</span></a>
+<a class="sourceLine" id="cb78-7" title="7">whiskies &lt;-<span class="st"> </span>whiskies[,<span class="dv">3</span><span class="op">:</span><span class="dv">14</span>]</a>
+<a class="sourceLine" id="cb78-8" title="8"></a>
+<a class="sourceLine" id="cb78-9" title="9">whi_km &lt;-<span class="st"> </span><span class="kw">kmeans</span>(<span class="kw">scale</span>(whiskies), <span class="dv">4</span>)</a></code></pre></div>
 <p>Setelah menggunakan <code>kmeans()</code> untuk mendapatkan cluster, berikutnya kita lakukan PCA dan membentuk PC yang diperoleh dalam bentuk data frame.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1">whis.pca&lt;-<span class="kw">PCA</span>(whiskies, <span class="dt">graph =</span> F,<span class="dt">scale.unit =</span> T)</a>
-<a class="sourceLine" id="cb71-2" title="2">df_pca &lt;-<span class="st"> </span><span class="kw">data.frame</span>(whis.pca<span class="op">$</span>ind<span class="op">$</span>coord) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb71-3" title="3"><span class="st">          </span><span class="kw">bind_cols</span>(<span class="dt">cluster =</span> <span class="kw">as.factor</span>(whi_km<span class="op">$</span>cluster))</a>
-<a class="sourceLine" id="cb71-4" title="4"><span class="kw">head</span>(df_pca)</a></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1">whis.pca&lt;-<span class="kw">PCA</span>(whiskies, <span class="dt">graph =</span> F,<span class="dt">scale.unit =</span> T)</a>
+<a class="sourceLine" id="cb79-2" title="2">df_pca &lt;-<span class="st"> </span><span class="kw">data.frame</span>(whis.pca<span class="op">$</span>ind<span class="op">$</span>coord) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb79-3" title="3"><span class="st">          </span><span class="kw">bind_cols</span>(<span class="dt">cluster =</span> <span class="kw">as.factor</span>(whi_km<span class="op">$</span>cluster))</a>
+<a class="sourceLine" id="cb79-4" title="4"><span class="kw">head</span>(df_pca)</a></code></pre></div>
 <pre><code>#&gt;         Dim.1      Dim.2      Dim.3      Dim.4       Dim.5 cluster
 #&gt; 1 -0.65565655  1.2056463 -0.1663438 -0.7807432  0.14526590       2
 #&gt; 2 -2.31263102  3.7479878  1.3669186  0.8719922  0.69366566       2
@@ -783,14 +833,14 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; 5  0.12164922  0.4127927 -0.3044621 -1.2705758  1.49597271       1
 #&gt; 6  0.09941062 -1.3966133 -1.2024542  1.6549138 -0.28659985       4</code></pre>
 <p>Langkah berikutnya adalah memvisualisasikan PC dan membedakan warna observasi berdasarkan cluster nya.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="kw">plot_ly</span>(df_pca,<span class="dt">x =</span> <span class="op">~</span>Dim<span class="fl">.1</span>, <span class="dt">y =</span> <span class="op">~</span>Dim<span class="fl">.2</span>, <span class="dt">z =</span> <span class="op">~</span>Dim<span class="fl">.3</span>, <span class="dt">color =</span> <span class="op">~</span>cluster)</a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="kw">plot_ly</span>(df_pca,<span class="dt">x =</span> <span class="op">~</span>Dim<span class="fl">.1</span>, <span class="dt">y =</span> <span class="op">~</span>Dim<span class="fl">.2</span>, <span class="dt">z =</span> <span class="op">~</span>Dim<span class="fl">.3</span>, <span class="dt">color =</span> <span class="op">~</span>cluster)</a></code></pre></div>
 <ol start="8" style="list-style-type: decimal">
 <li>Bagaimana implementasi PCA pada data pre-processing?</li>
 </ol>
 <p>Berikut ini aku dilakukan implementasi PCA pada tahapan data pre-processing dengan menggunakan data <code>attrition</code>.</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">attrition &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/04-UL/attrition.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb74-2" title="2"></a>
-<a class="sourceLine" id="cb74-3" title="3"><span class="kw">head</span>(attrition, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">attrition &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/04-UL/attrition.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb82-2" title="2"></a>
+<a class="sourceLine" id="cb82-3" title="3"><span class="kw">head</span>(attrition, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt;   attrition age   business_travel daily_rate           department
 #&gt; 1       yes  41     travel_rarely       1102                sales
 #&gt; 2        no  49 travel_frequently        279 research_development
@@ -847,24 +897,24 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; 5                          2                       2</code></pre>
 <p>Sebelum melakukan PCA terlebih dahulu dilakukan cross validation, yaitu membagi data menjadi <strong>training set</strong> untuk proses pemodelan dan <strong>testing set</strong> untuk melakukan evaluasi. Namun, data train dan data test tidak langsung dimasukkan ke dalam sebuah objek melainkan dilakukan PCA terlebih dahulu.</p>
 <p>Cross validation akan dilakukan dengan menggunakan fungsi <code>initial_split()</code> dari library <code>rsample</code>. Fungsi tersebut akan melakukan proses sampling untuk cross validation dengan metode <strong>stratified random sampling</strong>, sehingga proporsi target variabel pada data awal, akan dipertahankan baik pada training set maupun testing set.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="kw">set.seed</span>(<span class="dv">417</span>)</a>
-<a class="sourceLine" id="cb76-2" title="2">splitted &lt;-<span class="st"> </span><span class="kw">initial_split</span>(<span class="dt">data =</span> attrition, <span class="dt">prop =</span> <span class="fl">0.8</span>, <span class="dt">strata =</span> <span class="st">&quot;attrition&quot;</span>)</a>
-<a class="sourceLine" id="cb76-3" title="3"></a>
-<a class="sourceLine" id="cb76-4" title="4">splitted</a></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1"><span class="kw">set.seed</span>(<span class="dv">417</span>)</a>
+<a class="sourceLine" id="cb84-2" title="2">splitted &lt;-<span class="st"> </span><span class="kw">initial_split</span>(<span class="dt">data =</span> attrition, <span class="dt">prop =</span> <span class="fl">0.8</span>, <span class="dt">strata =</span> <span class="st">&quot;attrition&quot;</span>)</a>
+<a class="sourceLine" id="cb84-3" title="3"></a>
+<a class="sourceLine" id="cb84-4" title="4">splitted</a></code></pre></div>
 <pre><code>#&gt; &lt;1177/293/1470&gt;</code></pre>
 <p>Melakukan tahapan data preparation yang didalamnya termasuk melakukan PCA. Data preparation yang akan dilakukan adalah menghapus variabel yang dianggap tidak berpengaruh, membuang variabel yang variansinya mendekati 0 (tidak informatif), melakukan scaling, dan melakukan PCA. Proses yang dilakukan pada tahapan data preparation akan dilakukan dengan menggunakan fungsi dari library <code>recipes</code>, yaitu <code>step_rm()</code> untuk menghapus variabel, <code>step_nzv()</code> untuk membuang variabel yang variansinya mendekati 0,<code>step_center()</code> dan <code>step_scale()</code> untuk melakukan scaling, terakhir <code>step_pca()</code> untuk melakukan PCA.</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(attrition <span class="op">~</span><span class="st"> </span>., <span class="kw">training</span>(splitted)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb78-2" title="2"><span class="st">  </span><span class="kw">step_rm</span>(employee_count, employee_number) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb78-3" title="3"><span class="st">  </span><span class="kw">step_nzv</span>(<span class="kw">all_predictors</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb78-4" title="4"><span class="st">  </span><span class="kw">step_center</span>(<span class="kw">all_numeric</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb78-5" title="5"><span class="st">  </span><span class="kw">step_scale</span>(<span class="kw">all_numeric</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb78-6" title="6"><span class="st">  </span><span class="kw">step_pca</span>(<span class="kw">all_numeric</span>(), <span class="dt">threshold =</span> <span class="fl">0.8</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb78-7" title="7"><span class="st">  </span><span class="kw">prep</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(attrition <span class="op">~</span><span class="st"> </span>., <span class="kw">training</span>(splitted)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-2" title="2"><span class="st">  </span><span class="kw">step_rm</span>(employee_count, employee_number) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb86-3" title="3"><span class="st">  </span><span class="kw">step_nzv</span>(<span class="kw">all_predictors</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-4" title="4"><span class="st">  </span><span class="kw">step_center</span>(<span class="kw">all_numeric</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-5" title="5"><span class="st">  </span><span class="kw">step_scale</span>(<span class="kw">all_numeric</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-6" title="6"><span class="st">  </span><span class="kw">step_pca</span>(<span class="kw">all_numeric</span>(), <span class="dt">threshold =</span> <span class="fl">0.8</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-7" title="7"><span class="st">  </span><span class="kw">prep</span>()</a></code></pre></div>
 <p>Setelah mendefinisikan proses data preparation pada objek <code>rec</code>, selanjutnya proses tersebut diterapkan ke data train menggunakan fungsi <code>juice()</code> dan ke data test menggunakan fungsi <code>bake()</code> dari library <code>recipes</code>.</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1">train &lt;-<span class="st"> </span><span class="kw">juice</span>(rec)</a>
-<a class="sourceLine" id="cb79-2" title="2"></a>
-<a class="sourceLine" id="cb79-3" title="3"><span class="co"># melihat hasil data train setelah dilakukan tahapan data preparation</span></a>
-<a class="sourceLine" id="cb79-4" title="4"><span class="kw">head</span>(train, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1">train &lt;-<span class="st"> </span><span class="kw">juice</span>(rec)</a>
+<a class="sourceLine" id="cb87-2" title="2"></a>
+<a class="sourceLine" id="cb87-3" title="3"><span class="co"># melihat hasil data train setelah dilakukan tahapan data preparation</span></a>
+<a class="sourceLine" id="cb87-4" title="4"><span class="kw">head</span>(train, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt; # A tibble: 5 x 21
 #&gt;   business_travel department education_field gender job_role marital_status
 #&gt;   &lt;fct&gt;           &lt;fct&gt;      &lt;fct&gt;           &lt;fct&gt;  &lt;fct&gt;    &lt;fct&gt;         
@@ -876,10 +926,10 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; # … with 15 more variables: over_time &lt;fct&gt;, attrition &lt;fct&gt;, PC01 &lt;dbl&gt;,
 #&gt; #   PC02 &lt;dbl&gt;, PC03 &lt;dbl&gt;, PC04 &lt;dbl&gt;, PC05 &lt;dbl&gt;, PC06 &lt;dbl&gt;, PC07 &lt;dbl&gt;,
 #&gt; #   PC08 &lt;dbl&gt;, PC09 &lt;dbl&gt;, PC10 &lt;dbl&gt;, PC11 &lt;dbl&gt;, PC12 &lt;dbl&gt;, PC13 &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1">test &lt;-<span class="st"> </span><span class="kw">bake</span>(rec, <span class="kw">testing</span>(splitted))</a>
-<a class="sourceLine" id="cb81-2" title="2"></a>
-<a class="sourceLine" id="cb81-3" title="3"><span class="co"># melihat hasil data test setelah dilakukan tahapan data preparation</span></a>
-<a class="sourceLine" id="cb81-4" title="4"><span class="kw">head</span>(test, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1">test &lt;-<span class="st"> </span><span class="kw">bake</span>(rec, <span class="kw">testing</span>(splitted))</a>
+<a class="sourceLine" id="cb89-2" title="2"></a>
+<a class="sourceLine" id="cb89-3" title="3"><span class="co"># melihat hasil data test setelah dilakukan tahapan data preparation</span></a>
+<a class="sourceLine" id="cb89-4" title="4"><span class="kw">head</span>(test, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt; # A tibble: 5 x 21
 #&gt;   business_travel department education_field gender job_role marital_status
 #&gt;   &lt;fct&gt;           &lt;fct&gt;      &lt;fct&gt;           &lt;fct&gt;  &lt;fct&gt;    &lt;fct&gt;         
@@ -898,9 +948,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Bagaimana penggunaan visualisasi PCA menggunakan package <code>factoextra</code>?</li>
 </ol>
 <p>Kita akan mencoba melakukan visualisasi pada data setelah dilakukan PCA dengan menggunakan data <code>loan</code>.</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1">loan &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/04-UL/loan2017Q4.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb83-2" title="2"></a>
-<a class="sourceLine" id="cb83-3" title="3"><span class="kw">head</span>(loan, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1">loan &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/04-UL/loan2017Q4.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb91-2" title="2"></a>
+<a class="sourceLine" id="cb91-3" title="3"><span class="kw">head</span>(loan, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt;   initial_list_status            purpose int_rate installment annual_inc   dti
 #&gt; 1                   w debt_consolidation    14.08      675.99     156700 19.11
 #&gt; 2                   f debt_consolidation     9.44      480.08      50000 19.35
@@ -920,53 +970,53 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; 4        1 12.07254        0       0
 #&gt; 5        0 11.60816        0       0</code></pre>
 <p>Sebelum melakukan PCA kita akan melakukan tahapan data preparation terlebih dahulu dengan membuang variabel <code>initial_list_status</code>, <code>home_ownership</code>, dan <code>not_paid</code> karena visualisasi yang akan dibuat tidak memerlukan insight dari ketiga variabel tersebut.</p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1">loan_clean &lt;-<span class="st"> </span>loan <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb85-2" title="2"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(initial_list_status, home_ownership, not_paid))</a></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1">loan_clean &lt;-<span class="st"> </span>loan <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb93-2" title="2"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(initial_list_status, home_ownership, not_paid))</a></code></pre></div>
 <p>Membuat PCA dengan menggunakan fungsi <code>PCA()</code> dari library <code>FactoMiner</code>. Parameter yang digunakan adalah:</p>
 <ul>
 <li><p><code>ncp</code>: Jumlah PC yang akan dihasilkan. Secara default fungsi <code>PCA()</code> hanya akan menampilkan 5 PC awal (5 PC yang membawa informasi paling banyak).</p></li>
 <li><p><code>quali.sup</code>: Nomor kolom dari variabel kategorik.</p></li>
 <li><p><code>graph</code>: Sebuah logical value. T akan menampilkan hasil visualisasi, F tidak menampilkan hasil visualisasi. Secara default fungsi <code>PCA()</code> akan langsung menampilkan hasil visualisasi.</p></li>
 </ul>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1">pca_loan &lt;-<span class="st"> </span><span class="kw">PCA</span>(loan_clean, <span class="dt">ncp =</span> <span class="dv">10</span>, <span class="dt">quali.sup =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">7</span>), <span class="dt">graph =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" title="1">pca_loan &lt;-<span class="st"> </span><span class="kw">PCA</span>(loan_clean, <span class="dt">ncp =</span> <span class="dv">10</span>, <span class="dt">quali.sup =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">7</span>), <span class="dt">graph =</span> F)</a></code></pre></div>
 <p>Setelah membuat PCA, selanjutnya adalah membuat visualisasi dari hasil PCA. Kita akan membuat individual plot menggunakan fungsi <code>fviz_pca_ind()</code> dari library <code>factoextra</code>. Parameter yang digunakan adalah:</p>
 <ul>
 <li><p>Hasil PCA</p></li>
 <li><p><code>habillage</code>: Variabel kategori yang dipilih, setiap individu akan dibedakan berdasarkan variabel kategori yang dipilih.</p></li>
 <li><p><code>select.ind</code>: Jumlah individu dengan kontribusi tertinggi yang ingin dilihat.</p></li>
 </ul>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1"><span class="kw">fviz_pca_ind</span>(pca_loan, <span class="dt">habillage =</span> <span class="dv">6</span>, <span class="dt">select.ind =</span> <span class="kw">list</span>(<span class="dt">contrib =</span> <span class="dv">10</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">fviz_pca_ind</span>(pca_loan, <span class="dt">habillage =</span> <span class="dv">6</span>, <span class="dt">select.ind =</span> <span class="kw">list</span>(<span class="dt">contrib =</span> <span class="dv">10</span>))</a></code></pre></div>
 <p><img src="04-UL_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Plot individu di atas hanya menampilkan 10 observasi yang memberikan informasi tertinggi terhadap PC1 dan PC2. Namun, terdapat lebih dari 10 titik observasi yang terdapat pada plot di atas karena terdapat titik observasi yang merupakan titik pusat dari tiap status verifikasi.</p>
 </div>
 <div id="cluster" class="section level2">
 <h2><span class="header-section-number">4.2</span> Cluster</h2>
 <p>Kita akan mencoba melakukan visualisasi hasil clustering dengan menggunakan data <code>USArrests</code>.</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">head</span>(USArrests, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1"><span class="kw">head</span>(USArrests, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt;            Murder Assault UrbanPop Rape
 #&gt; Alabama      13.2     236       58 21.2
 #&gt; Alaska       10.0     263       48 44.5
 #&gt; Arizona       8.1     294       80 31.0
 #&gt; Arkansas      8.8     190       50 19.5
 #&gt; California    9.0     276       91 40.6</code></pre>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="co"># scaling data `USArrests`</span></a>
-<a class="sourceLine" id="cb90-2" title="2">USArrests_scale &lt;-<span class="st"> </span><span class="kw">scale</span>(USArrests)</a></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1"><span class="co"># scaling data `USArrests`</span></a>
+<a class="sourceLine" id="cb98-2" title="2">USArrests_scale &lt;-<span class="st"> </span><span class="kw">scale</span>(USArrests)</a></code></pre></div>
 <p>Menentukan jumlah cluster yang akan dibuat berdasarkan penurunan wss. Supaya lebih mudah menentukan penurunan wss yang sudah tidak signifikan ketika menambah jumlah cluster, maka dibuat visualisasinya dengan menggunakan fungsi <code>fviz_nbclust()</code> dari library <code>factoextra</code>.</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb91-2" title="2"><span class="kw">fviz_nbclust</span>(USArrests_scale, <span class="dt">method =</span> <span class="st">&quot;wss&quot;</span>, kmeans)</a></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb99-2" title="2"><span class="kw">fviz_nbclust</span>(USArrests_scale, <span class="dt">method =</span> <span class="st">&quot;wss&quot;</span>, kmeans)</a></code></pre></div>
 <p><img src="04-UL_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Melakukan k-means clustering dengan jumlah cluster 5 berdasarkan hasil penurunan wss di atas menggunakan fungsi <code>kmeans()</code>.</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb92-2" title="2">USArrests_cl &lt;-<span class="st"> </span><span class="kw">kmeans</span>(USArrests_scale, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb100-2" title="2">USArrests_cl &lt;-<span class="st"> </span><span class="kw">kmeans</span>(USArrests_scale, <span class="dv">5</span>)</a></code></pre></div>
 <p>Membuat visualisasi hasil cluster dengan menggunakan fungsi <code>fviz_cluster()</code> dari library <code>factoextra</code>.</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1"><span class="co"># `USArrests` bisa diganti dengan yang sudah dilakukan scaling `USArrests_scale` </span></a>
-<a class="sourceLine" id="cb93-2" title="2"><span class="kw">fviz_cluster</span>(USArrests_cl, USArrests)</a></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="co"># `USArrests` bisa diganti dengan yang sudah dilakukan scaling `USArrests_scale` </span></a>
+<a class="sourceLine" id="cb101-2" title="2"><span class="kw">fviz_cluster</span>(USArrests_cl, USArrests)</a></code></pre></div>
 <p><img src="04-UL_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Mengkombinasikan visualisasi hasil clusterig dengan PCA. Untuk melakukan hal tersebut kita harus menambahkan kolom cluster pada data <code>USArrests</code>.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" title="1">USArrests_clean &lt;-<span class="st"> </span>USArrests <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb94-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cluster =</span> USArrests_cl<span class="op">$</span>cluster)</a>
-<a class="sourceLine" id="cb94-3" title="3"></a>
-<a class="sourceLine" id="cb94-4" title="4"><span class="kw">head</span>(USArrests_clean, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1">USArrests_clean &lt;-<span class="st"> </span>USArrests <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb102-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cluster =</span> USArrests_cl<span class="op">$</span>cluster)</a>
+<a class="sourceLine" id="cb102-3" title="3"></a>
+<a class="sourceLine" id="cb102-4" title="4"><span class="kw">head</span>(USArrests_clean, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt;   Murder Assault UrbanPop Rape cluster
 #&gt; 1   13.2     236       58 21.2       1
 #&gt; 2   10.0     263       48 44.5       4
@@ -974,9 +1024,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; 4    8.8     190       50 19.5       5
 #&gt; 5    9.0     276       91 40.6       4</code></pre>
 <p>Kita akan mengubah nama baris yang awalnya berupa indeks menjadi nama negara sesuai dengan data <code>USArrests</code>.</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1"><span class="kw">rownames</span>(USArrests_clean) &lt;-<span class="st"> </span><span class="kw">rownames</span>(USArrests)</a>
-<a class="sourceLine" id="cb96-2" title="2"></a>
-<a class="sourceLine" id="cb96-3" title="3"><span class="kw">head</span>(USArrests_clean, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="kw">rownames</span>(USArrests_clean) &lt;-<span class="st"> </span><span class="kw">rownames</span>(USArrests)</a>
+<a class="sourceLine" id="cb104-2" title="2"></a>
+<a class="sourceLine" id="cb104-3" title="3"><span class="kw">head</span>(USArrests_clean, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt;            Murder Assault UrbanPop Rape cluster
 #&gt; Alabama      13.2     236       58 21.2       1
 #&gt; Alaska       10.0     263       48 44.5       4
@@ -984,14 +1034,14 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; Arkansas      8.8     190       50 19.5       5
 #&gt; California    9.0     276       91 40.6       4</code></pre>
 <p>Membuat PCA terlebih dahulu untuk mengkombinasikan visualisasi hasil clustering dengan PCA dengan menggunakan <code>PCA()</code>.</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1">pca_USArrest &lt;-<span class="st"> </span><span class="kw">PCA</span>(USArrests_clean, <span class="dt">quali.sup =</span> <span class="dv">5</span>, <span class="dt">graph =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1">pca_USArrest &lt;-<span class="st"> </span><span class="kw">PCA</span>(USArrests_clean, <span class="dt">quali.sup =</span> <span class="dv">5</span>, <span class="dt">graph =</span> F)</a></code></pre></div>
 <p>Mengkombinasikan visualisasi hasil clustering dan PCA menggunakan fungsi <code>fviz_pca_biplot()</code> dari library <code>factoextra</code>. Parameter yang digunakan adalah:</p>
 <ul>
 <li><p>Hasil PCA</p></li>
 <li><p><code>habillage</code>: Variabel kategori yang dipilih, setiap individu akan dibedakan berdasarkan variabel kategori yang dipilih.</p></li>
 <li><p><code>addEllipses</code>: Sebuah logical value. T akan menambah elips untuk ssetiap cluster, F sebaliknya. Secara default fungsi <code>fviz_pca_biplot()</code> tidak akan menambah elips pada plot individu.</p></li>
 </ul>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw">fviz_pca_biplot</span>(pca_USArrest, <span class="dt">habillage =</span> <span class="dv">5</span>, <span class="dt">addEllipses =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1"><span class="kw">fviz_pca_biplot</span>(pca_USArrest, <span class="dt">habillage =</span> <span class="dv">5</span>, <span class="dt">addEllipses =</span> T)</a></code></pre></div>
 <p><img src="04-UL_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Dari plot di atas terlihat bahwa antar cluster saling tumpang tindih, namun kenyataannya antar cluster pasti memiliki observasi/individu yang unik. Hal tersebut terjadi karena kita mencoba untuk memvisualisasikan cluster yang dibentuk dari 4 variabel/dimensi mejadi 2 variabel/dimensi saja.</p>
 
@@ -1010,16 +1060,16 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <p>Nilai smoothing paremeter mendekati nilai 1 artinya bobot lebih besar diberikan ke data observasi terbaru</p></li>
 <li><p>Pada time series forecasting, data deret waktu yang dimiliki harus lengkap tanpa ada tanggal yang hilang, bagaimana mengatasi data yang tanggal nya tidak lengkap?</p></li>
 </ol>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">library</span>(lubridate)</a>
-<a class="sourceLine" id="cb100-2" title="2"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb100-3" title="3">Quantity &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb100-4" title="4">Order.Date &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2019-01-03&quot;</span>,<span class="st">&quot;2019-01-07&quot;</span>,<span class="st">&quot;2019-01-08&quot;</span>) </a>
-<a class="sourceLine" id="cb100-5" title="5">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Order.Date, Quantity) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb100-6" title="6"><span class="st">       </span><span class="kw">mutate</span>(<span class="dt">Order.Date =</span> <span class="kw">ymd</span>(Order.Date)) </a></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb108-2" title="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb108-3" title="3">Quantity &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb108-4" title="4">Order.Date &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2019-01-03&quot;</span>,<span class="st">&quot;2019-01-07&quot;</span>,<span class="st">&quot;2019-01-08&quot;</span>) </a>
+<a class="sourceLine" id="cb108-5" title="5">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Order.Date, Quantity) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb108-6" title="6"><span class="st">       </span><span class="kw">mutate</span>(<span class="dt">Order.Date =</span> <span class="kw">ymd</span>(Order.Date)) </a></code></pre></div>
 <p>Gunakan function <code>pad()</code> dari package <code>padr</code> untuk memenuhi tanggal yang hilang</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="kw">library</span>(padr)</a>
-<a class="sourceLine" id="cb101-2" title="2">dat <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb101-3" title="3"><span class="st">  </span><span class="kw">pad</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">library</span>(padr)</a>
+<a class="sourceLine" id="cb109-2" title="2">dat <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb109-3" title="3"><span class="st">  </span><span class="kw">pad</span>()</a></code></pre></div>
 <pre><code>#&gt;   Order.Date Quantity
 #&gt; 1 2019-01-03        3
 #&gt; 2 2019-01-04       NA
@@ -1031,12 +1081,12 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Bagaimana mengisi nilai NA pada time series object?</li>
 </ol>
 <p><code>Fill = "extend"</code> adalah salah satu function untuk mengisi nilai NA dengan nilai disekitarnya. <a href="https://drive.google.com/file/d/1J7yIsONtK9z3fDvkxnWiEHEoWVE1zdBS/view?usp=sharing">link</a></p>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1"><span class="kw">library</span>(zoo)</a>
-<a class="sourceLine" id="cb103-2" title="2">dat <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb103-3" title="3"><span class="st">  </span><span class="kw">pad</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb103-4" title="4"><span class="st">  </span><span class="kw">pull</span>(Quantity)  <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb103-5" title="5"><span class="st">  </span><span class="kw">ts</span>(<span class="dt">frequency =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb103-6" title="6"><span class="st">  </span><span class="kw">na.fill</span>(<span class="dt">fill =</span> <span class="st">&quot;extend&quot;</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1"><span class="kw">library</span>(zoo)</a>
+<a class="sourceLine" id="cb111-2" title="2">dat <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb111-3" title="3"><span class="st">  </span><span class="kw">pad</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb111-4" title="4"><span class="st">  </span><span class="kw">pull</span>(Quantity)  <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb111-5" title="5"><span class="st">  </span><span class="kw">ts</span>(<span class="dt">frequency =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb111-6" title="6"><span class="st">  </span><span class="kw">na.fill</span>(<span class="dt">fill =</span> <span class="st">&quot;extend&quot;</span>) </a></code></pre></div>
 <pre><code>#&gt; Time Series:
 #&gt; Start = 1 
 #&gt; End = 6 
@@ -1050,9 +1100,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li><p>Apakah pada metode arima kita dapat menambahkan variable prediktor pada analisis?</p></li>
 </ol>
 <p>Untuk analisis time series dengan variabel prediktor lainnya dapat menggunakan parameter <code>xreg</code> pada function <code>Arima()</code> dan <code>auto.arima()</code>.</p>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1"><span class="kw">library</span>(fpp2)</a>
-<a class="sourceLine" id="cb105-2" title="2"><span class="kw">library</span>(forecast)</a>
-<a class="sourceLine" id="cb105-3" title="3"><span class="kw">Arima</span>(<span class="dt">y =</span> uschange[,<span class="dv">1</span>], <span class="dt">xreg =</span> uschange[,<span class="dv">2</span>], <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1"><span class="kw">library</span>(fpp2)</a>
+<a class="sourceLine" id="cb113-2" title="2"><span class="kw">library</span>(forecast)</a>
+<a class="sourceLine" id="cb113-3" title="3"><span class="kw">Arima</span>(<span class="dt">y =</span> uschange[,<span class="dv">1</span>], <span class="dt">xreg =</span> uschange[,<span class="dv">2</span>], <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>))</a></code></pre></div>
 <pre><code>#&gt; Series: uschange[, 1] 
 #&gt; Regression with ARIMA(1,1,0) errors 
 #&gt; 
@@ -1063,7 +1113,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; 
 #&gt; sigma^2 estimated as 0.3982:  log likelihood=-177.46
 #&gt; AIC=360.93   AICc=361.06   BIC=370.61</code></pre>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1"><span class="kw">auto.arima</span>(<span class="dt">y =</span> uschange[,<span class="dv">1</span>], <span class="dt">xreg =</span> uschange[,<span class="dv">2</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1"><span class="kw">auto.arima</span>(<span class="dt">y =</span> uschange[,<span class="dv">1</span>], <span class="dt">xreg =</span> uschange[,<span class="dv">2</span>])</a></code></pre></div>
 <pre><code>#&gt; Series: uschange[, 1] 
 #&gt; Regression with ARIMA(1,0,2) errors 
 #&gt; 
@@ -1092,9 +1142,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 </div>
 <div id="neural-network-and-deep-learning" class="section level1">
 <h1><span class="header-section-number">Bab 6</span> Neural Network and Deep Learning</h1>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">library</span>(rsample)</a>
-<a class="sourceLine" id="cb109-2" title="2"><span class="kw">library</span>(recipes)</a>
-<a class="sourceLine" id="cb109-3" title="3"><span class="kw">library</span>(keras)</a></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1"><span class="kw">library</span>(rsample)</a>
+<a class="sourceLine" id="cb117-2" title="2"><span class="kw">library</span>(recipes)</a>
+<a class="sourceLine" id="cb117-3" title="3"><span class="kw">library</span>(keras)</a></code></pre></div>
 <ol style="list-style-type: decimal">
 <li>Berapa jumlah hidden layer dan nodes untuk setiap hidden layer secara best practice dalam membangun arsitektur neural network (ANN) ?</li>
 </ol>
@@ -1141,9 +1191,9 @@ Jika data train terdiri dari 800 observasi, kita bisa menggunakan batch size 200
 <li>Bagaimana mentransformasikan prediktor data kategorik menjadi variabel dummy?</li>
 </ol>
 <p>Kita akan menggunakan data <code>attrition</code> yang memiliki variabel kategorik untuk dilakukan dummy transformation sebelum menggunakan metode neural network.</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1">attrition &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/06-NN/attrition.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb110-2" title="2"></a>
-<a class="sourceLine" id="cb110-3" title="3"><span class="kw">head</span>(attrition, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1">attrition &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/06-NN/attrition.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb118-2" title="2"></a>
+<a class="sourceLine" id="cb118-3" title="3"><span class="kw">head</span>(attrition, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt;   attrition age   business_travel daily_rate           department
 #&gt; 1       yes  41     travel_rarely       1102                sales
 #&gt; 2        no  49 travel_frequently        279 research_development
@@ -1200,25 +1250,25 @@ Jika data train terdiri dari 800 observasi, kita bisa menggunakan batch size 200
 #&gt; 5                          2                       2</code></pre>
 <p>Kita akan melakukan cross validation, yaitu membagi data menjadi <strong>training set</strong> untuk proses pemodelan dan <strong>testing set</strong> untuk melakukan evaluasi. Namun, data train dan data test tidak langsung dimasukkan ke dalam sebuah objek melainkan dilakukan tahapan data preparation terlebih dahulu yang di dalamnya terdapat tahapan dummy transformation.</p>
 <p>Cross validation akan dilakukan dengan menggunakan fungsi <code>initial_split()</code> dari library <code>rsample</code>. Fungsi tersebut akan melakukan proses sampling untuk cross validation dengan metode <strong>stratified random sampling</strong>, sehingga proporsi target variabel pada data awal, akan dipertahankan baik pada training set maupun testing set.</p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb112-2" title="2"></a>
-<a class="sourceLine" id="cb112-3" title="3">splitted &lt;-<span class="st"> </span><span class="kw">initial_split</span>(attrition, <span class="dt">prop =</span> <span class="fl">0.8</span>, <span class="dt">strata =</span> <span class="st">&quot;attrition&quot;</span>)</a>
-<a class="sourceLine" id="cb112-4" title="4"></a>
-<a class="sourceLine" id="cb112-5" title="5">splitted</a></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb120-2" title="2"></a>
+<a class="sourceLine" id="cb120-3" title="3">splitted &lt;-<span class="st"> </span><span class="kw">initial_split</span>(attrition, <span class="dt">prop =</span> <span class="fl">0.8</span>, <span class="dt">strata =</span> <span class="st">&quot;attrition&quot;</span>)</a>
+<a class="sourceLine" id="cb120-4" title="4"></a>
+<a class="sourceLine" id="cb120-5" title="5">splitted</a></code></pre></div>
 <pre><code>#&gt; &lt;1177/293/1470&gt;</code></pre>
 <p>Melakukan tahapan data preparation yang didalamnya termasuk melakukan dummy ransformation. Data preparation yang akan dilakukan adalah menghapus variabel yang dianggap tidak berpengaruh, membuang variabel yang variansinya mendekati 0 (tidak informatif), melakukan scaling, dan melakukan dummy transformation. Proses yang dilakukan pada tahapan data preparation akan dilakukan dengan menggunakan fungsi dari library <code>recipies</code>, yaitu <code>step_rm()</code> untuk menghapus variabel, <code>step_nzv()</code> untuk membuang variabel yang variansinya mendekati 0,<code>step_center()</code> dan <code>step_scale()</code> untuk melakukan scaling, terakhir <code>step_dummy()</code> untuk dummy transformation.</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" title="1">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(attrition <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> <span class="kw">training</span>(splitted)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb114-2" title="2"><span class="st">  </span><span class="kw">step_rm</span>(employee_count, employee_number) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb114-3" title="3"><span class="st">  </span><span class="kw">step_nzv</span>(<span class="kw">all_predictors</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb114-4" title="4"><span class="st">  </span><span class="kw">step_center</span>(<span class="kw">all_numeric</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb114-5" title="5"><span class="st">  </span><span class="kw">step_scale</span>(<span class="kw">all_numeric</span>()) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb114-6" title="6"><span class="st">  </span><span class="kw">step_dummy</span>(<span class="kw">all_nominal</span>(), <span class="op">-</span>attrition, <span class="dt">one_hot =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb114-7" title="7"><span class="st">  </span><span class="kw">prep</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1">rec &lt;-<span class="st"> </span><span class="kw">recipe</span>(attrition <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> <span class="kw">training</span>(splitted)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb122-2" title="2"><span class="st">  </span><span class="kw">step_rm</span>(employee_count, employee_number) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb122-3" title="3"><span class="st">  </span><span class="kw">step_nzv</span>(<span class="kw">all_predictors</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb122-4" title="4"><span class="st">  </span><span class="kw">step_center</span>(<span class="kw">all_numeric</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb122-5" title="5"><span class="st">  </span><span class="kw">step_scale</span>(<span class="kw">all_numeric</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb122-6" title="6"><span class="st">  </span><span class="kw">step_dummy</span>(<span class="kw">all_nominal</span>(), <span class="op">-</span>attrition, <span class="dt">one_hot =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb122-7" title="7"><span class="st">  </span><span class="kw">prep</span>()</a></code></pre></div>
 <p>Setelah mendefinisikan proses data preparation pada objek <code>rec</code>, selanjutnya proses tersebut diterapkan ke data train menggunakan fungsi <code>juice()</code> dan ke data test menggunakan fungsi <code>bake()</code> dari library <code>recipes</code>.</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">data_train &lt;-<span class="st"> </span><span class="kw">juice</span>(rec)</a>
-<a class="sourceLine" id="cb115-2" title="2">data_test &lt;-<span class="st"> </span><span class="kw">bake</span>(rec, <span class="kw">testing</span>(splitted))</a>
-<a class="sourceLine" id="cb115-3" title="3"></a>
-<a class="sourceLine" id="cb115-4" title="4"><span class="kw">head</span>(data_train, <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1">data_train &lt;-<span class="st"> </span><span class="kw">juice</span>(rec)</a>
+<a class="sourceLine" id="cb123-2" title="2">data_test &lt;-<span class="st"> </span><span class="kw">bake</span>(rec, <span class="kw">testing</span>(splitted))</a>
+<a class="sourceLine" id="cb123-3" title="3"></a>
+<a class="sourceLine" id="cb123-4" title="4"><span class="kw">head</span>(data_train, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt; # A tibble: 5 x 45
 #&gt;        age daily_rate distance_from_h… education environment_sat… hourly_rate
 #&gt;      &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;       &lt;dbl&gt;
@@ -1247,42 +1297,42 @@ Jika data train terdiri dari 800 observasi, kita bisa menggunakan batch size 200
 #&gt; #   job_role_sales_representative &lt;dbl&gt;, marital_status_married &lt;dbl&gt;,
 #&gt; #   marital_status_single &lt;dbl&gt;, over_time_yes &lt;dbl&gt;</code></pre>
 <p>Setelah melakukan dummy transformation pada pediktor, data train dan test harus disesuaikan bentuknya untuk melalui proses building model dengan metode neural network. Target variabel yang bertipe kategorik akan dilakukan dummy transformation dengan menggunakan fungsi <code>to_categorical()</code> dari library keras, sementara semua prediktor akan diubah ke dalam bentuk matriks numerik.</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1"><span class="co"># menyiapkan data train</span></a>
-<a class="sourceLine" id="cb117-2" title="2">data_train_y &lt;-<span class="st"> </span><span class="kw">to_categorical</span>(<span class="kw">as.numeric</span>(data_train<span class="op">$</span>attrition) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb117-3" title="3"></a>
-<a class="sourceLine" id="cb117-4" title="4">data_train_x &lt;-<span class="st"> </span>data_train <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb117-5" title="5"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>attrition) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb117-6" title="6"><span class="st">  </span><span class="kw">data.matrix</span>()</a>
-<a class="sourceLine" id="cb117-7" title="7"></a>
-<a class="sourceLine" id="cb117-8" title="8"><span class="co"># menyiapkan data test</span></a>
-<a class="sourceLine" id="cb117-9" title="9">data_test_y &lt;-<span class="st"> </span><span class="kw">to_categorical</span>(<span class="kw">as.numeric</span>(data_test<span class="op">$</span>attrition) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb117-10" title="10"></a>
-<a class="sourceLine" id="cb117-11" title="11">data_test_x &lt;-<span class="st"> </span>data_test <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb117-12" title="12"><span class="st">  </span><span class="kw">select</span>(attrition) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb117-13" title="13"><span class="st">  </span><span class="kw">data.matrix</span>()</a>
-<a class="sourceLine" id="cb117-14" title="14"></a>
-<a class="sourceLine" id="cb117-15" title="15"><span class="co"># cek data train dan test</span></a>
-<a class="sourceLine" id="cb117-16" title="16"><span class="kw">dim</span>(data_train_x)</a></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="co"># menyiapkan data train</span></a>
+<a class="sourceLine" id="cb125-2" title="2">data_train_y &lt;-<span class="st"> </span><span class="kw">to_categorical</span>(<span class="kw">as.numeric</span>(data_train<span class="op">$</span>attrition) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb125-3" title="3"></a>
+<a class="sourceLine" id="cb125-4" title="4">data_train_x &lt;-<span class="st"> </span>data_train <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb125-5" title="5"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>attrition) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb125-6" title="6"><span class="st">  </span><span class="kw">data.matrix</span>()</a>
+<a class="sourceLine" id="cb125-7" title="7"></a>
+<a class="sourceLine" id="cb125-8" title="8"><span class="co"># menyiapkan data test</span></a>
+<a class="sourceLine" id="cb125-9" title="9">data_test_y &lt;-<span class="st"> </span><span class="kw">to_categorical</span>(<span class="kw">as.numeric</span>(data_test<span class="op">$</span>attrition) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb125-10" title="10"></a>
+<a class="sourceLine" id="cb125-11" title="11">data_test_x &lt;-<span class="st"> </span>data_test <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb125-12" title="12"><span class="st">  </span><span class="kw">select</span>(attrition) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb125-13" title="13"><span class="st">  </span><span class="kw">data.matrix</span>()</a>
+<a class="sourceLine" id="cb125-14" title="14"></a>
+<a class="sourceLine" id="cb125-15" title="15"><span class="co"># cek data train dan test</span></a>
+<a class="sourceLine" id="cb125-16" title="16"><span class="kw">dim</span>(data_train_x)</a></code></pre></div>
 <pre><code>#&gt; [1] 1177   44</code></pre>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1"><span class="kw">dim</span>(data_train_y)</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="kw">dim</span>(data_train_y)</a></code></pre></div>
 <pre><code>#&gt; [1] 1177    2</code></pre>
 <ol start="8" style="list-style-type: decimal">
 <li>Ketika running model NN weight/bobot diinisialisasi secara random sehingga menyebabkan hasil yang berbeda jika dilakukan berulang kali. Bagaiamana cara mengatur/menggunakan seed pada Neural Network?</li>
 </ol>
 <p>Metode neural network selalu menginisialisasi bobot/weight secara random di awal, sehingga ketika metode tersebut di running berulang kali akan memperoleh hasil yang berbeda. Untuk mengatasi hal tersebut kita dapat menggunakan seed (state random). Kita dapat menentukan seed dengan menggunakan fungsi <code>use_session_with_seed()</code> dari library <code>keras</code>.</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" title="1"><span class="kw">use_session_with_seed</span>(seed)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="kw">use_session_with_seed</span>(seed)</a></code></pre></div>
 <p>Selain menggunakan cara di atas kita juga dapat menggunakan seed dengan fungsi <code>initializer_random_normal()</code>. Berikut cara menggunakan seed dengan fungsi tersebut.</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1"><span class="co"># define seed</span></a>
-<a class="sourceLine" id="cb122-2" title="2"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb122-3" title="3">initializer &lt;-<span class="st"> </span><span class="kw">initializer_random_normal</span>(<span class="dt">seed =</span> <span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb122-4" title="4"></a>
-<a class="sourceLine" id="cb122-5" title="5"><span class="co"># use the seed when building architecture</span></a>
-<a class="sourceLine" id="cb122-6" title="6">model &lt;-<span class="st"> </span><span class="kw">keras_model_sequential</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb122-7" title="7"><span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> ..., </a>
-<a class="sourceLine" id="cb122-8" title="8">              <span class="dt">activation =</span> <span class="st">&quot;...&quot;</span>, </a>
-<a class="sourceLine" id="cb122-9" title="9">              <span class="dt">input_shape =</span> <span class="kw">c</span>(...),</a>
-<a class="sourceLine" id="cb122-10" title="10">              <span class="dt">kernel_initializer =</span> initializer, </a>
-<a class="sourceLine" id="cb122-11" title="11">              <span class="dt">bias_initializer =</span> initializer)</a></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1"><span class="co"># define seed</span></a>
+<a class="sourceLine" id="cb130-2" title="2"><span class="kw">set.seed</span>(<span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb130-3" title="3">initializer &lt;-<span class="st"> </span><span class="kw">initializer_random_normal</span>(<span class="dt">seed =</span> <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb130-4" title="4"></a>
+<a class="sourceLine" id="cb130-5" title="5"><span class="co"># use the seed when building architecture</span></a>
+<a class="sourceLine" id="cb130-6" title="6">model &lt;-<span class="st"> </span><span class="kw">keras_model_sequential</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb130-7" title="7"><span class="st">  </span><span class="kw">layer_dense</span>(<span class="dt">units =</span> ..., </a>
+<a class="sourceLine" id="cb130-8" title="8">              <span class="dt">activation =</span> <span class="st">&quot;...&quot;</span>, </a>
+<a class="sourceLine" id="cb130-9" title="9">              <span class="dt">input_shape =</span> <span class="kw">c</span>(...),</a>
+<a class="sourceLine" id="cb130-10" title="10">              <span class="dt">kernel_initializer =</span> initializer, </a>
+<a class="sourceLine" id="cb130-11" title="11">              <span class="dt">bias_initializer =</span> initializer)</a></code></pre></div>
 
 </div>
             </section>
