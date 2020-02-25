@@ -30,7 +30,7 @@ library(recipes)
 
 2. Untuk prediktor kategorik, bagaimana jika terdapat kategori yang tidak signifikan (p value > alpha)? apakah prediktor tersebut masih dianggap signifikan mempengaruhi target?
 
-  Untuk level yang menjadi basis akan dianggap signifikan, untuk level lainnya yang tidak signifikan artinya memang level tersebut tidak memberikan pengaruh terhadap target variabel. Solusi yang dapat dilakukan adalah bining (level tersebut dijadikan satu level yg mirip dan signifikan) atau menambahkan jumlah observasi pada level yang tidak signifikan tersebut.
+  Untuk level yang menjadi basis akan dianggap signifikan, untuk level lainnya yang tidak signifikan artinya memang level tersebut tidak memberikan pengaruh terhadap target variabel. Solusi yang dapat dilakukan adalah bining (level tersebut dijadikan satu level yg mirip dan signifikan) atau menambahkan jumlah observasi pada level yang tidak signifikan tersebut.   
 
 3. Pada fungsi `lm` sudah otomatis melakukan transformasi data kategorik dengan level pertama yang dijadikan basis. Bagaimana jika dilakukan reorder level (mengubah urutan level), apakah akan mengubah hasil pemodelan?
 
@@ -61,7 +61,7 @@ Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi
 
    Misalkan pada kasus fraud detection, dari 1000 transaksi yang dimiliki, 10 diantaranya fraud, sedangkan sisanya tidak fraud. Kemudian perfomance model yang diperoleh sekitar 85%, mungkin terdengar sangat baik, namun pada kenyatannya tidak. Kemungkinan besar model tersebut hanya mampu memprediksi salah satu kelas kelas mayoritas yaitu yang tidak fraud, sedangkan kelas positif yang kita miliki sangat sedikit data yang dimiliki.
 
-## Imbalance Target Variable
+- **Imbalance Target Variable**
 
 Pemodelan klasifikasi mulai banyak digunakan pada berbagai bidang industri, seperti perbankan untuk mendeteksi transaksi yang memiliki kecenderungan kecurangan atau memprediksi potensi kegagalan nasabah dalam membayar kredit/hutang, tranportasi (penerbangan) untuk memprediksi kemungkinan suatu penerbangan mengalami keterlambatan, digital marketing untuk memprediksi pelanggan yang loyal atau pelanggan yang memiliki potensi untuk kembali membeli produk yang dijual, kesehatan untuk memprediksi apakah seorang pasien positif terkena penyakit tertentu, dan masih banyak lagi.
 
@@ -110,7 +110,7 @@ prop.table(table(test$attrition)) %>% round(2)
 
 Downsampling dan upsampling hanya akan dilakukan pada data train karena proses pembuatan model klasifikasi hanya dilakukan pada data train. Data test hanya digunakan untuk mengevaluasi model yang dihasilkan pada data train.
 
-### Downsample
+- Downsample
 
 Untuk melakukan downsampling dengan library `caret` dapat menggunakan fungsi `downSample()`.
 ```{r}
@@ -121,7 +121,7 @@ train_down <- downSample(x = train[, -1], y = train$attrition, yname = "attritio
 prop.table(table(train_down$attrition)) %>% round(2)
 ```
 
-### Upsample
+- Upsample
 
 Untuk melakukan upsampling dengan library `caret` dapat menggunakan fungsi `upSample()`.
 ```{r}
@@ -134,7 +134,7 @@ prop.table(table(train_up$attrition)) %>% round(2)
 
 Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi [downSample: Down- and Up-Sampling Imbalanced Data](https://rdrr.io/cran/caret/man/downSample.html)
 
-### Downsample/Upsample Using `Recipes`
+- Downsample/Upsample Using `Recipes`
 
 Sama seperti saat menggunakan fungsi pada library `caret`, ketika menggunakan fungsi dari library `recipes` juga harus dilakukan cross validation terlebih dahulu. Perbedaan ketika menggunakan fungsi dari library `recipes` data train dan data test tidak langsung dimasukkan ke dalam sebuah objek melainkan dilakukan downsampling atau upsampling terlebih dahulu.
 

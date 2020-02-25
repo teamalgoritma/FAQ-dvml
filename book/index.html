@@ -24,7 +24,7 @@
 <meta name="author" content="Team Algoritma" />
 
 
-<meta name="date" content="2020-02-21" />
+<meta name="date" content="2020-02-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -130,22 +130,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul class="summary">
 <li class="chapter" data-level="" data-path=""><a href="#pendahuluan"><i class="fa fa-check"></i>Pendahuluan</a></li>
 <li class="chapter" data-level="1" data-path=""><a href="#regression-model"><i class="fa fa-check"></i><b>1</b> Regression Model</a></li>
-<li class="chapter" data-level="2" data-path=""><a href="#classification-1"><i class="fa fa-check"></i><b>2</b> Classification 1</a><ul>
-<li class="chapter" data-level="2.1" data-path=""><a href="#imbalance-target-variable"><i class="fa fa-check"></i><b>2.1</b> Imbalance Target Variable</a><ul>
-<li class="chapter" data-level="2.1.1" data-path=""><a href="#downsample"><i class="fa fa-check"></i><b>2.1.1</b> Downsample</a></li>
-<li class="chapter" data-level="2.1.2" data-path=""><a href="#upsample"><i class="fa fa-check"></i><b>2.1.2</b> Upsample</a></li>
-<li class="chapter" data-level="2.1.3" data-path=""><a href="#downsampleupsample-using-recipes"><i class="fa fa-check"></i><b>2.1.3</b> Downsample/Upsample Using <code>Recipes</code></a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path=""><a href="#classification-2"><i class="fa fa-check"></i><b>3</b> Classification 2</a><ul>
-<li class="chapter" data-level="3.1" data-path=""><a href="#deletion"><i class="fa fa-check"></i><b>3.1</b> Deletion</a></li>
-<li class="chapter" data-level="3.2" data-path=""><a href="#full-analysis"><i class="fa fa-check"></i><b>3.2</b> Full analysis</a></li>
-<li class="chapter" data-level="3.3" data-path=""><a href="#imputation"><i class="fa fa-check"></i><b>3.3</b> Imputation</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path=""><a href="#unsupervised-learning"><i class="fa fa-check"></i><b>4</b> Unsupervised Learning</a><ul>
-<li class="chapter" data-level="4.1" data-path=""><a href="#pca"><i class="fa fa-check"></i><b>4.1</b> PCA</a></li>
-<li class="chapter" data-level="4.2" data-path=""><a href="#cluster"><i class="fa fa-check"></i><b>4.2</b> Cluster</a></li>
-</ul></li>
+<li class="chapter" data-level="2" data-path=""><a href="#classification-1"><i class="fa fa-check"></i><b>2</b> Classification 1</a></li>
+<li class="chapter" data-level="3" data-path=""><a href="#classification-2"><i class="fa fa-check"></i><b>3</b> Classification 2</a></li>
+<li class="chapter" data-level="4" data-path=""><a href="#unsupervised-learning"><i class="fa fa-check"></i><b>4</b> Unsupervised Learning</a></li>
 <li class="chapter" data-level="5" data-path=""><a href="#time-series-and-forecasting"><i class="fa fa-check"></i><b>5</b> Time Series and Forecasting</a></li>
 <li class="chapter" data-level="6" data-path=""><a href="#neural-network-and-deep-learning"><i class="fa fa-check"></i><b>6</b> Neural Network and Deep Learning</a></li>
 </ul>
@@ -168,7 +155,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">FAQ</h1>
 <p class="author"><em>Team Algoritma</em></p>
-<p class="date"><em>February 21, 2020</em></p>
+<p class="date"><em>February 25, 2020</em></p>
 </div>
 <style>
 body {
@@ -299,8 +286,9 @@ text-align: justify}
 <p>Permasalahan besar kasus klasifikasi adalah dataset yang tidak seimbang. Contohnya pada case churn telekomunikasi, employee attrition, prediksi kanker, fraud detection, dan sebagainya. Dalam hal tersebut, biasanya jumlah kelas positif jauh lebih sedikit dibandingkan kelas negatif.</p>
 <p>Misalkan pada kasus fraud detection, dari 1000 transaksi yang dimiliki, 10 diantaranya fraud, sedangkan sisanya tidak fraud. Kemudian perfomance model yang diperoleh sekitar 85%, mungkin terdengar sangat baik, namun pada kenyatannya tidak. Kemungkinan besar model tersebut hanya mampu memprediksi salah satu kelas kelas mayoritas yaitu yang tidak fraud, sedangkan kelas positif yang kita miliki sangat sedikit data yang dimiliki.</p></li>
 </ol>
-<div id="imbalance-target-variable" class="section level2">
-<h2><span class="header-section-number">2.1</span> Imbalance Target Variable</h2>
+<ul>
+<li><strong>Imbalance Target Variable</strong></li>
+</ul>
 <p>Pemodelan klasifikasi mulai banyak digunakan pada berbagai bidang industri, seperti perbankan untuk mendeteksi transaksi yang memiliki kecenderungan kecurangan atau memprediksi potensi kegagalan nasabah dalam membayar kredit/hutang, tranportasi (penerbangan) untuk memprediksi kemungkinan suatu penerbangan mengalami keterlambatan, digital marketing untuk memprediksi pelanggan yang loyal atau pelanggan yang memiliki potensi untuk kembali membeli produk yang dijual, kesehatan untuk memprediksi apakah seorang pasien positif terkena penyakit tertentu, dan masih banyak lagi.</p>
 <p>Dari berbagai macam permasalahan klasifikasi tersebut tidak semua masalah klasifikasi memiliki jumlah target variabel yang seimbang (level yang mendominasi keseluruhan target merupakan kelas mayoritas dan level yang lebih kecil disebut kelas minoritas). Ketika kondisi seperti apa target variabel tidak memiliki proporsi yang seimbang ?</p>
 <p><img src="assets/03-C1/imbalance%20proportion.png" /></p>
@@ -338,17 +326,18 @@ text-align: justify}
 #&gt;   no  yes 
 #&gt; 0.84 0.16</code></pre>
 <p>Downsampling dan upsampling hanya akan dilakukan pada data train karena proses pembuatan model klasifikasi hanya dilakukan pada data train. Data test hanya digunakan untuk mengevaluasi model yang dihasilkan pada data train.</p>
-<div id="downsample" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> Downsample</h3>
+<ul>
+<li>Downsample</li>
+</ul>
 <p>Untuk melakukan downsampling dengan library <code>caret</code> dapat menggunakan fungsi <code>downSample()</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">train_down &lt;-<span class="st"> </span><span class="kw">downSample</span>(<span class="dt">x =</span> train[, <span class="dv">-1</span>], <span class="dt">y =</span> train<span class="op">$</span>attrition, <span class="dt">yname =</span> <span class="st">&quot;attrition&quot;</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(train_down<span class="op">$</span>attrition)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>)</a></code></pre></div>
 <pre><code>#&gt; 
 #&gt;  no yes 
 #&gt; 0.5 0.5</code></pre>
-</div>
-<div id="upsample" class="section level3">
-<h3><span class="header-section-number">2.1.2</span> Upsample</h3>
+<ul>
+<li>Upsample</li>
+</ul>
 <p>Untuk melakukan upsampling dengan library <code>caret</code> dapat menggunakan fungsi <code>upSample()</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">train_up &lt;-<span class="st"> </span><span class="kw">upSample</span>(<span class="dt">x =</span> train[, <span class="dv">-1</span>], <span class="dt">y =</span> train<span class="op">$</span>attrition, <span class="dt">yname =</span> <span class="st">&quot;attrition&quot;</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">prop.table</span>(<span class="kw">table</span>(train_up<span class="op">$</span>attrition)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>)</a></code></pre></div>
@@ -356,9 +345,9 @@ text-align: justify}
 #&gt;  no yes 
 #&gt; 0.5 0.5</code></pre>
 <p>Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi <a href="https://rdrr.io/cran/caret/man/downSample.html">downSample: Down- and Up-Sampling Imbalanced Data</a></p>
-</div>
-<div id="downsampleupsample-using-recipes" class="section level3">
-<h3><span class="header-section-number">2.1.3</span> Downsample/Upsample Using <code>Recipes</code></h3>
+<ul>
+<li>Downsample/Upsample Using <code>Recipes</code></li>
+</ul>
 <p>Sama seperti saat menggunakan fungsi pada library <code>caret</code>, ketika menggunakan fungsi dari library <code>recipes</code> juga harus dilakukan cross validation terlebih dahulu. Perbedaan ketika menggunakan fungsi dari library <code>recipes</code> data train dan data test tidak langsung dimasukkan ke dalam sebuah objek melainkan dilakukan downsampling atau upsampling terlebih dahulu.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw">set.seed</span>(<span class="dv">417</span>)</a>
 <a class="sourceLine" id="cb21-2" title="2"></a>
@@ -413,8 +402,6 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <p>Parameter <code>detect_separation</code> akan menghasilkan output <code>TRUE</code> or <code>FALSE</code>. Ketika <code>TRUE</code> artinya terdapat perfect separation pada model. Untuk mengetahui detail variabel mana yang merupakan perfect separtion, kita perlu amati dari output <code>summary()</code> model.</p>
 
 </div>
-</div>
-</div>
 <div id="classification-2" class="section level1">
 <h1><span class="header-section-number">Bab 3</span> Classification 2</h1>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="co"># libraries</span></a>
@@ -439,7 +426,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>tidak mengharuskan scaling data (+)</li>
 <li>baseline yang baik sebelum mencoba model yang lebih kompleks (+)</li>
 <li>memerlukan ketelitian saat melakukan feature engineering karena sangat bergantung pada data yang fit</li>
-<li>tidak dapat mengevaluasi hubungan yang tidak linier (-)</li>
+<li>tidak dapat mengevaluasi hubungan yang tidak linier antara log of odds dan variabel prediktor(-)</li>
 <li><p>mengharuskan antar prediktornya tidak saling terkait (cukup kaku) (-)</p>
 <p><strong>Decision tree:</strong></p></li>
 <li>tidak mengharuskan scaling data (+)</li>
@@ -604,12 +591,13 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <li>Bagaimana penanganan terhadap data missing values?</li>
 </ol>
 <p>Terdapat berbagai cara menangani data yang mengandung missing value. Cara yang paling sering digunakan untuk menangani data yang mengandung missing value, yaitu deletion, full analysis, dan imputation.</p>
-<div id="deletion" class="section level2">
-<h2><span class="header-section-number">3.1</span> Deletion</h2>
+<ul>
+<li>Deletion</li>
+</ul>
 <p>Deletion adalah membuang variabel/kolom pada data yang memiliki jumlah missing value (<code>NA</code>) melebihi 50% dari jumlah observasi. Hal ini menganggap bahwa variabel tersebut tidak banyak memberikan informasi pada data (variansinya mendekati 0). Ketika membuang variabel perlu memperhatikan business case dari data tersebut, apakah variabel yang dibuang akan menghilangkan informasi yang cukup signfikan atau tidak? Apakah ketika variabel tersebut dibuang ada informasi yang berkurang dari data tersebut atau tidak?</p>
-</div>
-<div id="full-analysis" class="section level2">
-<h2><span class="header-section-number">3.2</span> Full analysis</h2>
+<ul>
+<li>Full analysis</li>
+</ul>
 <p>Full analysis adalah membuang observasi/baris yang mengandung missing value. Cara ini dilakukan jika jumlah observasi yang mengandung missing value <code>NA</code> tidak melebihi 5% dari total observasi data.</p>
 <p>Sebagai contoh akan digunakan data <code>credit_data</code>:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="kw">load</span>(<span class="st">&quot;data/03-C2/credit_data.RData&quot;</span>)</a>
@@ -646,9 +634,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt;  Expenses    Income    Assets      Debt    Amount     Price 
 #&gt;         0         0         0         0         0         0</code></pre>
 <p>Dari output di atas diketahui bahwa data <code>credit_data</code> sudah tidak mengandung missing value. Namun, jika diperhatikan jumlah observasi/baris pada data menjadi berkurang yang pada awalnya terdapat 4454 observasi setelah dilakukan full analysis menjadi 4039 observasi dengan variabel/kolom yang jumlahnya tetap sama.</p>
-</div>
-<div id="imputation" class="section level2">
-<h2><span class="header-section-number">3.3</span> Imputation</h2>
+<ul>
+<li>Imputation</li>
+</ul>
 <p>Jika jumlah missing value pada data cukup banyak (melebihi 5% jumlah observasi), kita dapat melakukan imputation yaitu mengisi missing value tersebut dengan suatu nilai tertentu. Biasanya imputation dilakukan bedasarkan business knowledge dari variabel tersebut, misalkan variabel jumlah pengunjung per jam pada sebuah restoran. Seharusnya terdapat jumlah visitor yang bernilai 0 pada jam-jam tertentu karena pasti terdapat kemungkinan pada jam-jam tertentu tidak terdapat pengunjung. Tetapi, jika secara business knowledge seharusnya observasi tersebut memiliki suatu nilai, kita bisa melakukan imputation dengan menggunakan pusat datanya seperti mean/median untuk variabel numerik dan modus untuk variabel kategorik.</p>
 <p>Sebelum melakukan imputation untuk mengisi data yang mengandung missing value terlebih dahulu dilakukan cross validation, yaitu membagi data menjadi <strong>training set</strong> untuk proses pemodelan dan <strong>testing set</strong> untuk melakukan evaluasi. Jika pada data test terdapat missing value, imputation akan dilakukan dengan memanfaatkan informasi dari data train. Data train dan data test tidak langsung dimasukkan ke dalam suatu objek melainkan dilakukan tahapan data pre-paration terlebih dahulu yang di dalamnya termasuk melakukan tahapan imputation.</p>
 <p>Cross validation akan dilakukan dengan menggunakan fungsi <code>initial_split()</code> dari library <code>rsample</code>. Fungsi tersebut akan melakukan proses sampling untuk cross validation dengan metode <strong>stratified random sampling</strong>, sehingga proporsi target variabel pada data awal, akan dipertahankan baik pada training set maupun testing set.</p>
@@ -737,7 +725,6 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <p>Kurva ROC (Receiver Operating Characteristic) menggambarkan seberapa baik kinerja model klasifikasi biner. Kurva ROC dibentuk dari nilai TPR (True Positive Rate) dan FPR (False Positive Rate) untuk semua nilai threshold dari 0 hingga 1. AUC (Area Under the Curve) adalah luas daerah dari kurva ROC. Nilai AUC mendekati 1 artinya model sangat baik, ketika nilai AUC berada di sekitar 0.5 maka model tersebut memiliki performance yang tidak baik dan cenderung hanya menebak secara acak.</p></li>
 </ol>
 
-</div>
 </div>
 <div id="unsupervised-learning" class="section level1">
 <h1><span class="header-section-number">Bab 4</span> Unsupervised Learning</h1>
@@ -941,11 +928,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 #&gt; # … with 15 more variables: over_time &lt;fct&gt;, attrition &lt;fct&gt;, PC01 &lt;dbl&gt;,
 #&gt; #   PC02 &lt;dbl&gt;, PC03 &lt;dbl&gt;, PC04 &lt;dbl&gt;, PC05 &lt;dbl&gt;, PC06 &lt;dbl&gt;, PC07 &lt;dbl&gt;,
 #&gt; #   PC08 &lt;dbl&gt;, PC09 &lt;dbl&gt;, PC10 &lt;dbl&gt;, PC11 &lt;dbl&gt;, PC12 &lt;dbl&gt;, PC13 &lt;dbl&gt;</code></pre>
-<p>Dari output di atas diketahui bahwa variabel numerik sudah berbentuk sebuah PC.</p>
-<div id="pca" class="section level2">
-<h2><span class="header-section-number">4.1</span> PCA</h2>
+<p>Dari output di atas diketahui bahwa variabel numerik sudah berbentuk sebuah PC. Selanjutnya, data sudah siap dilanjutkan ketahap modeling.</p>
 <ol start="9" style="list-style-type: decimal">
-<li>Bagaimana penggunaan visualisasi PCA menggunakan package <code>factoextra</code>?</li>
+<li>Bagaimana implementasi visualisasi PCA menggunakan package <code>factoextra</code>?</li>
 </ol>
 <p>Kita akan mencoba melakukan visualisasi pada data setelah dilakukan PCA dengan menggunakan data <code>loan</code>.</p>
 <div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1">loan &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/04-UL/loan2017Q4.csv&quot;</span>)</a>
@@ -988,9 +973,9 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">fviz_pca_ind</span>(pca_loan, <span class="dt">habillage =</span> <span class="dv">6</span>, <span class="dt">select.ind =</span> <span class="kw">list</span>(<span class="dt">contrib =</span> <span class="dv">10</span>))</a></code></pre></div>
 <p><img src="04-UL_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Plot individu di atas hanya menampilkan 10 observasi yang memberikan informasi tertinggi terhadap PC1 dan PC2. Namun, terdapat lebih dari 10 titik observasi yang terdapat pada plot di atas karena terdapat titik observasi yang merupakan titik pusat dari tiap status verifikasi.</p>
-</div>
-<div id="cluster" class="section level2">
-<h2><span class="header-section-number">4.2</span> Cluster</h2>
+<ol start="10" style="list-style-type: decimal">
+<li>Bagaimana implementasi visualisasi K-means clustering menggunakan package <code>factoextra</code>?</li>
+</ol>
 <p>Kita akan mencoba melakukan visualisasi hasil clustering dengan menggunakan data <code>USArrests</code>.</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1"><span class="kw">head</span>(USArrests, <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>#&gt;            Murder Assault UrbanPop Rape
@@ -1045,7 +1030,6 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <p><img src="04-UL_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Dari plot di atas terlihat bahwa antar cluster saling tumpang tindih, namun kenyataannya antar cluster pasti memiliki observasi/individu yang unik. Hal tersebut terjadi karena kita mencoba untuk memvisualisasikan cluster yang dibentuk dari 4 variabel/dimensi mejadi 2 variabel/dimensi saja.</p>
 
-</div>
 </div>
 <div id="time-series-and-forecasting" class="section level1">
 <h1><span class="header-section-number">Bab 5</span> Time Series and Forecasting</h1>
