@@ -24,7 +24,7 @@
 <meta name="author" content="Team Algoritma" />
 
 
-<meta name="date" content="2020-02-25" />
+<meta name="date" content="2020-03-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -155,7 +155,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">FAQ</h1>
 <p class="author"><em>Team Algoritma</em></p>
-<p class="date"><em>February 25, 2020</em></p>
+<p class="date"><em>March 11, 2020</em></p>
 </div>
 <style>
 body {
@@ -291,7 +291,7 @@ text-align: justify}
 </ul>
 <p>Pemodelan klasifikasi mulai banyak digunakan pada berbagai bidang industri, seperti perbankan untuk mendeteksi transaksi yang memiliki kecenderungan kecurangan atau memprediksi potensi kegagalan nasabah dalam membayar kredit/hutang, tranportasi (penerbangan) untuk memprediksi kemungkinan suatu penerbangan mengalami keterlambatan, digital marketing untuk memprediksi pelanggan yang loyal atau pelanggan yang memiliki potensi untuk kembali membeli produk yang dijual, kesehatan untuk memprediksi apakah seorang pasien positif terkena penyakit tertentu, dan masih banyak lagi.</p>
 <p>Dari berbagai macam permasalahan klasifikasi tersebut tidak semua masalah klasifikasi memiliki jumlah target variabel yang seimbang (level yang mendominasi keseluruhan target merupakan kelas mayoritas dan level yang lebih kecil disebut kelas minoritas). Ketika kondisi seperti apa target variabel tidak memiliki proporsi yang seimbang ?</p>
-<p><img src="assets/03-C1/imbalance%20proportion.png" /></p>
+<p><img src="assets/imbalance%20proportion.png" /></p>
 <p>Hal tersebut akan berpengaruh terhadap kemampuan model untuk memprediksi target (model klasifikasi cenderung lebih pintar dalam memprediksi kelas mayoritas), karena model klasifikasi sangat bergantung pada jumlah setiap level target dalam proses learning nya (model klasifikasi akan melalui proses learning yang seimbang jika diberikan jumlah sampel yang seimbang pula). Hal ini menjadi masalah yang cukup serius, sehingga perlu dilakukan penanganan sebagai solusi permasalahan tersebut.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">attrition &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/02-C1/attrition.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb7-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">attrition =</span> <span class="kw">as.factor</span>(attrition))</a></code></pre></div>
@@ -723,7 +723,13 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <ol start="12" style="list-style-type: decimal">
 <li><p>Jelaskan kegunaan dari ROC dan AUC?</p>
 <p>Kurva ROC (Receiver Operating Characteristic) menggambarkan seberapa baik kinerja model klasifikasi biner. Kurva ROC dibentuk dari nilai TPR (True Positive Rate) dan FPR (False Positive Rate) untuk semua nilai threshold dari 0 hingga 1. AUC (Area Under the Curve) adalah luas daerah dari kurva ROC. Nilai AUC mendekati 1 artinya model sangat baik, ketika nilai AUC berada di sekitar 0.5 maka model tersebut memiliki performance yang tidak baik dan cenderung hanya menebak secara acak.</p></li>
+<li><p>Apa yang dimaksud dengan ensemble method?</p>
+<p>Ensemble method merupakan gabungan prediksi dari beberapa model menjadi prediksi tunggal. Random forest merupakan salah satu jenis ensemble method yang memanfaatkan konsep <em>Bagging</em>, dimana <em>Bagging</em> merupakan gabungan dari bootstrap dan aggregation.</p></li>
 </ol>
+<ul>
+<li><p>Bootstrap merupakan proses pengambilan sampel dengan pengembalian, adanya pengembalian memiliki kemungkinan data yang diambil berulang. Setiap observasi memiliki peluang yang sama untuk dijadikan sampel.</p></li>
+<li><p>Aggregation, dari beberapa model yang telah terbentuk dikumpulkan semua hasil prediksi untuk menentukan hasil prediksi tunggal. Untuk klasifikasi, maka dilakukan <code>majority voting</code> dimana kelas yang paling banyak diprediksi akan menjadi targetnya. Sedangkan untuk regresi akan diperoleh nilai rata-rata targetnya dari setiap model.</p></li>
+</ul>
 
 </div>
 <div id="unsupervised-learning" class="section level1">
@@ -1079,7 +1085,6 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <ol start="7" style="list-style-type: decimal">
 <li><p>Jika hasil decomposition pada trend masih membentuk pola berulang, apa yang terjadi?</p>
 <p>Ketika hasil decomposition yang diperoleh pada trend masih membentuk pola berulang, itu artinya masih terdapat pola seasonal yang belum tertangkap, kemungkinan data yang digunakan memiliki multiple seasonal, untuk membuat object ts pada pola data multiple seasonal dapat menggunakan function msts().</p>
-<p>Berikut merupakan link eksternal untuk penanganan <a href="https://www.researchgate.net/post/How_many_components_can_I_retrieve_in_principal_component_analysis">Multiple Seasonal</a>.</p>
 <p>Untuk penanganan multiple seasonal lebih lengkap nya dapat di cek pada link berikut ini. <a href="https://algotech.netlify.com/blog/multiple-seasonal/">multiple seasonal</a></p></li>
 <li><p>Apakah pada metode arima kita dapat menambahkan variable prediktor pada analisis?</p></li>
 </ol>
@@ -1121,7 +1126,7 @@ Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien
 <ol start="10" style="list-style-type: decimal">
 <li>Apakah hasil diff manual berbeda dengan yang dilakukan pada fungsi arima atau auto.arima ?</li>
 </ol>
-<p>Hasil prediksi yang diperoleh ketika melakukan differencing manual kemudian diaplikasikan dengan function arima/auto.arima akan sedikit berbeda ketika langsung melakukan differencing dari function arima/auto.arima. Hal ini tentunya tidak menjadi masalah besar, karena hasil yang diperoleh tidak jauh berbeda. Untuk detail rumus yang digunakan dapat dilihat di link berikut. <a href="https://stats.stackexchange.com/questions/32634/difference-time-series-before-arima-or-within-arima">differencing</a></p>
+<p>Hasil prediksi yang diperoleh ketika melakukan differencing manual kemudian diaplikasikan dengan function arima/auto.arima akan sedikit berbeda ketika langsung melakukan differencing dari function arima/auto.arima. Hal ini tentunya tidak menjadi masalah besar, karena hasil yang diperoleh tidak jauh berbeda. Untuk detail rumus yang digunakan dapat dilihat di <a href="https://stats.stackexchange.com/questions/32634/difference-time-series-before-arima-or-within-arima">link berikut.</a></p>
 
 </div>
 <div id="neural-network-and-deep-learning" class="section level1">
