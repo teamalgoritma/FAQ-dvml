@@ -16,11 +16,13 @@ knitr::opts_chunk$set(
 options(scipen = 9999)
 ```
 
-```{r}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(rsample)
 library(recipes)
 library(keras)
 ```
+
+## FAQ
 
 1. Berapa jumlah hidden layer dan nodes untuk setiap hidden layer secara best practice dalam membangun arsitektur neural network (ANN) ?
 
@@ -141,3 +143,118 @@ model <- keras_model_sequential() %>%
               kernel_initializer = initializer, 
               bias_initializer = initializer)
 ```
+
+## Mathematics Concept
+
+Aturan update weight:
+
+1. Menghitung turunan parsial dari weight.
+
+2. Berikut hal yang harus dilakukan jika:
+
+   - Hasil turunannya Positif, maka nilai weight dikurangi.
+   - Hasil turunannya negatif, maka nilai weight ditambah.
+   
+   Keduanya dilakukan dengan tujuan untuk mencari titik minimum/error terkecil.
+
+```{r echo=FALSE, out.width="60%"}
+knitr::include_graphics("assets/06-NN/updaterule.png")
+```
+
+**Forward Propagation**
+
+```{r echo=FALSE, out.width="60%"}
+knitr::include_graphics("assets/06-NN/nn.png")
+```
+
+Diketahui:
+
+- $w_{11}=0.5$
+- $w_{12}=1$
+- $b_{11}=0.5$
+- $w_{21}=0.5$
+- $b_{21}=1$
+
+1. Forward pass dari input ke hidden layer 1.
+
+```{r echo=FALSE, out.width="60%"}
+knitr::include_graphics("assets/06-NN/input-hidden.png")
+```
+
+$$h_{in}=x_1*w_{11}+x_2*w_{12}+b_{11} \\ h_{in}= 2*0.5 + 3*1 + 0.5 \\ h_{in}= 5$$
+
+2. Transformasi nilai dengan Fungsi Aktivasi.
+
+$$sigmoid=\frac{1}{1+e^{-x}}$$
+
+$$h_{out}=\frac{1}{1+e^{-5}} \\ h_{out} = 0.9933$$
+
+3. Forward pass hidden layer ke output layer.
+
+```{r echo=FALSE, out.width="60%"}
+knitr::include_graphics("assets/06-NN/hidden-output.png")
+```
+
+$$Output_{in}=0.9933*0.5+1 \\ Output_{in} = 1.4966$$
+
+4. Transformasi nilai dengan fungsi aktivasi.
+
+output linear, maka 
+
+$$Output_{in} = Output_{out} = 1.4966$$
+
+5. Hitung nilai error dengan cost function.
+
+$$cost=\frac{1}{2}(output_{aktual} - output_{out})^2 \\ cost = \frac{1}{2}(2.5034)^2  \\ cost = 3.134$$
+
+**Backpropagation**
+
+1. Backward Pass dari Output ke hidden layer 1
+
+2. Mengitung turunan parsial cost ke $w_{21}$
+
+Chain rule
+
+$$\frac{d_{cost}}{d_{w_{21}}}= \frac{d_{cost}}{d_{output_{out}}}* \frac{d_{output_{out}}}{d_{output_{in}}}*\frac{d_{output_{in}}}{d_{w_{21}}}$$
+
+Hitung $\frac{d_{cost}}{d_{output_{out}}}$
+
+$$\frac{d_{cost}}{d_{output_{out}}} = \frac{d(\frac{1}{2}(output_{actual}-output_{out})^2)}{d(output_{out})} \\ \frac{d_{cost}}{d_{output_{out}}} = -1 * 2 * \frac{1}{2}(4-1.4966) \\ \frac{d_{cost}}{d_{output_{out}}} = 1.4966 - 4 \\ \frac{d_{cost}}{d_{output_{out}}} = -2.5034$$
+
+Hitung $\frac{d_{output_{out}}}{d_{output_{in}}}$
+
+karena linear maka, 
+
+$$\frac{d_{output_{out}}}{d_{output_{in}}} = 1$$
+
+Hitung $\frac{d_{output_{in}}}{d_{w_{21}}}$
+
+$$\frac{d_{output_{in}}}{d_{w_{21}}} = \frac{d(h_{out}*w_{21}+b_{21})}{d(w_{21})} \\ \frac{d_{output_{in}}}{d_{w_{21}}} = h_{out} \\ \frac{d_{output_{in}}}{d_{w_{21}}} = 0.9933$$
+
+Jadi turunan parsial $\frac{d_{cost}}{d_{output_{out}}}$:
+
+$$\frac{d_{cost}}{d_{output_{out}}} = -2.5034 * 1 * 0.9933 \\ \frac{d_{cost}}{d_{output_{out}}} = - 2.4866$$
+
+3. turunan parsial cost ke $b_{21}$
+
+Chain rule
+
+$$\frac{d_{cost}}{d_{b_{21}}}= \frac{d_{cost}}{d_{output_{out}}}* \frac{d_{output_{out}}}{d_{output_{in}}}*\frac{d_{output_{in}}}{d_{b_{21}}} \\ \frac{d_{cost}}{d_{b_{21}}} = -2.5034*1*1 \\ \frac{d_{cost}}{d_{b_{21}}} = -2.5034$$
+
+4. Update $w_{21}$
+
+Misal, learning rate ($\alpha$) = 0.1, 
+
+$$w_{21}^{'} = w_{21} - \alpha(\frac{d_{cost}}{d_{w_{21}}}) \\ w_{21}^{'} = 0.5 - (0.1*-2.4866) \\ w_{21}^{'} = 0.5 - (-2.4866) \\ w_{21}^{'} = 0.74866$$
+
+5. update $b_{21}$
+
+$$b_{21}^{'} = b_{21} - \alpha(\frac{d_{cost}}{d_{b_{21}}}) \\ b_{21}^{'} = 1 - (0.1*-2.5034) \\ w_{21}^{'} = 1 - (-2.5034) \\ w_{21}^{'} = 1.25034$$
+
+
+
+
+
+
+
+

@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 options(scipen = 9999)
 ```
 
+## FAQ
+
 1. Apa itu Time Series?
 
    Time series merupakan data yang diperoleh dan disusun berdasarkan urutan waktu. Waktu yang digunakan dapat berupa hari, minggu, bulan, dan sebagainya.
@@ -93,4 +95,207 @@ Untuk detail lengkapnya dapat di lihat pada link berikut ini: [Regression ARIMA]
 10. Apakah hasil diff manual berbeda dengan yang dilakukan pada fungsi arima atau auto.arima ?
 
    Hasil prediksi yang diperoleh ketika melakukan differencing manual kemudian diaplikasikan dengan function arima/auto.arima akan sedikit berbeda ketika langsung melakukan differencing dari function arima/auto.arima. Hal ini tentunya tidak menjadi masalah besar, karena hasil yang diperoleh tidak jauh berbeda. Untuk detail rumus yang digunakan dapat dilihat di [link berikut.](https://stats.stackexchange.com/questions/32634/difference-time-series-before-arima-or-within-arima)
+
+## Mathematics Concept
+
+Selain mengamati pola trend atau seasonal pada data time series, perlu diperhatikan pula apakah data time series yang dianalisis merupakan model additive atau multiplicative.
+
+```{r out.width="60%", fig.align='center', echo=FALSE}
+knitr::include_graphics("assets/05-TS/aditif vs multiplikatif.png")
+```
+
+- Additive: 
+
+$$Data = Trend + Seasonality + Error$$
+
+- Multiplicative: 
+
+$$Data = Trend * Seasonality * Error$$
+
+**Decomposition** merupakan metode yang cukup sederhana dan sering digunakan untuk memahami lebih lanjut pola/struktur data time series. Decomposition adalah proses membagi data time series menjadi 3 komponen utama, yaitu:
+
+- `trend`: pola kenaikan/penurunan
+- `seasonality`: pola berulang
+- `error`: pola yang tidak tertangkap oleh trend dan seasonal
+
+> Hasil decomposition digunakan untuk mengecek apakah frequency yang ditentukan saat membuat ojek time series sudah tepat atau belum. Perhatikan pola trend, jika masih belum smooth (membentuk pola selain pola naik/turun) maka frequency yang ditentukan belum tepat. Hal ini terjadi karena masih terdapat pola seasonal yang belum tertangkap. 
+
+**1. Menghitung secara manual decompose additive model**
+
+Import Data 
+```{r}
+births <- read.csv("data/05-TS/nybirth.csv")
+```
+
+Membuat time series object
+```{r}
+births_ts <- ts(data = births$births, start = c(1946, 1), frequency = 12)
+```
+
+Gunakan function `decompose()`
+```{r}
+births_dc <- decompose(x = births_ts, type = "additive")
+```
+
+Objek time series di atas merupakan objek time series dengan model additive, dimana $Data = Trend + Seasonality + Error$
+
+**TREND**
+
+Trend diperoleh dari hasil pemulusan/smoothing `center moving average`. Smoothing dilakukan untuk memperoleh pola objek time series yang cenderung naik/turun (trend).
+
+Mengambil nilai trend dari hasil decompose:
+```{r}
+births_dc$trend %>% autoplot()
+```
+Lakukan smoothing pada data actual untuk memperoleh pola trend dengan metode moving average:
+```{r}
+births_trend <- ma(births_ts, order = 12, centre = T)
+
+births_trend %>% autoplot()
+```
+
+**SEASONALITY**
+
+Mengambil nilai seasonal dari hasil decompose:
+```{r}
+births_dc$seasonal %>% autoplot()
+```
+
+Berikut ini merupakan step by step untuk memperoleh nilai seasonal
+
+1. Nilai seasonal + nilai error diperoleh dari pengurangan data actual dengan data trend
+
+```{r}
+sea.err_births <- births_ts - births_trend
+```
+2. Mencari nilai rata-rata untuk setiap frekuensi
+```{r}
+mean.mon_births <- sea.err_births %>% 
+  matrix(ncol = 12, byrow = T) %>% 
+  colMeans(na.rm = T)
+```
+3. Mencari nilai rata-rata global data time series
+
+```{r}
+mean.glo_births <- mean(mean.mon_births)
+```
+
+4. Mencari selisih dari rata-rata untuk setiap frekuensi dengan rata-rata global
+
+```{r}
+mean.mon_births - mean.glo_births
+```
+
+5. Setelah diperoleh nilai seasonal dapat diimplementasikan untuk setiap frekuensi
+```{r}
+births_seasonal <- ts(rep(mean.mon_births - mean.glo_births, 14), start = start(births_ts), frequency = 12)
+
+births_seasonal %>% autoplot()
+```
+
+**ERROR**
+
+Error = Data - Trend - Seasonality
+
+Mengambil nilai error dari hasil decompose:
+```{r}
+births_dc$random %>% autoplot()
+```
+
+Nilai error diperoleh dari pengurangan data actual dengan data trend dan seasonal:
+```{r}
+births_error <- births_ts - births_trend - births_seasonal
+
+births_error %>% autoplot()
+```
+
+**2. Menghitung secara manual decompose multiplicative model**
+
+Menggunakan data `AirPassengers` yang merupakan data bawaan R
+```{r}
+head(AirPassengers)
+class(AirPassengers)
+```
+
+Decompose time series object using `decompose()` function
+```{r}
+air_dc <- decompose(x = AirPassengers, type = "multiplicative")
+```
+
+Cara manual decompose pada multiplicative model
+
+Objek time series di atas merupakan objek time series dengan model multiplicative, dimana $Data = Trend * Seasonality * Error$
+
+**TREND**
+
+Mengambil nilai trend dari hasil decompose:
+```{r}
+air_dc$trend %>% autoplot()
+```
+Lakukan smoothing pada data actual untuk memperoleh pola trend dengan metode moving average:
+```{r}
+air_trend <- ma(AirPassengers, order = 12, centre = T)
+
+air_trend %>% autoplot()
+```
+
+**Seasonality**
+
+SEASONALITY * ERROR = DATA / TREND
+
+```{r}
+air_dc$seasonal %>% autoplot()
+```
+
+```{r}
+(AirPassengers/air_trend) %>% autoplot()
+```
+
+Berikut ini merupakan step by step untuk memperoleh nilai seasonal
+
+1. Nilai seasonal + nilai error diperoleh dari pembagian data actual dengan data trend
+
+```{r}
+sea.err_air <- AirPassengers/air_trend
+```
+2. Mencari nilai rata-rata untuk setiap frekuensi
+```{r}
+mean.month_air <- sea.err_air %>% 
+  matrix(ncol =  12, byrow = T) %>% 
+  colMeans(na.rm = T)
+```
+3. Mencari nilai rata-rata global data time series
+
+```{r}
+mean.glob_air <- mean(mean.month_air)
+```
+
+4. Mencari nilai pembagian dari rata-rata untuk setiap frekuensi dengan rata-rata global
+
+```{r}
+mean.month_air/mean.glob_air
+```
+
+5. Setelah diperoleh nilai seasonal dapat diimplementasikan untuk setiap frekuensi
+```{r}
+air_seasonal <- ts(rep(mean.month_air/mean.glob_air, 12), start = start(AirPassengers), frequency = 12)
+ 
+air_seasonal %>% autoplot()
+```
+
+**Error**
+
+ERROR = DATA / (TREND * SEASONALITY)
+
+Mengambil nilai error dari hasil decompose:
+```{r}
+air_dc$random %>% autoplot()
+```
+Nilai error diperoleh dari pembagian data actual dengan hasil kali nilai trend dan nilai seasonal:
+```{r}
+air_error <- AirPassengers/(air_trend*air_seasonal)
+
+air_error %>% autoplot()
+```
+
 

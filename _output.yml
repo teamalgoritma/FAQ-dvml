@@ -4,4 +4,5 @@ bookdown::gitbook:
   config:
     toc:
     toc_depth: 2
-    toc_float: true
+    toc_float: 
+      collapsed: true

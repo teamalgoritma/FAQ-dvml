@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 options(scipen = 9999)
 ```
 
-```{r}
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 # libraries
 library(tidyverse)
 library(FactoMineR)
@@ -25,6 +25,8 @@ library(rsample)
 library(recipes)
 library(plotly)
 ```
+
+## FAQ
 
 1. Bagaimana penerapan PCA di industri?
 
@@ -266,3 +268,148 @@ fviz_pca_biplot(pca_USArrest, habillage = 5, addEllipses = T)
 
 Dari plot di atas terlihat bahwa antar cluster saling tumpang tindih, namun kenyataannya antar cluster pasti memiliki observasi/individu yang unik. Hal tersebut terjadi karena kita mencoba untuk memvisualisasikan cluster yang dibentuk dari 4 variabel/dimensi mejadi 2 variabel/dimensi saja.
 
+## Mathematics Concept
+
+**1. Tujuan: membuat axis baru yang dapat merangkum informasi data**
+
+```{r echo=FALSE, out.width="60%"}
+knitr::include_graphics("assets/04-UL/pca1.png")
+```
+
+Kita akan menggunakan data generate yang disimpan pada objek A, yang terdiri dari variabel x dan y.
+```{r}
+set.seed(100)
+x <- runif(200)
+A <- data.frame(x=x, y=-x+runif(100, 1.05, 1.25))
+
+# sebelum menghitung varian-kovarian  harus dilakukan scaling trlebih dahulu, karena variance dan covariance sangat bergantung pada interval nilai dari data
+A <- scale(A, center = T)
+head(A)
+```
+
+Membuat visualisasi data yang disimpan pada objek A.
+```{r}
+plot(A, cex=0.4)
+```
+
+Variabel x dan y berkorelasi secara negatif, karena variabel y dibentuk dari operasi matematika dari variabel x (dengan kata lain variabel y mengandung informasi dari x). 
+
+**2. PC merangkum informasi dari actual data sehingga akan dihitung variance-covariance (variance-covaiance merepresentasikan informasi yang terkandung pada suatu data)** 
+```{r}
+var(A)
+class(var(A))
+
+# bisa menggunakan `cov()` selain menggunakan `var()` untuk menghitung variance-covariance
+# cov(A)
+# cor(A)
+```
+
+Jika diperhatikan variance-covariance yang dihasilkan berupa matriks, dalam aljabar terdapat beberapa operasi perkalian untuk kelas matriks:
+
+- **Vektor x skalar (konstanta)**
+```{r}
+matrix(c(2,3)) %*% 2
+```
+
+Membuat plot untuk melihat vektor awal
+```{r}
+plot(2, 3)
+lines(x = c(0, 2), y = c(0, 3))
+```
+
+Membuat plot untuk membandingkan vektor awal dan setelah dilakukan operasi perkalian dengan skalar (konstanta)
+```{r}
+plot(x = c(2, 4), y = c(3, 6))
+lines(x = c(0, 4), y = c(0, 6))
+```
+
+> Operasi perkalian antara vektor x skalar (konstanta) akan memperbesar vektor dengan arah yang sama.
+
+- **Matriks x vektor**
+```{r}
+matrix(1:4, nrow = 2) %*% matrix(c(2, 3))
+```
+
+Membuat plot untuk membandingkan vektor awal dan setelah dilakukan operasi perkalian dengan matriks
+```{r}
+plot(x = c(2, 11), y = c(3, 16))
+lines(x = c(0, 2), y = c(0, 3))
+lines(x = c(0, 11), y = c(0, 16))
+```
+
+Jika diperhatikan kedua vektor tersebut seperti berada dalam satu garis karena hampir sejajar, namun jika dicek nilai slope ($y/x$) akan sangat jelas berbeda.
+```{r}
+# vektor awal
+3/2
+# vektor setelah dilakukan operasi perkalian dengan matriks
+16/11
+```
+
+> Operasi perkalian antara matriks x vektor akan mengubah besar dan arah vektor
+
+- **Matriks identitas x vektor**
+```{r}
+matrix(c(1, 0, 0, 1), nrow = 2) %*% matrix(c(2, 3))
+```
+
+> Operasi perkalian antara matriks x vektor akan mengubah besar dan arah vektor, namun **terdapat matriks yang jika dikalikan dengan vektor tidak akan mengubah besar dan arah vektor, yaitu matriks identitas**.
+
+- **Matriks rotasi x vektor** 
+```{r}
+matrix(c(-1, 0, 0, -1), nrow = 2) %*% matrix(c(-3, 2))
+```
+
+Membuat plot untuk melihat vektor awal
+```{r}
+plot(-3, 2)
+lines(x = c(0, -3), y = c(0, 2))
+```
+
+Membuat plot untuk membandingkan vektor awal dan setelah dilakukan operasi perkalian dengan matriks rotasi
+```{r}
+plot(3, -2)
+lines(x = c(0, 3), y = c(0, -2))
+```
+
+> Operasi perkalian antara matriks x vektor akan mengubah besar dan arah vektor, namun **terdapat matriks yang jika dikalikan dengan vektor hanya akan mengubah arah vektor, yaitu matriks rotasi**.
+
+```{r echo=FALSE, out.width="60%"}
+knitr::include_graphics("assets/04-UL/rotation.gif")
+```
+
+- **Matriks x eigen vektor**
+
+> Operasi perkalian antara matriks x vektor akan mengubah besar dan arah vektor. Namun, terdapat vektor yang unik yang jika dikalikan dengan matriks hasilnya sama dengan mengalikan vektor dengan skalar.
+
+Skalar tersebut adalah konstanta yang disebut sebagai eigen value. Ketika kita mengalikan matriks A dengan eigen vector x, hasilnya adalah konstanta $\lambda$ dikalikan x. Maka persamaannya adalah:
+
+$$A x = \lambda x $$
+
+dimana:
+
+- $A$ merupakan matriks varian-kovarian 
+- $x$ merupakan eigen vector
+- $\lambda$ merupkan skalar (konstanta) yang disebut eigen value. 
+
+Eigen vektor tersebut digunakan sebagai transformasi untuk mengubah arah/menentukan arah axis baru yang lebih bisa merangkum informasi pada actual data.
+
+**3. Variance-covariance yang memuat informasi pada actual data akan digunakan untuk memperoleh eigen vektor (transformasi) dan eigen value.**
+```{r}
+eigen(var(A))
+```
+
+Eigen value memuat jumlah informasi yang dirangkum oleh setiap PC, sehingga total eigen value akan sama dengan jumlah variabel pada actual data.
+```{r}
+1.98271899 + 0.01728101
+```
+
+**4. Membuat new data (PC) dari hasil perkalian antara actual data dengan eigen vektor (transformasi).**
+
+New data tersebut akan memuat informasi yang sama dengan actual data dengan arah yang berbeda dari actual data.
+
+**new data = actual data x eigen vektor**
+
+```{r}
+# dim(200x2).dim(2x2)
+hasil_pc1 <- A %*% eigen(var(A))$vectors
+```
