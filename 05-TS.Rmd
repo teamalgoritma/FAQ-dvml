@@ -68,6 +68,8 @@ dat %>%
 
    Ketika hasil decomposition yang diperoleh pada trend masih membentuk pola berulang, itu artinya masih terdapat pola seasonal yang belum tertangkap, kemungkinan data yang digunakan memiliki multiple seasonal, untuk membuat object ts pada pola data multiple seasonal dapat menggunakan function msts(). 
    
+   Berikut merupakan link eksternal untuk penanganan [Multiple Seasonal](https://www.researchgate.net/post/How_many_components_can_I_retrieve_in_principal_component_analysis).  
+   
    Untuk penanganan multiple seasonal lebih lengkap nya dapat di cek pada link berikut ini. [multiple seasonal](https://algotech.netlify.com/blog/multiple-seasonal/)
 
 8. Apakah pada metode arima kita dapat menambahkan variable prediktor pada analisis?
@@ -94,7 +96,7 @@ Untuk detail lengkapnya dapat di lihat pada link berikut ini: [Regression ARIMA]
 
 10. Apakah hasil diff manual berbeda dengan yang dilakukan pada fungsi arima atau auto.arima ?
 
-   Hasil prediksi yang diperoleh ketika melakukan differencing manual kemudian diaplikasikan dengan function arima/auto.arima akan sedikit berbeda ketika langsung melakukan differencing dari function arima/auto.arima. Hal ini tentunya tidak menjadi masalah besar, karena hasil yang diperoleh tidak jauh berbeda. Untuk detail rumus yang digunakan dapat dilihat di [link berikut.](https://stats.stackexchange.com/questions/32634/difference-time-series-before-arima-or-within-arima)
+   Hasil prediksi yang diperoleh ketika melakukan differencing manual kemudian diaplikasikan dengan function arima/auto.arima akan sedikit berbeda ketika langsung melakukan differencing dari function arima/auto.arima. Hal ini tentunya tidak menjadi masalah besar, karena hasil yang diperoleh tidak jauh berbeda. Untuk detail rumus yang digunakan dapat dilihat di link berikut. [differencing](https://stats.stackexchange.com/questions/32634/difference-time-series-before-arima-or-within-arima)
 
 ## Mathematics Concept
 
@@ -161,7 +163,7 @@ Mengambil nilai seasonal dari hasil decompose:
 births_dc$seasonal %>% autoplot()
 ```
 
-Berikut ini merupakan step by step untuk memperoleh nilai seasonal
+Berikut ini merupakan step by step untuk memperoleh nilai seasonal secara manual:
 
 1. Nilai seasonal + nilai error diperoleh dari pengurangan data actual dengan data trend
 
@@ -241,8 +243,9 @@ air_trend %>% autoplot()
 
 **Seasonality**
 
-SEASONALITY * ERROR = DATA / TREND
+Seasonality * Error = Data / Trend
 
+Mengambil nilai seasonal dari hasil decompose:
 ```{r}
 air_dc$seasonal %>% autoplot()
 ```
@@ -251,7 +254,7 @@ air_dc$seasonal %>% autoplot()
 (AirPassengers/air_trend) %>% autoplot()
 ```
 
-Berikut ini merupakan step by step untuk memperoleh nilai seasonal
+Berikut ini merupakan step by step untuk memperoleh nilai seasonal secara manual:
 
 1. Nilai seasonal + nilai error diperoleh dari pembagian data actual dengan data trend
 
@@ -285,7 +288,7 @@ air_seasonal %>% autoplot()
 
 **Error**
 
-ERROR = DATA / (TREND * SEASONALITY)
+Error = Data / (Trend * Seasonality)
 
 Mengambil nilai error dari hasil decompose:
 ```{r}

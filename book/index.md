@@ -1,11 +1,7 @@
 --- 
 title: "FAQ"
 author: "Team Algoritma"
-<<<<<<< HEAD
 date: "March 24, 2020"
-=======
-date: "March 11, 2020"
->>>>>>> 7e10dc79dd5972cd5f902db9c0686fbb6cc284a1
 documentclass: book
 ---
 
