@@ -69,11 +69,9 @@ Pemodelan klasifikasi mulai banyak digunakan pada berbagai bidang industri, sepe
 
 Dari berbagai macam permasalahan klasifikasi tersebut tidak semua masalah klasifikasi memiliki jumlah target variabel yang seimbang (level yang mendominasi keseluruhan target merupakan kelas mayoritas dan level yang lebih kecil disebut kelas minoritas). Ketika kondisi seperti apa target variabel tidak memiliki proporsi yang seimbang ?
 
-<<<<<<< HEAD
 ![](assets/02-C1/imbalance proportion.png)
-=======
+
 ![](assets/imbalance proportion.png)
->>>>>>> 7e10dc79dd5972cd5f902db9c0686fbb6cc284a1
 
 Hal tersebut akan berpengaruh terhadap kemampuan model untuk memprediksi target (model klasifikasi cenderung lebih pintar dalam memprediksi kelas mayoritas), karena model klasifikasi sangat bergantung pada jumlah setiap level target dalam proses learning nya (model klasifikasi akan melalui proses learning yang seimbang jika diberikan jumlah sampel yang seimbang pula). Hal ini menjadi masalah yang cukup serius, sehingga perlu dilakukan penanganan sebagai solusi permasalahan tersebut.
 
