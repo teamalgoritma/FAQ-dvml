@@ -24,7 +24,7 @@
 <meta name="author" content="Team Algoritma" />
 
 
-<meta name="date" content="2020-03-30" />
+<meta name="date" content="2020-04-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">FAQ</h1>
 <p class="author"><em>Team Algoritma</em></p>
-<p class="date"><em>March 30, 2020</em></p>
+<p class="date"><em>April 1, 2020</em></p>
 </div>
 <style>
 body {
@@ -274,19 +274,19 @@ text-align: justify}
 </div>
 <div id="mathematics-concept" class="section level2">
 <h2><span class="header-section-number">1.2</span> Mathematics Concept</h2>
-<p>Untuk mengestimasi nilai koefisien (beta), pertama-tama coba ingat kembali beberapa konsep pada workshop “Practical Statistics”. Variance merupakan nilai yang menggamabarkan seberapa bervariasi/beragamnya suatu variabel bertipe numerik/angka. Semakin besar nilai variance maka semakin beragam nilai dalam satu variabel (heterogen), sedangkan semakin kecil nilai variance maka semakin sama/mirip setiap observasi pada satu variabel (homogen). Data yang observasinya bernilai sama, maka variance sama dengan 0.</p>
+<p>Untuk mengestimasi nilai koefisien (beta), pertama-tama coba ingat kembali beberapa konsep pada workshop “Practical Statistics”. Variance merupakan nilai yang menggambarkan seberapa bervariasi/beragamnya suatu variabel bertipe numerik/angka. Semakin besar nilai variance maka semakin beragam nilai dalam satu variabel (heterogen), sedangkan semakin kecil nilai variance maka semakin sama/mirip setiap observasi pada satu variabel (homogen). Data yang observasinya bernilai sama, maka variance sama dengan 0.</p>
 <p>Sementara covariance merupakan nilai yang menggambarkan hubungan (positif/negatif/tidak ada hubungan) antara dua variabel numerik. Namun covariance tidak dapat menggambarkan seberapa erat/kuat hubungan tersebut karena nilai covariance tidak memilki batasan yang mutlak (- inf, + inf).</p>
 <p>Dalam notasi matematika, anggap kita memiliki data yang terdiri dari 2 variabel, yaitu, <span class="math inline">\(({X_i}, {Y_i})\)</span>, maka secara empiris nlai covariance diperoleh dari:</p>
 <p><span class="math display">\[Cov(X,Y) = \frac{1}{n-1}\sum\limits_{i=1}^{n}({X_i}-\bar{X})({Y_i}-\bar{Y})\]</span></p>
 <p>bisa juga diperoleh dari,</p>
 <p><span class="math display">\[Cov(X,Y) = \frac{1}{n-1}(\sum\limits_{i=1}^{n}{X_i}{Y_i} - n\bar{X}\bar{Y})\]</span></p>
-<p>Jika formula dari covariane cukup rumit, coba ingat kembali formula dari variance:</p>
+<p>Jika formula dari covariance cukup rumit, coba ingat kembali formula dari variance:</p>
 <p><span class="math display">\[S^2 = \frac{1}{n-1}\sum\limits_{i=1}^{n}(X_i - \bar{X})^2\]</span></p>
 <p>pahami bahwa perbedaan variance dan covariance adalah variance hanya mengacu pada 1 variabel, sedangkan covariance mengacu pada 2 variabel. Maka, formula dari covariance:</p>
 <p><span class="math display">\[Cov(X,Y) = \frac{1}{n-1}\sum\limits_{i=1}^{n}({X_i}-\bar{X})({Y_i}-\bar{Y})\]</span></p>
-<p>Seperti yang telah dijelaskan di atas bahwa covariance menjelaskan jenis hubungan antara 2 variabel numerik. Namun, kita tidak dapat menilai seberapa erat/kuat hubungan antara keduanya karena interval nilai covariance yang tidak memiliki batasan. Oleh karena itu, kita bisa melakukan standarization terlebih dahulu terhadap 2 variabel numerik tersebt yang mengacu pada definisi correlation:</p>
+<p>Seperti yang telah dijelaskan di atas bahwa covariance menjelaskan jenis hubungan antara 2 variabel numerik. Namun, kita tidak dapat menilai seberapa erat/kuat hubungan antara keduanya karena interval nilai covariance yang tidak memiliki batasan. Oleh karena itu, kita bisa melakukan standarization terlebih dahulu terhadap 2 variabel numerik tersebut yang mengacu pada definisi correlation:</p>
 <p><span class="math display">\[Cor(X, Y) = \frac{Cov(X,Y)}{{S_x}{S_y}}\]</span></p>
-<p>beberapa fackta mengenai correlation:</p>
+<p>beberapa fakta mengenai correlation:</p>
 <ul>
 <li>Cor(X,Y) = Cor(Y,X)<br />
 </li>
@@ -308,6 +308,17 @@ text-align: justify}
 <li>Estimasi intercept:</li>
 </ul>
 <p><span class="math display">\[\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{X}\]</span></p>
+<p><strong>R-square</strong> secara definisi adalah persentase total keragaman suatu target variabel yang dapat dijelaskan oleh prediktor variabel (model), dengan formula:</p>
+<p><span class="math display">\[R^2 = 1 - \frac{\sum\limits_{i=1}^n (\hat{Y_i} - \bar{Y})^2}{\sum\limits_{i=1}^n(Y_i - \bar{Y})^2}\]</span></p>
+<p>Beberapa fakta tentang R-square (<span class="math inline">\(R^2\)</span>):</p>
+<ul>
+<li><span class="math inline">\(R^2\)</span> adalah persentase total keragaman suatu target variabel yang dapat dijelaskan oleh model regresi<br />
+</li>
+<li><span class="math inline">\(0 \leq R^2 \leq 1\)</span></li>
+</ul>
+<p>Salah satu alat statistik yang dapat digunakan untuk mengecek ada/tidak multicolinearity adalah <strong>Variance Inflation Factor</strong> (VIF). VIF mengukur peningkatan estimasi koefisien beta, jika antar prediktor saling berkorelasi. Secara matematis, nilai VIF diperoleh dengan meregresikan setiap prediktor dengan prediktor lain. Contoh: diketahui terdapat <span class="math inline">\(X1, X2, ..., Xn\)</span>, nilai VIF untuk <span class="math inline">\(X1\)</span> diperoleh dari hasil regresi <span class="math inline">\(X1\)</span> dengan <span class="math inline">\(X2, ..., Xn\)</span>, dst. Hasil regresi tersebut kemudian diterapkan pada formula berikut:</p>
+<p><span class="math display">\[VIF = \frac{1}{1-R^2(x)}\]</span></p>
+<p>Secara umum jika nilai VIF yang diperoleh lebih besar atau sama dengan 10, mengindikasikan terjadi multicolinearity (antar prediktor saling berkorelasi kuat).</p>
 
 </div>
 </div>

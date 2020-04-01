@@ -131,7 +131,7 @@ cor.test.all(data = copiers,target ="Profit")
 
 ## Mathematics Concept
 
-Untuk mengestimasi nilai koefisien (beta), pertama-tama coba ingat kembali beberapa konsep pada workshop "Practical Statistics". Variance merupakan nilai yang menggamabarkan seberapa bervariasi/beragamnya suatu variabel bertipe numerik/angka. Semakin besar nilai variance maka semakin beragam nilai dalam satu variabel (heterogen), sedangkan semakin kecil nilai variance maka semakin sama/mirip setiap observasi pada satu variabel (homogen). Data yang observasinya bernilai sama, maka variance sama dengan 0.
+Untuk mengestimasi nilai koefisien (beta), pertama-tama coba ingat kembali beberapa konsep pada workshop "Practical Statistics". Variance merupakan nilai yang menggambarkan seberapa bervariasi/beragamnya suatu variabel bertipe numerik/angka. Semakin besar nilai variance maka semakin beragam nilai dalam satu variabel (heterogen), sedangkan semakin kecil nilai variance maka semakin sama/mirip setiap observasi pada satu variabel (homogen). Data yang observasinya bernilai sama, maka variance sama dengan 0.
 
 Sementara covariance merupakan nilai yang menggambarkan hubungan (positif/negatif/tidak ada hubungan) antara dua variabel numerik. Namun covariance tidak dapat menggambarkan seberapa erat/kuat hubungan tersebut karena nilai covariance tidak memilki batasan yang mutlak (- inf, + inf).
 
@@ -143,7 +143,7 @@ bisa juga diperoleh dari,
 
 $$Cov(X,Y) = \frac{1}{n-1}(\sum\limits_{i=1}^{n}{X_i}{Y_i} - n\bar{X}\bar{Y})$$  
 
-Jika formula dari covariane cukup rumit, coba ingat kembali formula dari variance:
+Jika formula dari covariance cukup rumit, coba ingat kembali formula dari variance:
 
 $$S^2 = \frac{1}{n-1}\sum\limits_{i=1}^{n}(X_i - \bar{X})^2$$  
 
@@ -151,11 +151,11 @@ pahami bahwa perbedaan variance dan covariance adalah variance hanya mengacu pad
 
 $$Cov(X,Y) = \frac{1}{n-1}\sum\limits_{i=1}^{n}({X_i}-\bar{X})({Y_i}-\bar{Y})$$  
 
-Seperti yang telah dijelaskan di atas bahwa covariance menjelaskan jenis hubungan antara 2 variabel numerik. Namun, kita tidak dapat menilai seberapa erat/kuat hubungan antara keduanya karena interval nilai covariance yang tidak memiliki batasan. Oleh karena itu, kita bisa melakukan standarization terlebih dahulu terhadap 2 variabel numerik tersebt yang mengacu pada definisi correlation:
+Seperti yang telah dijelaskan di atas bahwa covariance menjelaskan jenis hubungan antara 2 variabel numerik. Namun, kita tidak dapat menilai seberapa erat/kuat hubungan antara keduanya karena interval nilai covariance yang tidak memiliki batasan. Oleh karena itu, kita bisa melakukan standarization terlebih dahulu terhadap 2 variabel numerik tersebut yang mengacu pada definisi correlation:
 
 $$Cor(X, Y) = \frac{Cov(X,Y)}{{S_x}{S_y}}$$
 
-beberapa fackta mengenai correlation:
+beberapa fakta mengenai correlation:
 
 - Cor(X,Y) = Cor(Y,X)  
 - -1 <= Cor(X,Y) <= 1  
@@ -177,5 +177,20 @@ $$\hat{\beta}_1 = Cor(Y,X)\frac{Sd(Y)}{Sd(X)}$$
 
 $$\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{X}$$
 
+**R-square** secara definisi adalah persentase total keragaman suatu target variabel yang dapat dijelaskan oleh prediktor variabel (model), dengan formula:  
+
+$$R^2 = 1 - \frac{\sum\limits_{i=1}^n (\hat{Y_i} - \bar{Y})^2}{\sum\limits_{i=1}^n(Y_i - \bar{Y})^2}$$  
+
+Beberapa fakta tentang R-square ($R^2$):
+
+
+- $R^2$ adalah persentase total keragaman suatu target variabel yang dapat dijelaskan oleh model regresi  
+- $0 \leq R^2 \leq 1$  
+
+Salah satu alat statistik yang dapat digunakan untuk mengecek ada/tidak multicolinearity adalah **Variance Inflation Factor** (VIF). VIF mengukur peningkatan estimasi koefisien beta, jika antar prediktor saling berkorelasi. Secara matematis, nilai VIF diperoleh dengan meregresikan setiap prediktor dengan prediktor lain. Contoh: diketahui terdapat $X1, X2, ..., Xn$, nilai VIF untuk $X1$ diperoleh dari hasil regresi $X1$ dengan $X2, ..., Xn$, dst. Hasil regresi tersebut kemudian diterapkan pada formula berikut:
+
+$$VIF = \frac{1}{1-R^2(x)}$$
+
+Secara umum jika nilai VIF yang diperoleh lebih besar atau sama dengan 10, mengindikasikan terjadi multicolinearity (antar prediktor saling berkorelasi kuat).
 
 
