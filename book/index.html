@@ -24,7 +24,7 @@
 <meta name="author" content="Team Algoritma" />
 
 
-<meta name="date" content="2020-04-01" />
+<meta name="date" content="2020-04-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">FAQ</h1>
 <p class="author"><em>Team Algoritma</em></p>
-<p class="date"><em>April 1, 2020</em></p>
+<p class="date"><em>April 17, 2020</em></p>
 </div>
 <style>
 body {
@@ -201,8 +201,8 @@ text-align: justify}
 <li>Terdapat banyak data outlier</li>
 </ul>
 <ol start="3" style="list-style-type: decimal">
-<li><p>Untuk prediktor kategorik, bagaimana jika terdapat kategori yang tidak signifikan (p value &gt; alpha)? apakah prediktor tersebut masih dianggap signifikan mempengaruhi target?</p>
-<p>Untuk variabel kategorik ketika salah satu variabel signifikan, kita anggap levels lainnya juga signifikan.</p></li>
+<li><p>Untuk prediktor kategorik, bagaimana jika terdapat salah satu level yang tidak signifikan (p value &gt; alpha)? apakah prediktor tersebut masih dianggap signifikan mempengaruhi target?</p>
+<p>Ketika terdapat salah satu level pada variabel kategori yang tidak signifikan, salah satu penyebab yang sering ditemui karena jumlah observasi pada level tersebut sangat sedikit dibandingkan dengan level lainnya. Jika hal tersebut terjadi kita perlu mempertimbangkan <code>business question</code> dari model tersebut, tentunya ketika kita hanya membuang level yang tidak signifikan kemampuan model tidak dapat memprediksi pada salah satu level tersebut. Ketika kita memiliki kebutuhan untuk variabel tersebut dan salah satu level signifikan, kita dapat menganggap level lainnya juga signifikan.</p></li>
 <li><p>Pada fungsi <code>lm</code> sudah otomatis melakukan transformasi data kategorik dengan level pertama yang dijadikan basis. Bagaimana jika dilakukan reorder level (mengubah urutan level), apakah akan mengubah hasil pemodelan?</p>
 <p>Hasil pemodelan tidak akan berubah, mengubah urutan level hanya akan mengubah basis yang digunakan.</p></li>
 <li><p>Bagaimana jika terdapat prediktor yang tidak signifikan, tetapi secara bisnis seharusnya prediktor tersebut berpengaruh terhadap target?</p>

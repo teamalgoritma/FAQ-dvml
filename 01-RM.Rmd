@@ -39,9 +39,9 @@ library(tidyverse)
 -  Selain itu, error harus berdistribusi normal terkait dengan pengujian-pengujian parameter (beta/koefisien regresi) secara statistik (F-test, t-test, dan confidence interval).
 -  Terdapat banyak data outlier
 
-3. Untuk prediktor kategorik, bagaimana jika terdapat kategori yang tidak signifikan (p value > alpha)? apakah prediktor tersebut masih dianggap signifikan mempengaruhi target?
+3. Untuk prediktor kategorik, bagaimana jika terdapat salah satu level yang tidak signifikan (p value > alpha)? apakah prediktor tersebut masih dianggap signifikan mempengaruhi target?
 
-   Untuk variabel kategorik ketika salah satu variabel signifikan, kita anggap levels lainnya juga signifikan.
+   Ketika terdapat salah satu level pada variabel kategori yang tidak signifikan, salah satu penyebab yang sering ditemui karena jumlah observasi pada level tersebut sangat sedikit dibandingkan dengan level lainnya. Jika hal tersebut terjadi kita perlu mempertimbangkan `business question` dari model tersebut, tentunya ketika kita hanya membuang level yang tidak signifikan kemampuan model tidak dapat memprediksi pada salah satu level tersebut. Ketika kita memiliki kebutuhan untuk variabel tersebut dan salah satu level signifikan, kita dapat menganggap level lainnya juga signifikan.
 
 4. Pada fungsi `lm` sudah otomatis melakukan transformasi data kategorik dengan level pertama yang dijadikan basis. Bagaimana jika dilakukan reorder level (mengubah urutan level), apakah akan mengubah hasil pemodelan?
 
