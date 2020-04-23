@@ -1,64 +1,77 @@
+.rmdcaution, .rmdimportant, .rmdnote, .rmdtip, .rmdwarning {
+  padding: 1em 1em 1em 4em;
+  margin-bottom: 10px;
+  background: #f5f5f5 5px center/3em no-repeat;
+}
+
+/* override pygments setting code to a tag */
+.book .book-body .page-wrapper .page-inner section.normal pre code a {
+  color: #585858;
+}
+.rmdcaution {
+  background-image: url("../images/caution.png");
+}
+.rmdimportant {
+  background-image: url("../images/important.png");
+}
+.rmdnote {
+  background-image: url("../images/note.png");
+}
+.rmdtip {
+  background-image: url("../images/tip.png");
+}
+.rmdwarning {
+  background-image: url("../images/warning.png");
+}
 p.caption {
+  color: #777;
   margin-top: 10px;
+}
+p code {
+  white-space: inherit;
 }
 pre {
   word-break: normal;
   word-wrap: normal;
 }
-
-.book  {
-  background-color: #fffff8;
+pre code {
+  white-space: inherit;
 }
-
-.section {
-  background-color: #fffff8;
+p.flushright {
+  text-align: right;
 }
-
-.body-inner {
-    background-color: #fffff8;
+blockquote > p:last-child {
+  text-align: right;
 }
-
-.book .book-body .page-wrapper {
-    position: relative;
-    outline: 0;
-    background-color: #fffff8;
+blockquote > p:first-child {
+  text-align: inherit;
 }
-
-.book .book-body .page-wrapper .page-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px 0 40px;
+.header-section-number {
+  padding-right: .2em;
+  font-weight: 500;
 }
-
-.book .book-header {
-    overflow: visible;
-    height: 48px;    /* adjust to match title space*/
-    padding: 0 8px;
-    z-index: 2;
-    font-family: Roboto sans-serif;
-    font-size: .85em;
-    color: #7e888b;
-    background-color: #fffff8;
-    /* background: 0 0; */
+.level1 .header-section-number {
+  display: inline-block;
+  border-bottom: 3px solid;
 }
-
-/* only way to set bgcolor of top bar?*/
-.book-body.fixed {
-  background-color: #fffff8;
+.level1 h1 {
+  border-bottom: 1px solid;
 }
-
-/* Rather than resize the header, just get rid of line */
-.book.with-summary .book-header.fixed {
-  background-color: #fffff8;
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+h1.title {
+  font-weight: 700;
+}
+.smallcaps {
   font-variant: small-caps;
-  /*font-family: Stalemate Roboto Sans; ignored as all it is doing is taking from index title*/
-  border-bottom: 0 solid rgba(0,0,0,.07);  /*just remove it; this makes height in .book-header above moot*/
-  border-bottom-width: 0;
-  border-bottom-style: solid;
-  border-bottom-color: rgba(0, 0, 0, 0.07);
+}
+.book .book-body .page-wrapper .page-inner section.normal strong {
+  font-weight: 600;
 }
 
-i {
-  background-color: #fffff8;
+.book .book-summary ul.summary li a:hover, .book .book-summary ul.summary li.active>a {
+  color: #fffff8;  /*#6197D5*/
+  background-color: #990024;
 }
 
