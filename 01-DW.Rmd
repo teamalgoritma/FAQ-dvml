@@ -1,0 +1,273 @@
+# Data Wrangling
+
+```{r setup, include=FALSE}
+# clear-up the environment
+rm(list = ls())
+
+# chunk options
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  comment = "#>"
+)
+
+# scientific notation
+options(scipen = 9999)
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+# libraries
+library(tidyverse)
+library(leaflet)
+library(scales)
+library(plotly)
+library(lubridate)
+library(glue)
+library(forcats)
+library(RCurl)
+```
+
+## FAQ
+
+```{r, echo=FALSE}
+vids <- read.csv("data/01-DW/USvideos.csv")
+vids <- vids %>% 
+  mutate(category_id = as.character(category_id),
+         category_id = case_when(category_id == "1" ~ "Film and Animation",
+                                 category_id == "2" ~ "Autos and Vehicles",
+                                 category_id == "10" ~ "Music", 
+                                 category_id == "15" ~ "Pets and Animals", 
+                                 category_id == "17" ~ "Sports",
+                                 category_id == "19" ~ "Travel and Events", 
+                                 category_id == "20" ~ "Gaming",
+                                 category_id == "22" ~ "People and Blogs",
+                                 category_id == "23" ~ "Comedy",
+                                 category_id == "24" ~ "Entertainment",
+                                 category_id == "25" ~ "News and Politics",
+                                 category_id == "26" ~ "Howto and Style",
+                                 category_id == "27" ~ "Education",
+                                 category_id == "28" ~ "Science and Technology",
+                                 category_id == "29" ~ "Nonprofit and Activism",
+                                 category_id == "43" ~ "Shows"),
+         category_id = as.factor(category_id),
+         trending_date = ydm(trending_date),
+         publish_time = ymd_hms(publish_time, tz = "America/New_York"))
+```
+
+
+1. Bagaimana cara mengubah variabel/kolom bertipe "character" menjadi "date", jika dalam 1 kolom terdapat format (urutan) tanggal yang berbeda?
+
+Untuk mengubah tipe data "character" menjadi "date" pada kolom yang memiliki format (urutan) tanggal yang berbeda-beda, dapat mnggunakan fungsi `parse_date()` dari library `parsedate`.
+```{r}
+covid_19 <- read_csv("data/01-DW/2019_nCoV_data.csv")
+covid_19[c(2, 498), ]
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(parsedate)
+
+covid_19 <- covid_19 %>%
+  mutate(Date = mdy_hms(Date),
+         `Last Update` = parsedate::parse_date(`Last Update`)) 
+
+covid_19[c(2, 498), ]
+```
+
+2. Bagaimana cara melakukan filter terhadap baris-baris yang sama dengan beberapa nilai? Misal, akan dilakukan filter terhadap baris-baris yang memiliki ketegori (`category_id`) Comedy, Music, atau Gaming?
+
+Untuk melakukan filter terhadap baris-baris yang sama dengan beberapa nilai (lebih dari satu nilai), dapat menggunakan operator atau `|` ataupun menggunakan operator inlude `%in%`.
+```{r}
+unique(vids$category_id)
+```
+
+```{r}
+filter1 <- vids %>% 
+  filter(category_id == "Comedy" | category_id == "Music" | category_id == "Gaming")
+  
+unique(filter1$category_id)
+```
+
+```{r}
+# code di atas dapat disederhanakan menjadi
+filter1 <- vids %>% 
+  filter(category_id %in% c("Gaming", "Music", "Comedy"))
+
+unique(filter1$category_id)
+```
+
+Berikut contoh kasus jika baris-baris yang ingin dipilih tidak sama dengan beberapa nilai (lebih dari satu nilai), dapat menggunakan operator dan `&` ataupun menggunakan operator include `%in%` yang digabungkan dengan operator tidak `!`.
+```{r}
+filter2 <- vids %>% 
+  filter(category_id != "Comedy" & category_id != "Music" & category_id != "Gaming")
+  
+unique(filter2$category_id)
+```
+
+```{r}
+# code di atas dapat disederhanakan menjadi
+filter2 <- vids %>% 
+  filter(!category_id %in% c("Comedy", "Music", "Gaming"))
+  
+unique(filter2$category_id)
+```
+
+3. Bagaimana cara untuk menampilkan kolom yang memiliki unsur kata *dana*?
+
+```{r, echo=FALSE}
+laporan <- read.csv("data/01-DW/data-bugdet.csv")
+head(laporan)
+```
+
+Untuk menampilkan kolom dengan term tertentu dapat menggunakan function `select_at()` dari package dplyr:
+```{r}
+laporan %>% 
+  select_at(.vars = vars(contains("dana"))) %>% 
+  head()
+```
+
+4. Bagaimana cara untuk menampilkan kolom dengan term tertentu dengan 2 kondisi?
+
+Berikut ini kita akan menampilkan kolom yang memiliki unsur *Pendapatan* atau *Daerah* dengan bantuan function `matches()`
+
+```{r}
+laporan %>% 
+  select_at(.vars = vars(matches("Pendapatan|Daerah"))) %>% 
+  head()
+```
+
+5. Bagaimana cara untuk menampilkan kolom dengan kata tertentu pada awalan nama kolom atau akhiran nama kolom?
+
+Untuk kasus ini kita dapat menggunakan bantuan function starts_with dan ends_with
+
+```{r}
+laporan %>% 
+  select(starts_with("Dana")) %>% 
+  head()
+```
+
+```{r}
+laporan %>% 
+  select(ends_with("pajak")) %>% 
+  head()
+```
+
+
+6. Bagaimana cara untuk menampilkan data teratas berdasarkan category?
+
+Berikut ini kita akan menampilkan jenis Anggaran terbaru untuk setiap provinsi, langkah yang dilakukan sebagai berikut:
+
+    - Memfilter variable jenis untuk tipe "Anggaran"
+    - Mengurutkan periode terbaru hingga terlama
+    - Grouping berdasarkan `provinsi`
+    - Menampilkan 1 data teratas berdasarkan variabel provinsi
+    
+Artinya output berikut ini menampilkan Anggaran dari setiap provinsi terbaru:
+```{r}
+laporan %>% 
+  filter(
+    jenis == "Anggaran"
+  ) %>% 
+  arrange(daerah, desc(periode)) %>% 
+  group_by(provinsi) %>% 
+  slice(1)
+```
+
+7. Bagaimana cara untuk membuat nama kolom menjadi rapih untuk visualisasi?
+
+```{r}
+names(vids)
+```
+
+Untuk membuat tampilan visualisai lebih rapih kita dapat mengubah nama kolom menggunakan function `str_replace()` dan `str_to_title()`. Function `str_replace()` akan mengubah nama kolom dengan menghapus pattern "_". Sedangkan function `str_to_title()` akan membuat huruf awal setiap kata menjadi *uppercase*.
+
+```{r}
+names(vids) %>% 
+  str_replace(pattern = "_",
+              replacement = " ") %>% 
+  str_to_title()
+```
+
+
+8. Bagaimana cara untuk mengubah nama kolom dengan pattern tertentu?
+
+Pada data laporan kita memiliki kolom "hasil_pajak_daerah", "hasil_retribusi_daerah", "hasil_pengelolaan_kekayaan_daerah_yang_dipisahkan". Berikut ini kita akan mengubah nama kolom yang memiliki pattern `hasil_` diubah menjadi `total_` menggunakan function `str_replace()`
+
+```{r}
+names(laporan) %>% 
+  str_replace(pattern = "hasil_",
+              replacement =  "total_")
+```
+
+9. Bagaimana cara untuk menggabungkan dua atau lebih vector ke dalam satu vector? 
+
+Kita dapat menggunakan function `str_c()` sebagai berikut:
+
+```{r}
+str_c(c("Music","Gaming","Shows"), collapse = ",")
+```
+
+Function `str_c()` juga dapat digunakan untuk membuat vector dengan pattern yang berulang sebagai berikut:
+
+```{r}
+str_c("Laporan", c(2017:2020),"Q1",sep = "-")
+```
+
+10. Apa perbedaan dari function `str_replace()` dan `str_replace_all()`?
+
+```{r}
+dat <- c("data","science","algoritma")
+```
+
+Ketika menggunakan function `str_replace()` akan mengubah pattern pertama yang ditemui, sebagai berikut:
+```{r}
+str_replace(dat,"[aiueo]","-")
+```
+Sedangkan function `str_replace_all()` akan mengubah semua pattern yang ditemui pada vector, sebagai berikut:
+```{r}
+str_replace_all(dat,"[aiueo]","-")
+```
+
+11. Bagaimana cara untuk memisahkan element pada setiap observasi ke dalam beberapa kolom?
+
+Berikut ini kita memiliki variabel product yang berisikan berbagai macam product yang dibeli oleh customer, bagaimana cara kita untuk memisahkan variabel tersebut menjadi beberapa kolom untuk setiap product yang dibeli?
+```{r, echo=FALSE}
+id <- 1:4
+product <- c("Milk, Cereal", "Coffe, Sugar, Milk",
+             "Bread","Tea, Sugar, Bread")
+dat <- data.frame(id, product)
+dat
+```
+
+Kita dapat menggunakan function `separate()` dari package `tidyr` sebagai berikut:
+
+```{r}
+dat %>% 
+  separate(col = "product",
+           into = str_c("Product",1:3, sep = "-"),
+           sep = ", ")
+```
+
+12. Bagaimana mengatasi missing value pada data?
+
+Salah satu penanganan missing value dengan melakukan *inputation* atau mengisi missing value dengan suatu nilai. Package `tidyr` menyediakan function `fill()` yang bekerja dengan mengisi missing value menggunakan nilai observasi berikutnya atau sebelumnya.
+
+```{r, echo=FALSE}
+treatment <- tribble(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+treatment
+```
+
+Function `fill()` memiliki parameter `direction` untuk mengatur arah nilai yang akan diisi. Parameter direction terdiri dari "down", "up", "downup", dan "updown".
+```{r}
+treatment %>% 
+  fill(person,.direction = "down")
+```
+
+Tentunya penanganan missing value tersebut tidak dapat diterapkan untuk semua data, penanganan ini cocok untuk format data yang memiliki nilai tidak berulang.
+

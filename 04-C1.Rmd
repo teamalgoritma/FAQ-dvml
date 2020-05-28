@@ -1,0 +1,208 @@
+# Classification 1
+
+```{r setup, include=FALSE}
+# clear-up the environment
+rm(list = ls())
+
+# chunk options
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  comment = "#>"
+)
+
+# scientific notation
+options(scipen = 9999)
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+# libraries
+library(tidyverse)
+library(rsample)
+library(caret)
+library(recipes)
+```
+
+## FAQ
+
+1. Pada klasifikasi penentuan kelas didasarkan pada peluang, bagaimana jika peluang yang diperoleh sama besar, misal pada kasus klasifikasi biner diperoleh peluang masuk ke kelas 1 adalah 0.5 dan peluang masuk ke kelas 0 adalah 0.5?
+
+   Hal tersebut bergantung pada user yang menentukan threshold/batasan probability untuk masuk ke kelas 1 atau masuk ke kelas 0. Namun, pada umumnya jika diperoleh probability >= 0.5 maka observasi tersebut akan masuk ke kelas 1.
+
+2. Untuk prediktor kategorik, bagaimana jika terdapat kategori yang tidak signifikan (p value > alpha)? apakah prediktor tersebut masih dianggap signifikan mempengaruhi target?
+
+  Untuk level yang menjadi basis akan dianggap signifikan, untuk level lainnya yang tidak signifikan artinya memang level tersebut tidak memberikan pengaruh terhadap target variabel. Solusi yang dapat dilakukan adalah bining (level tersebut dijadikan satu level yg mirip dan signifikan) atau menambahkan jumlah observasi pada level yang tidak signifikan tersebut.   
+
+3. Pada fungsi `lm` sudah otomatis melakukan transformasi data kategorik dengan level pertama yang dijadikan basis. Bagaimana jika dilakukan reorder level (mengubah urutan level), apakah akan mengubah hasil pemodelan?
+
+   Nilai pvalue pada setiap level tidak akan berubah ketika kita melakukan reorder level. Interpretasi untuk variable kategorik bergantung pada level yang dijadikan basis
+
+4. Pengertian dari null deviance dan residual deviance pada output summary?
+
+   Null deviance menunjukkan seberapa baik target variabel diprediksi oleh model berdasarkan nilai intercept. Sedangkan residual deviance menunjukkan seberapa baik target variabel diprediksi oleh model berdasarkan intercept dan semua variabel independen yang digunakan.
+   
+Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi  
+[Null deviance & Residual deviance](https://www.theanalysisfactor.com/r-glm-model-fit/)
+
+5. Apa itu `Fisher Scoring` pada output summary?
+
+   Fisher scoring adalah turunan dari metode Newton untuk mengatasi Maximum Likelihood. Fisher scoring memberikan informasi berapa banyak iterasi yang dilakukan pada model sehingga diperoleh nilai parameter.
+
+6. Apa itu Maximum Likelihood Estimator (MLE)?
+
+   Parameter pada model logistik regression diperoleh dari pendekatan MLE. MLE merupakan pendekatan statistik untuk memperkirakan paramater pada model.
+
+7. Pada kasus klasifikasi, kenapa pengukuran accuracy tidak cukup menjelaskan seberapa baik model yang diperoleh?
+
+   Untuk mengetahui seberapa baik perfomance model klasifikasi, tidak cukup dengan melihat nilai accuracy nya saja, karena accuracy menganggap sama penting untuk nilai false positive dan false negative. Kita membutuhkan perhitungan lain seperti precision dan recall, contohnya untuk memprediksi pasien mengidap kanker jinak atau ganas. Tentunya akan lebih berbahaya jika kemampuan model yang kita miliki cenderung lebih baik memprediksi kanker ganas namun terprediksi menjadi jinak. Pada kasus ini karena kelas positif yang dimiliki adalah kanker ganas, maka kita akan mementingkan nilai recall lebih besar dibandingkan nilai pengukuran lainnya.
+
+8. Permasalahan apa yang paling sering ditemui pada kasus klasifikasi?
+
+   Permasalahan besar kasus klasifikasi adalah dataset yang tidak seimbang. Contohnya pada case churn telekomunikasi, employee attrition, prediksi kanker, fraud detection, dan sebagainya. Dalam hal tersebut, biasanya jumlah kelas positif jauh lebih sedikit dibandingkan kelas negatif. 
+
+   Misalkan pada kasus fraud detection, dari 1000 transaksi yang dimiliki, 10 diantaranya fraud, sedangkan sisanya tidak fraud. Kemudian perfomance model yang diperoleh sekitar 85%, mungkin terdengar sangat baik, namun pada kenyatannya tidak. Kemungkinan besar model tersebut hanya mampu memprediksi salah satu kelas kelas mayoritas yaitu yang tidak fraud, sedangkan kelas positif yang kita miliki sangat sedikit data yang dimiliki.
+
+- **Imbalance Target Variable**
+
+Pemodelan klasifikasi mulai banyak digunakan pada berbagai bidang industri, seperti perbankan untuk mendeteksi transaksi yang memiliki kecenderungan kecurangan atau memprediksi potensi kegagalan nasabah dalam membayar kredit/hutang, tranportasi (penerbangan) untuk memprediksi kemungkinan suatu penerbangan mengalami keterlambatan, digital marketing untuk memprediksi pelanggan yang loyal atau pelanggan yang memiliki potensi untuk kembali membeli produk yang dijual, kesehatan untuk memprediksi apakah seorang pasien positif terkena penyakit tertentu, dan masih banyak lagi.
+
+Dari berbagai macam permasalahan klasifikasi tersebut tidak semua masalah klasifikasi memiliki jumlah target variabel yang seimbang (level yang mendominasi keseluruhan target merupakan kelas mayoritas dan level yang lebih kecil disebut kelas minoritas). Ketika kondisi seperti apa target variabel tidak memiliki proporsi yang seimbang ?
+
+![](assets/04-C1/imbalance proportion.png)
+
+Hal tersebut akan berpengaruh terhadap kemampuan model untuk memprediksi target (model klasifikasi cenderung lebih pintar dalam memprediksi kelas mayoritas), karena model klasifikasi sangat bergantung pada jumlah setiap level target dalam proses learning nya (model klasifikasi akan melalui proses learning yang seimbang jika diberikan jumlah sampel yang seimbang pula). Hal ini menjadi masalah yang cukup serius, sehingga perlu dilakukan penanganan sebagai solusi permasalahan tersebut.
+
+```{r}
+attrition <- read_csv("data/04-C1/attrition.csv") %>% 
+  mutate(attrition = as.factor(attrition))
+```
+
+```{r}
+prop.table(table(attrition$attrition)) %>% round(2)
+```
+
+Salah satu cara yang paling umum dilakukan adalah menyeimbangkan jumlah target variabel dengan metode sampling. Metode tersebut terbagi menjadi 2, yaitu **downsampling** dan **upsampling**.
+
+1. **Downsampling** adalah proses sampling pada observasi kelas mayoritas sebanyak jumlah observasi pada kelas minoritas, tujuannya adalah menyamakan jumlah observasi pada kelas mayoritas dan minoritas. Sehingga model klasifikasi dapat melalui proses learning yang seimbang. Proses downsampling akan mengurangi jumlah observasi pada kelas mayoritas, sehingga memungkinkan terjadinya kehilangan informasi.
+
+2. **Upsampling** adalah proses sampling pada observasi kelas minoritas sebanyak jumlah observasi pada kelas mayoritas, tujuannya adalah menyamakan jumlah observasi pada kelas mayoritas dan minoritas. Sehingga model klasifikasi dapat melalui proses learning yang seimbang. Proses upsampling akan menambah jumlah observasi pada kelas minoritas, sehingga memungkinkan terdapat data yang duplicate pada kelas minoritas.
+
+Untuk melakukan downsampling dan upsampling dapat menggunakan fungsi pada library `caret` ataupun `recipes`. Berikut contoh downsampling dan upsampling dengan menggunakan fungsi pada library `caret` dan `recipes`
+
+Sebelum menerapkan downsampling dan upsamling terlebih dahulu dilakukan cross validation, yaitu membagi data menjadi **training set** untuk proses pemodelan dan **testing set** untuk melakukan evaluasi. Cross validation akan dilakukan dengan menggunakan fungsi `initial_split()` dari library `rsample`. Fungsi tersebut akan melakukan proses sampling untuk cross validation dengan metode **stratified random sampling**, sehingga proporsi target variabel pada data awal, akan dipertahankan baik pada training set maupun testing set.
+```{r}
+# define seed
+set.seed(100)
+
+# menentukan indeks untuk train dan test
+splitted <- initial_split(data = attrition, prop = 0.75, strata = "attrition")
+
+# mengambil indeks data train dengan fungsi `tarining()`
+train <- training(splitted)
+
+# mengambil indeks data test dengan fungsi `testing()`
+test <- testing(splitted)
+```
+
+```{r}
+prop.table(table(train$attrition)) %>% round(2)
+prop.table(table(test$attrition)) %>% round(2)
+```
+
+Downsampling dan upsampling hanya akan dilakukan pada data train karena proses pembuatan model klasifikasi hanya dilakukan pada data train. Data test hanya digunakan untuk mengevaluasi model yang dihasilkan pada data train.
+
+- Downsample
+
+Untuk melakukan downsampling dengan library `caret` dapat menggunakan fungsi `downSample()`.
+```{r}
+train_down <- downSample(x = train[, -1], y = train$attrition, yname = "attrition")
+```
+
+```{r}
+prop.table(table(train_down$attrition)) %>% round(2)
+```
+
+- Upsample
+
+Untuk melakukan upsampling dengan library `caret` dapat menggunakan fungsi `upSample()`.
+```{r}
+train_up <- upSample(x = train[, -1], y = train$attrition, yname = "attrition")
+```
+
+```{r}
+prop.table(table(train_up$attrition)) %>% round(2)
+```
+
+Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi [downSample: Down- and Up-Sampling Imbalanced Data](https://rdrr.io/cran/caret/man/downSample.html)
+
+- Downsample/Upsample Using `Recipes`
+
+Sama seperti saat menggunakan fungsi pada library `caret`, ketika menggunakan fungsi dari library `recipes` juga harus dilakukan cross validation terlebih dahulu. Perbedaan ketika menggunakan fungsi dari library `recipes` data train dan data test tidak langsung dimasukkan ke dalam sebuah objek melainkan dilakukan downsampling atau upsampling terlebih dahulu.
+
+```{r}
+set.seed(417)
+
+splitted_rec <- initial_split(data = attrition, prop = 0.8, strata = "attrition")
+
+splitted_rec
+```
+
+Untuk melakukan downsampling atau upsampling menggunakan library `recipes` dapat menggunakan fungsi `step_downsample()` atau `step_upsample()` yang didefinisikan dalam sebuah **recipe**.
+```{r}
+rec <- recipe(attrition ~ ., training(splitted)) %>% 
+  # `step_downsample()` dapat diganti dengan `step_upsample()`
+  step_downsample(attrition, ratio = 1, seed = 100) %>%
+  prep()
+```
+
+```{r}
+# membuat data train dengan fungsi `juice()`
+train_rec <- juice(rec)
+
+# membuat data test dengan fungsi `bake()`
+test_rec <- bake(rec, testing(splitted))
+```
+
+```{r}
+prop.table(table(train_rec$attrition)) %>% round(2)
+```
+
+Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi [tidymodels/recipes](https://github.com/tidymodels/recipes)
+
+9. Apa yang dimaksud dengan false positive dan false negative?
+
+  -  False positive adalah kasus dimana sisi negatif terprediksi sebagai positif. Contohnya, pasien terprediksi mengidap kanker ganas, namun data actual nya pasien tersebut mengidap kanker jinak.
+
+  -  False negative adalah kasus dimana sisi positif terprediksi sebagai negatif.
+Contohnya, pasien teprediksi mengidap kanker jinak, namun data actual nya pasien tersebut mengidap kanker ganas.
+
+10. Bagaimana model regresi logistic regression menangani data kategorik?
+
+    Sama seperti kasus linear regression, pada logistic regression akan mengubah variabel kategorik menjadi dummy variabel.
+
+11. Apa maksud dari nilai AIC?
+
+    AIC (Akaike Information Criterion) menggambarkan seberapa banyak informasi yang hilang pada model tersebut. AIC biasa digunakan untuk membandingkan beberapa model, karena berbeda dengan R-squared yang memiliki range semakin mendekati 1 semakin baik, AIC tidak memiliki batasan, jadi kita perlu membandingkannya dengan model lain.
+
+    
+13. Bagaimana cara untuk mengindikasi adanya perfect separation pada model?
+
+Indikasi perfect separation dapat dilihat dari beberapa point berikut:
+
+- tidak ada prediktor yang signifikan padahal aic sangat kecil   
+
+- terdapat 1 koefisien yang nilainya cukup besar dibandingkan yang lain   
+
+- gunakan parameter `detect_separation` untuk mengetahui adanya perefect separation pada model:
+
+```{r}
+honors <- read.csv("data/04-C1/sample.csv")
+```
+
+```{r}
+library(brglm2)
+glm(hon ~ female + read + math + write, data=honors, family="binomial", method = "detect_separation")
+```
+
+Parameter `detect_separation` akan menghasilkan output `TRUE` or `FALSE`. Ketika `TRUE` artinya terdapat perfect separation pada model. Untuk mengetahui detail variabel mana yang merupakan perfect separtion, kita perlu amati dari output `summary()` model.
