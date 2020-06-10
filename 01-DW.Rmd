@@ -26,9 +26,8 @@ library(lubridate)
 library(glue)
 library(forcats)
 library(RCurl)
+library(rmarkdown)
 ```
-
-## FAQ
 
 ```{r, echo=FALSE}
 vids <- read.csv("data/01-DW/USvideos.csv")
@@ -114,9 +113,9 @@ unique(filter2$category_id)
 
 3. Bagaimana cara untuk menampilkan kolom yang memiliki unsur kata *dana*?
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, rows.print = 6}
 laporan <- read.csv("data/01-DW/data-bugdet.csv")
-head(laporan)
+paged_table(laporan)
 ```
 
 Untuk menampilkan kolom dengan term tertentu dapat menggunakan function `select_at()` dari package dplyr:
@@ -271,3 +270,20 @@ treatment %>%
 
 Tentunya penanganan missing value tersebut tidak dapat diterapkan untuk semua data, penanganan ini cocok untuk format data yang memiliki nilai tidak berulang.
 
+13. Apa perbedaan dari `left_join`, `right_join`, `full_join`, dan `inner_join`?
+
+- Function `left_join()` akan mempertahankan observasi X
+- Function `right_join()` akan mempertahankan observasi Y
+- Function `full_join()` akan menampilkan observasi yang berada pada data X atau Y
+- Function `inner_join()` akan menampilkan observasi yang terdapat pada data X dan Y.
+
+```{r, echo=FALSE, out.width="70%", fig.align="center"}
+knitr::include_graphics("assets/01-DW/join-outer.png")
+```
+
+[Source: R For Data Science](https://r4ds.had.co.nz/relational-data.html)
+
+```{r, echo=FALSE, out.width="70%", fig.align="center"}
+knitr::include_graphics("assets/01-DW/join-inner.png")
+```
+[Inner join](https://r4ds.had.co.nz/relational-data.html)
