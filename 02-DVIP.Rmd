@@ -59,7 +59,7 @@ laporan <- read.csv("data/02-DVIP/data-bugdet.csv")
 
 ### Geom
 
-1. Bagaimana cara menambahkan separator (,) untuk memisahkan angka ribuan pada label `geom_text()`/`geom_label()` yang terletak pada setiap batang di bar plot ?
+1. Bagaimana cara menambahkan separator (,) untuk memisahkan angka ribuan pada label `geom_text()`/`geom_label()` yang terletak pada setiap batang (bar) di bar plot ?
 
 Untuk menambahkan separator (,) dengan tujuan  memisahkan angka ribuan pada label `geom_text()`/`geom_label()` yang terletak pada setiap batang di bar plot, bisa menggunakan fungsi `comma()` dari package `scales`.
 ```{r}
@@ -85,21 +85,21 @@ ggplot(vids1, aes(x = total.likes,y = reorder(channel_title, total.likes))) +
   theme_minimal()
 ```
 
-
-2. Bagaimana cara untuk mengurutkan bar saat menggunakan `geom_bar()`?
+2. Bagaimana cara untuk mengurutkan batang (bar) saat menggunakan `geom_bar()`?
 
 ```{r, echo=FALSE}
 vids.u <- vids[match(x = unique(vids$title),table = vids$title),]
 ```
 
-Untuk mengurutkan `geom_bar` kita dapat menggunakan function `fct_infreq()` dari package `forcats` dan untuk mengatur bar dari paling besar hingga paling kecil kita dapat menggunakan bantuan function `fct_rev()`.
+Untuk mengurutkan batang ketika menggunakan `geom_bar` kita dapat menggunakan function `fct_infreq()` dari package `forcats`, kemudian untuk mengatur bar dari paling besar hingga paling kecil kita dapat menggunakan bantuan function `fct_rev()`.
 ```{r}
 ggplot(data = vids.u, mapping = aes(y = fct_rev(fct_infreq(category_id))))+
   geom_bar() +
   labs( x = "Category",
         y = "Total Video")
 ```
-3. Bagaimana mengubah urutan pada legend?
+
+3. Bagaimana cara mengubah urutan kategori pada legend?
 
 ```{r}
 ggplot(data = iris, aes(x = Species,y = Sepal.Length))+
@@ -107,13 +107,13 @@ ggplot(data = iris, aes(x = Species,y = Sepal.Length))+
   scale_color_manual(values = c("red","blue","green"))
 ```
 
-Secara default legend akan diurutkan berdasarkan urutan level kategori:
+Secara default katgori pada legend akan diurutkan berdasarkan urutan level/kategori:
 
 ```{r}
 levels(iris$Species)
 ```
 
-Untuk mengurutkan level legend, kita dapat mengubah urutan level pada kolom kategori tersebut:
+Untuk mengurutkan kategori pada legend, kita dapat mengubah urutan level pada kolom kategori tersebut:
 
 ```{r}
 #order level
@@ -128,7 +128,7 @@ ggplot(data = iris, aes(x = Species,y = Sepal.Length))+
 
 ```
 
-4. Bagaimana cara untuk plotting dua variabel dengan `geom_line` pada satu grafik?
+4. Bagaimana cara membuat lebih dari satu line pada satu grafik dengan menggunakan `geom_line`?
 
 ```{r, echo=FALSE}
 set.seed(100)
@@ -140,7 +140,7 @@ datline <-data.frame(
 head(datline)
 ```
 
-Untuk membuat grafik line dari dua variabel sekaligus, kita perlu menyatukan kedua variabel tersebut menjadi satu variabel dengan bantuan function `pivot_longer()` dari package `tidyr`. Data yang akan diperoleh sebagai berikut:
+Untuk membuat grafik line dari dua variabel sekaligus, kita perlu melakukan manipulasi dari kedua variabel tersebut menjadi satu variabel dengan bantuan function `pivot_longer()` dari package `tidyr`. Data yang akan diperoleh sebagai berikut:
 ```{r}
 data_viz <- datline %>% 
             pivot_longer(cols = c(market_A,market_B),
@@ -148,13 +148,13 @@ data_viz <- datline %>%
 head(data_viz)
 ```
 
-Setelah data visualisasi siap, selanjutnya kita dapat melakukan visualisasi seperti biasa. Karena kita ingin membedakan grafik line berdasarkan kategori, kita bisa menggunakan parameter `group` untuk membedakan grafik line berdasarkan category.
+Setelah data dimanimpulasi, selanjutnya kita dapat melakukan visualisasi seperti biasa. Karena kita ingin membedakan grafik line berdasarkan kategori, kita bisa menggunakan parameter `group` untuk membedakan grafik line berdasarkan category.
 ```{r}
 ggplot(data = data_viz, aes(x = date,y = value, group = market)) +
   geom_line()
 ```
 
-5. Bagaimana cara untuk menampilkan value pada stacked bar?
+5. Bagaimana cara untuk menampilkan nilai (value) pada stacked bar?
 
 Berikut ini merupakan data yang akan digunakan untuk visualisasi:
 ```{r, echo = FALSE}
@@ -176,8 +176,7 @@ ggplot(dat_cat, aes(x = year,y = freq)) +
             position = position_stack(vjust = 0.5))
 ```
 
-
-6. Bagaimana menerapkan secondary axis pada ggplot?
+6. Bagaimana cara membuat secondary axis pada `ggplot2`?
 
 ```{r, echo=FALSE}
 weather <- ReadAxfBOM::ReadAxfBOM("http://www.bom.gov.au/fwo/IDV60901/IDV60901.94866.axf") %>% 
@@ -185,7 +184,7 @@ weather <- ReadAxfBOM::ReadAxfBOM("http://www.bom.gov.au/fwo/IDV60901/IDV60901.9
 head(weather)
 ```
 
-Penggunaan secondary axis pada ggplot dapat diatur pada function `scale_y_continuous()`, terdapat parameter sec.axis pada parameter tersebut. Kita dapat menyesuaikan formula pada secondary axis tersebut pada parameter `trans`.
+Penggunaan secondary axis pada `ggplot2` diatur melalui function `scale_y_continuous()`, dengan menggunakan parameter `sec.axis`. Kita dapat menyesuaikan formula pada secondary axis tersebut pada parameter `trans`.
 ```{r }
 ggplot(data = weather, aes(x = Timestamp,y = air_temp))+
   geom_line()+
@@ -193,7 +192,7 @@ ggplot(data = weather, aes(x = Timestamp,y = air_temp))+
                                          name = "Relative Humidity [%]"))
 ```
 
-7. Bagaimana membuat multi row axis label pada ggplot?
+7. Bagaimana cara membuat multi row axis label pada ggplot?
 
 ```{r, echo = FALSE}
 set.seed(100)
@@ -238,6 +237,7 @@ df <- data.frame(Var1 = rnorm(1000, 50, 10),
                  Var2 = rnorm(1000, 50,10))
 head(df)
 ```
+
 Untuk membuat histogram marginal, kita dapat menggunakan function `ggMarginal()` dari package `ggExtra`. Kita dapat mengatur type grafik sesuai kebutuhan, type yang tersedia yaitu density, histogram, boxplot, violin, dan densigram.
 ```{r}
 p <- ggplot(data = df, aes(x = Var1,y = Var2))+
@@ -298,37 +298,25 @@ ggplotly(interactive_map, tooltip = "text")
 
 1. Bagaimana cara memberi big mark pada axis plot?
 
+```{r, echo=FALSE}
+vids3 <- vids %>% 
+  select(channel_title, category_id, views, likes) %>% 
+  filter(category_id %in% c("Education", "Science and Technology"))
+```
+
 untuk memberikan big mark pada axis dapat dibantu dengan package `scales`
 ```{r}
-iris %>% 
-  mutate(Petal.Length = Petal.Length*10^6, 
-         Sepal.Length = Sepal.Length*10^6) %>% 
-  ggplot(aes(x = Sepal.Length, y = Petal.Length)) + 
-  geom_point() +
+ggplot(vids3, aes(views, likes)) +
+  geom_point(aes(color = category_id))  +
   scale_y_continuous(labels = comma)+
   scale_x_continuous(labels = comma)
 ```
 
-2. Bagaimana cara memberikan big mark `Rp.` pada axis plot?
+2. Apakah pengaturan label baik pada sumbu x ataupun y dapat dilakukan secara terpisah? misal kita ingin memeberikan label ribuan (1 ribu, 2 ribu, dst). Namun, pada angka 0 tidak ingin diikuti oleh "ribuan".
 
-Untuk custom big mark sebelum dan setelah text dapat menggunakan function `unit_format()`. Parameter prefix dan suffix digunakan untuk menampilkan symbol sebelum dan setelah nilai.
+Tidak bisa dilakukan secara terpisah, karena parameter `labels` pada fungsi `scale_y_continous` akan menambahkan satuan pada semua nilai label. Alternatif lain yang dapat dilakukan adalah membuat judul (title) pada sumbu x ataupun y dengan disertai oleh satuan. Misal, "Dislikes (Ribu)", kemudian membuat skalanya menjadi lebih kecil (50000 menjadi 50 saja).
 
-```{r, echo = FALSE}
-iris %>% 
-  mutate(Petal.Length = Petal.Length*10^6, 
-         Sepal.Length = Sepal.Length*10^6) %>% 
-  ggplot(aes(x = Sepal.Length, y = Petal.Length)) + 
-  geom_point() +
-  scale_y_continuous(labels = unit_format(prefix = "Rp. ", 
-                                          suffix = ",-",
-                                          big.mark = ","))
-```
-
-3. Apakah kita dapat mengatur label pada sumbu y supaya angka 0 tidak diikuti oleh satuan (hanya 1 nilai saja yg tidak dikuti oleh satuan)?
-
-tidak bisa kalau hanya 1 nilai saja yang diubah. Parameter `labels` pada fungsi `scale_y_continous` akan menambahkan satuan pada semua nilai label. Alternatif lain yang dapat dilakukan adalah membuat judul sumbu y dengan satuan (misal, Dislikes (Ribu)), kemudian membuat interval menjadi lebih kecil skalanya (misal, 50000 menjadi 50 saja).
-
-4. Bagaimana mengatasi axis yang memiliki satuan besar seperti berikut ini?
+3. Bagaimana mengatasi axis yang memiliki satuan besar seperti berikut ini?
 
 ```{r, echo = FALSE}
 data_agg <- laporan %>% 
@@ -380,7 +368,7 @@ ggplot(data_agg, aes(x = belanja_daerah, y = reorder(daerah, belanja_daerah))) +
 
 Setelah diaplikasikan label pada axis text terlihat lebih mudah dipahami informasi yang disampaikan pada grafik tersebut.
 
-5. Bagaimana cara untuk mewarnai dan memberi label pada bar tertentu pada plot?
+4. Bagaimana cara untuk mewarnai dan memberi label pada bar tertentu pada plot?
 
 Misalkan, pada data top 10 trending channel akan dibentuk bar plot dan kita akan membedakan warna pada top 3 channel tersebut. Untuk pewarnaan dari top 3 channel kita memerlukan `geom_col()` tambahan yang berisi 3 data awal yang akan ditampilkan, begitupun pada `geom_label()` pada parameter data kita define observasi mana saja yang ingin diberikan label.
 ```{r, echo = FALSE}
@@ -410,7 +398,7 @@ ggplot(data = vids.top,mapping = aes(x = total,
 
 ### Theme
 
-1. Secara umum elemen-elemen apa saja yang dapat diatur/disesuaikan pada fungsi `theme()`?
+**1. Secara umum elemen-elemen apa saja yang dapat diatur/disesuaikan pada fungsi `theme()`?**
 
 Berikut adalah gambaran elemen-elemen apa saja yang dapat diatur/disesuaikan dengan fungsi `theme()`
 
@@ -446,7 +434,7 @@ Berikut adalah gambaran elemen-elemen apa saja yang dapat diatur/disesuaikan den
 
   - `legend.text`: digunakan untuk menyesuaikan/mengatur elemen yang berkaitan dengan tulisan pada bagian legend. Digunakan dengan menambahkan parameter `element_text()` untuk mengatur spesifikasi tulisan yang diinginkan mulai dari ukuran (`size`), rata kiri-kanan/alignment (`hjust`), cetak tebal/miring (`face`), dll.
 
-2. Bagaimana cara mengatur posisi legend secara manual (selain menggunakan position default "none", "left", "right", "bottom", dan "top") supaya posisnya berada di dalam kanvas plotnya?
+**2. Bagaimana cara mengatur posisi legend secara manual (selain menggunakan position default "none", "left", "right", "bottom", dan "top") supaya posisnya berada di dalam kanvas plotnya?**
 
 Untuk mengatur posisi legend secara manual dapat menambahakan parameter `legend.position` pada `theme` seperti berikut ini: 
 ```{r}
@@ -485,120 +473,9 @@ ggplot(vids3, aes(views, likes)) +
 ```
 
 
-## Interactive plotting & Leaflet
+## Interactive plotting 
 
-1. Bagaimana cara mengubah base map pada leaflet?
-
-```{r, echo=FALSE, rows.print = 6}
-datraw <- read_csv("data/02-DVIP/temp.csv")
-
-temp <- datraw %>% 
-        head(100)
-paged_table(temp)
-```
-
-Kita dapat menggunakan fungsi addProviderTiles() lalu memilih providers yang diinginkan
-```{r, eval = FALSE}
-leaflet(data = temp) %>% 
-  addProviderTiles(providers$Esri) %>% 
-  addMarkers(lng = ~longitude, lat = ~latitude)
-
-```
-
-```{r, eval = FALSE}
-leaflet(data = temp) %>% 
-  addProviderTiles(providers$Esri.WorldImagery) %>% 
-  addMarkers(lng = ~longitude, lat = ~latitude)
-```
-
-Untuk mengetahui detail tampilan setiap providers dapat dilihat pada link berikut ini [Leaflet Providers Preview](https://leaflet-extras.github.io/leaflet-providers/preview/).
-
-
-2. Bagaimana cara untuk membuat leaflet interactive dengan pilihan provider pada leaflet tersebut?
-
-Kita dapat menggunakan *Leaflet's Layer Control* untuk mengatur provider yang akan dipilih.
-
-```{r, eval = FALSE}
-leaflet(data = temp) %>% 
-  addTiles(group = "Esri") %>% 
-  addProviderTiles(providers$Esri.WorldImagery,group = "Esri World Imagery") %>%
-  addProviderTiles(providers$OpenTopoMap, group = "Open Topo Map") %>% 
-  addMarkers(lng = ~longitude, lat = ~latitude) %>%
-  addLayersControl(baseGroups = c("Esri", "Esri World Imagery",
-                                  "Open Topo Map"),
-                   options = layersControlOptions(collapsed = FALSE))
-```
-
-3. Bagaimana mengatasi titik lokasi yang cukup banyak dan terlihat overlap pada leaflet?
-
-```{r, eval = FALSE}
-loca <- data.frame(latitude=runif(200, min = -32.162, max=-30.0522),
-                   longitude=runif(200, min=141.33, max=150.38))
-leaflet(data = loca) %>% 
-  addProviderTiles(providers$Esri) %>% 
-  addMarkers(lng = ~longitude, 
-             lat = ~latitude)
-```
-
-Untuk memperoleh tampilan yang lebih rapih ketika memiliki banyak titik lokasi, kita dapat menggunakan parameter `clusterOptions`.
-```{r, eval = FALSE}
-leaflet(data = loca) %>% 
-  addProviderTiles(providers$Esri) %>% 
-  addMarkers(lng = ~longitude, 
-             lat = ~latitude,
-             clusterOptions = markerClusterOptions()) 
-
-```
-
-4. Bagaimana cara untuk memberikan markers untuk identifikasi titik pada leaflet?
-
-```{r, echo=FALSE}
-dat <- datraw %>% 
-        tail(40)
-```
-
-Untuk memberikan icon markers pada leaflet, kita dapat menggunakan function `addAwesomeMarkers()` dan juga kita perlu tentukan icon yang akan digunakan, untuk mengetahui macam-macam icon yang digunakan dapat di liat pada link berikut [Font Awesome](https://fontawesome.com/icons?d=gallery).
-
-```{r, eval= FALSE}
-icons <- awesomeIcons(icon = "street-view",
-                      iconColor = "pink",
-                      markerColor = "black",
-                      library = "fa")
-
-leaflet(data = dat) %>% 
-  addProviderTiles(providers$Esri) %>% 
-  addMarkers(lng = ~longitude, lat = ~latitude) %>% 
-  addAwesomeMarkers(icon = icons)
-
-```
-
-5. Bagaimana cara memetakan point markers berdasarkan ukuran?
-
-Berikut ini akan dilakukan pemetaan besaran gempa untuk setiap wilayah, kita ingin memetakan point berdasarkan besarnya gempa yang terjadi. Data yang akan digunakan adalah sebagai berikut:
-```{r, echo = FALSE, rows.print = 6}
-quakes <- read.csv("data/02-DVIP/quakes.csv")
-
-paged_table(quakes)
-```
-
-Untuk memetakan point berdasarkan besaran dapat menggunakan function `addCircleMarkers()` dan untuk mengatur besaran terhadap circle yang ingin ditampilkan gunakan parameter radius. Lingkaran merah tersebut menandakan semakin besar lingkaran artinya ukuran magnitude gempa pada titik tersebut besar.
-```{r, eval= FALSE}
-leaflet(quakes) %>%
-  addProviderTiles("Esri.WorldTopoMap") %>%
-  
-  addCircleMarkers(lng = ~longitude,
-                   lat = ~latitude,
-                   popup =paste0("Magnitude: ", quakes$mag, 
-                                 "<br>Date: ", quakes$time),
-                   fillColor = "red", 
-                   color = "red", 
-                   weight = 1, 
-                   fillOpacity = 0.25,
-                   radius = 1.75^quakes$mag
-  ) 
-```
-
-6. Contoh penggunaan echarts4r untuk beberapa plot sederhana
+**1. Contoh penggunaan echarts4r untuk beberapa plot sederhana**
 
 ```{r}
 library(echarts4r)
@@ -685,7 +562,7 @@ retail.agg2 %>%
   e_title("Treemap charts")
 ```
 
-7. Bagaimana cara membuat echarts menjadi interaktif?
+**2. Bagaimana cara membuat echarts menjadi interaktif?**
 
 ```{r}
 vids1 %>% 
@@ -697,7 +574,7 @@ vids1 %>%
             axisPointer = list(type = "cross"))
 ```
 
-8. Contoh penggunaan highcharter untuk beberapa plot sederhana
+**3. Contoh penggunaan highcharter untuk beberapa plot sederhana:**
 
 ```{r}
 library(highcharter)
@@ -723,7 +600,7 @@ hchart(vids2, "line", hcaes(x = trending_date, y = total.video, group = category
   hc_title(text = "Trend Total Video Trending based on Category")
 ```
 
-9. Bagaimana cara untuk menampilkan popup informasi dari grafik?
+**4. Bagaimana cara untuk menampilkan popup informasi dari grafik?**
 
 Untuk membuat plot menjadi interactive, kita dapat menggunakan package `glue` dan `plotly`. 
 
@@ -768,7 +645,7 @@ p <- ggplot(data_viz, aes(x = belanja_daerah, y = reorder(daerah, belanja_daerah
 ggplotly(p, tooltip = "text")
 ```
 
-10. Apakah plotly juga dapat diatur/disesuaikan (custom) secara terpisah dari `ggplot2`? bagaimana caranya?
+**5. Apakah plotly juga dapat diatur/disesuaikan (custom) secara terpisah dari `ggplot2`? bagaimana caranya?**
 
 Bisa, berikut beberapa contoh pengaturan pada `plotly`: 
 
@@ -798,31 +675,7 @@ ggplotly(p, tooltip = "text") %>%
   layout(dragmode = "pan")
 ```
 
-11. Bagaimana cara membuat spatial map menggunakan `leaflet`?
 
-Untuk membuat spatial map menggunakan leaflet, terlabih dahulu download shapefile pada link http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip
-```{r,eval=FALSE}
-library(leaflet)
-library(raster)
+## Leaflet
 
-# read shapefile
-shape <- shapefile("data/02-DVIP/TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.shx")
-class(shape)
-
-# cleaning data
-shape@data$POP2005 <- as.numeric(shape@data$POP2005)
-
-# create a color pallete
-pal <- colorNumeric("viridis", NULL)
-
-leaflet(shape) %>% 
-  addProviderTiles("Esri.NatGeoWorldMap") %>% 
-  addPolygons(fillColor = ~pal(POP2005),
-              fillOpacity = 1,
-              label = paste0(shape@data$NAME, ": ", shape@data$POP2005)) %>% 
-  addLegend(pal = pal, 
-            values = ~POP2005, 
-            opacity = 1.0,
-            title = "Population in 2005")
-```
-
+Kunjungi halaman berikut untuk [Section Leaflet](https://askalgo-leaflet.netlify.app/).

@@ -31,7 +31,7 @@ library(recipes)
 
 ## FAQ
 
-1. Dari berbagai metode klasifikasi yang telah dipelajari (logistic regression, KNN, naive bayes, decision tree, dan random forest), bagaimana pemilihan dalam penggunaan metode tersebut?
+**1. Dari berbagai metode klasifikasi yang telah dipelajari (logistic regression, KNN, naive bayes, decision tree, dan random forest), bagaimana pemilihan dalam penggunaan metode tersebut?**
 
    Pemilihan metode klasifikasi bergantung pada tujuan analisis yang dilakukan. Secara umum tujuan pemodelan klasifikasi adalah melakukan analisa terkait hubungan prediktor dengan target variabel atau melakukan prediksi.
 
@@ -61,7 +61,7 @@ library(recipes)
 
    Naive bayes umumnya digunakan untuk masalah-masalah yang berkaitan dengan klasifikasi text. Berikut merupakan link eksternal yang dapat dijadikan sebagai bahan referensi [The Naive Bayes Classifier](https://towardsdatascience.com/the-naive-bayes-classifier-e92ea9f47523)
 
-2. Apakah k-fold cross validation dapat digunakan untuk metode klasifikasi lain (selain random forest)?
+**2. Apakah k-fold cross validation dapat digunakan untuk metode klasifikasi lain (selain random forest)?**
 
   k-fold cross validation dapat digunakan untuk semua metode klasifikasi bahkan di luar metode klasifikasi yang telah dipelajari. Namun, karena k-fold cross validation tidak memperlihatkan hasil pemodelan untuk semua subset data (hanya mengambil yang terbaik, yaitu tingkat akurasi tertinggi), maka tetap perlu dilakukan cross validation untuk melakukan evaluasi model. Berikut contoh k-fold cross validation untuk metode lain (selain random forest).
 ```{r eval=FALSE}
@@ -71,7 +71,7 @@ ctrl <- trainControl(method = "repeatedcv", number = 5, repeats = 3)
 model <- train(attrition ~ ., data = train, method = "ctree", trControl = ctrl)
 ```
 
-3. Apakah pada metode KNN, naive bayes, decision tree, dan random forest hasilnya dapat berupa probability?
+**3. Apakah pada metode KNN, naive bayes, decision tree, dan random forest hasilnya dapat berupa probability?**
 
    Pada dasarnya semua metode klasifikasi akan menghasilkan probability, bukan langsung kelas. Namun, kebanyakan metode klasifikasi secara default di R langsung menghasilkan kelas (threshold 0.5). Untuk menghasilkan probability dapat menambahkan parameter `type` saat melakukan `predict()`. Berikut beberapa `type` untuk metode klasifikasi yang dipelajari:
 
@@ -79,14 +79,14 @@ model <- train(attrition ~ ., data = train, method = "ctree", trControl = ctrl)
   -  `raw` untuk naive bayes
   -  `probability` untuk decision tree dan random forest
 
-4. Apakah metode naive bayes dapat diterapkan untuk prediktor bertipe numerik? peluang apa yang dihitung?
+**4. Apakah metode naive bayes dapat diterapkan untuk prediktor bertipe numerik? peluang apa yang dihitung?**
 
 Naive bayes dapat diterapkan pada berbagai permasalahan klasifikasi bukan hanya pada klasifikasi text. Jika prediktor yang digunakan bertipe numerik naive bayes akan menghitung peluang rata-rata (mean) dan standard deviation (sd) untuk setiap level target. Berikut contoh naive bayes pada data `iris`.
 ```{r}
 naiveBayes(Species ~ ., iris)
 ```
 
-5. Bagaimana cara menghapus `stopwords` dalam bahasa indonesia?
+**5. Bagaimana cara menghapus `stopwords` dalam bahasa indonesia?**
 
 File stopwords dapat di download terlebih dahulu di [link](https://github.com/stopwords-iso/stopwords-id) berikut. Kemudian import `stopwords id.txt` tersebut dengan menggunakan fungsi `readLines()`.
 ```{r}
@@ -112,8 +112,7 @@ text_clean1 <- text %>%
 text_clean1[[1]]$content
 ```
 
-
-6. Bagaimana cara mengubah kata berimbuhan mejadi kata dasarnya saja dalam bahasa Indonesia?
+**6. Bagaimana cara mengubah kata berimbuhan mejadi kata dasarnya saja dalam bahasa Indonesia?**
 
 Untuk mengubah kata berimbuhan menjadi kata dasar dalam bahasa Indonesia dapat menggunakan fungsi `katadasaR()` dari library `katadasaR`. Namun, fungsi tersebut hanya menerima 1 inputan (1 value) saja sehigga dibutuhkan fungsi `sapply()` untuk mengaplikasikan fungsi tersebut ke dalam 1 kalimat.
 ```{r}
@@ -134,7 +133,7 @@ text_clean2 <- text %>%
 text_clean2[[1]]$content
 ```
 
-7. Bagaiamana cara menghapus emoticon dan emoji?
+**7. Bagaiamana cara menghapus emoticon dan emoji?**
 
 Untuk menghapus emoticon dan emoji dapat menggunakan fungsi `replace_emoji()` dan `replace_emoticon()` dari library `textclean`. Namun, fungsi tersebut hanya menerima tipe data berupa karakter sehingga harus diubah terlebih dahulu tipe datanya jika masih belum karakter. 
 ```{r}
@@ -147,7 +146,7 @@ text_clean3 <- text %>%
 text_clean3
 ```
 
-8. Bagaimana cara menghapus mention dan hashtag?
+**8. Bagaimana cara menghapus mention dan hashtag?**
 
 Untuk menghapus mention dan hashtag dapat menggunakan fungsi `replace_hash()` dan `replace_tag()` dari library `textclean`.
 ```{r}
@@ -160,7 +159,7 @@ text_clean4 <- text %>%
 text_clean4
 ```
 
-9. Bagaimana cara menghapus slang words?
+**9. Bagaimana cara menghapus slang words?**
 
 Untuk menghapus slang words dapat menggunakan fungsi `replace_internet_slang()` dari library `textclean`.
 ```{r}
@@ -178,7 +177,7 @@ text_clean5
 
 Berikut link eksternal yang dapat dijadikan sebagai bahan referensi dalam melakukan cleaning text [Text Cleaning Bahasa Indonesia](hthttps://algotech.netlify.com/blog/text-cleaning-bahasa/) dan [Text Cleaning Bahasa Inggris](https://algotech.netlify.com/blog/textclean/)
 
-10. Bagaimana penanganan terhadap data missing values?
+**10. Bagaimana penanganan terhadap data missing values?**
 
 Terdapat berbagai cara menangani data yang mengandung missing value. Cara yang paling sering digunakan untuk menangani data yang mengandung missing value, yaitu deletion, full analysis, dan imputation.
 
@@ -257,7 +256,7 @@ Dari output di atas diketahui bahwa variabel `Income`, `Assets`, dan `Debt` suda
 
 - Link mengenai Step Functions - Imputation dari library `recipes` [Step Functions - Imputation](https://tidymodels.github.io/recipes/reference/index.html#section-step-functions-imputation)
 
-11. Bagaimana implementasi model regresi pada random forest?
+**11. Bagaimana implementasi model regresi pada random forest?**
 
 import data yang akan digunakan
 ```{r}
@@ -292,7 +291,7 @@ test$pred <- predict(object = insurance_forest,newdata = test)
 RMSE(y_pred = test$pred,y_true = test$charges)
 ```
 
-12. Jelaskan kegunaan dari ROC dan AUC?
+**12. Jelaskan kegunaan dari ROC dan AUC?**
 
     Kurva ROC (Receiver Operating Characteristic) menggambarkan seberapa baik kinerja model klasifikasi biner. Kurva ROC dibentuk dari nilai TPR (True Positive Rate) dan FPR (False Positive Rate) untuk semua nilai threshold dari 0 hingga 1. AUC (Area Under the Curve) adalah luas daerah dari kurva ROC. Nilai AUC mendekati 1 artinya model sangat baik, ketika nilai AUC berada di sekitar 0.5 maka model tersebut memiliki performance yang tidak baik dan cenderung hanya menebak secara acak.
 

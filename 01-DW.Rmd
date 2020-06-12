@@ -54,26 +54,20 @@ vids <- vids %>%
          publish_time = ymd_hms(publish_time, tz = "America/New_York"))
 ```
 
-
-1. Bagaimana cara mengubah variabel/kolom bertipe "character" menjadi "date", jika dalam 1 kolom terdapat format (urutan) tanggal yang berbeda?
+**1. Bagaimana cara mengubah variabel/kolom bertipe "character" menjadi "date", jika dalam 1 kolom terdapat format (urutan) tanggal yang berbeda?**
 
 Untuk mengubah tipe data "character" menjadi "date" pada kolom yang memiliki format (urutan) tanggal yang berbeda-beda, dapat mnggunakan fungsi `parse_date()` dari library `parsedate`.
 ```{r}
-covid_19 <- read_csv("data/01-DW/2019_nCoV_data.csv")
-covid_19[c(2, 498), ]
+# membuat sebuah vector yang berisi tanggal dengan format yang berbeda
+tanggal <- c("1-January-2020", "01/01/20", "12-31-2019")
+
+tanggal <- parsedate::parse_date(tanggal)
+
+class(tanggal)
+tanggal
 ```
 
-```{r, warning=FALSE, message=FALSE}
-library(parsedate)
-
-covid_19 <- covid_19 %>%
-  mutate(Date = mdy_hms(Date),
-         `Last Update` = parsedate::parse_date(`Last Update`)) 
-
-covid_19[c(2, 498), ]
-```
-
-2. Bagaimana cara melakukan filter terhadap baris-baris yang sama dengan beberapa nilai? Misal, akan dilakukan filter terhadap baris-baris yang memiliki ketegori (`category_id`) Comedy, Music, atau Gaming?
+**2. Bagaimana cara melakukan subsetting baris (filter) terhadap baris-baris yang sama dengan beberapa nilai? Misal, akan dilakukan filter terhadap baris-baris yang memiliki ketegori (`category_id`) Comedy, Music, atau Gaming?**
 
 Untuk melakukan filter terhadap baris-baris yang sama dengan beberapa nilai (lebih dari satu nilai), dapat menggunakan operator atau `|` ataupun menggunakan operator inlude `%in%`.
 ```{r}
@@ -111,23 +105,23 @@ filter2 <- vids %>%
 unique(filter2$category_id)
 ```
 
-3. Bagaimana cara untuk menampilkan kolom yang memiliki unsur kata *dana*?
+**3. Bagaimana cara menampilkan kolom yang memiliki unsur kata *dana*?**
 
 ```{r, echo=FALSE, rows.print = 6}
 laporan <- read.csv("data/01-DW/data-bugdet.csv")
 paged_table(laporan)
 ```
 
-Untuk menampilkan kolom dengan term tertentu dapat menggunakan function `select_at()` dari package dplyr:
+Untuk menampilkan kolom dengan kata (term) tertentu dapat menggunakan function `select_at()` dari package dplyr:
 ```{r}
 laporan %>% 
   select_at(.vars = vars(contains("dana"))) %>% 
   head()
 ```
 
-4. Bagaimana cara untuk menampilkan kolom dengan term tertentu dengan 2 kondisi?
+**4. Bagaimana cara menampilkan kolom dengan lebih dari satu kata (term) tertentu?**
 
-Berikut ini kita akan menampilkan kolom yang memiliki unsur *Pendapatan* atau *Daerah* dengan bantuan function `matches()`
+Berikut ini kita akan menampilkan kolom yang memiliki unsur *Pendapatan* atau *Daerah* dengan bantuan function `matches()` dari package dplyr
 
 ```{r}
 laporan %>% 
@@ -135,9 +129,9 @@ laporan %>%
   head()
 ```
 
-5. Bagaimana cara untuk menampilkan kolom dengan kata tertentu pada awalan nama kolom atau akhiran nama kolom?
+**5. Bagaimana cara menampilkan kolom dengan kata (term) awalan atau akhiran tertentu?**
 
-Untuk kasus ini kita dapat menggunakan bantuan function starts_with dan ends_with
+Untuk meampilkan kolom yang diawali dengan kata *Dana* atau diakhiri dengan kata *pajak* dapat menggunakan bantuan function `starts_with()` dan `ends_with()` dari package dplyr
 
 ```{r}
 laporan %>% 
@@ -151,17 +145,16 @@ laporan %>%
   head()
 ```
 
-
-6. Bagaimana cara untuk menampilkan data teratas berdasarkan category?
+**6. Bagaimana cara menampilkan data teratas untuk setiap kategori dari variabel tertentu?**
 
 Berikut ini kita akan menampilkan jenis Anggaran terbaru untuk setiap provinsi, langkah yang dilakukan sebagai berikut:
 
-    - Memfilter variable jenis untuk tipe "Anggaran"
-    - Mengurutkan periode terbaru hingga terlama
-    - Grouping berdasarkan `provinsi`
-    - Menampilkan 1 data teratas berdasarkan variabel provinsi
+    - Melakukan filter pada kolom jenis untuk tipe "Anggaran"
+    - Mengurutkan periode dari yang terbaru hingga terlama
+    - Melakukan grouping berdasarkan `provinsi`
+    - Menampilkan 1 data teratas untuk setiap provinsi
     
-Artinya output berikut ini menampilkan Anggaran dari setiap provinsi terbaru:
+Output berikut ini menampilkan Anggaran terbaru dari setiap provinsi:
 ```{r}
 laporan %>% 
   filter(
@@ -172,13 +165,13 @@ laporan %>%
   slice(1)
 ```
 
-7. Bagaimana cara untuk membuat nama kolom menjadi rapih untuk visualisasi?
+**7. Bagaimana cara membuat nama kolom menjadi lebih rapi saat dilakukan visualisasi?**
 
 ```{r}
 names(vids)
 ```
 
-Untuk membuat tampilan visualisai lebih rapih kita dapat mengubah nama kolom menggunakan function `str_replace()` dan `str_to_title()`. Function `str_replace()` akan mengubah nama kolom dengan menghapus pattern "_". Sedangkan function `str_to_title()` akan membuat huruf awal setiap kata menjadi *uppercase*.
+Untuk membuat tampilan visualisai menjadi lebih rapi kita dapat mengubah nama kolom menggunakan function `str_replace()` dan `str_to_title()`. Function `str_replace()` akan mengubah nama kolom dengan menghapus pattern "_". Sedangkan function `str_to_title()` akan membuat huruf awal setiap kata menjadi *uppercase*.
 
 ```{r}
 names(vids) %>% 
@@ -187,8 +180,7 @@ names(vids) %>%
   str_to_title()
 ```
 
-
-8. Bagaimana cara untuk mengubah nama kolom dengan pattern tertentu?
+**8. Bagaimana cara mengubah nama kolom dengan bentuk (pattern) tertentu?**
 
 Pada data laporan kita memiliki kolom "hasil_pajak_daerah", "hasil_retribusi_daerah", "hasil_pengelolaan_kekayaan_daerah_yang_dipisahkan". Berikut ini kita akan mengubah nama kolom yang memiliki pattern `hasil_` diubah menjadi `total_` menggunakan function `str_replace()`
 
@@ -198,7 +190,7 @@ names(laporan) %>%
               replacement =  "total_")
 ```
 
-9. Bagaimana cara untuk menggabungkan dua atau lebih vector ke dalam satu vector? 
+**9. Bagaimana cara menggabungkan dua atau lebih vector ke dalam satu vector? **
 
 Kita dapat menggunakan function `str_c()` sebagai berikut:
 
@@ -212,7 +204,7 @@ Function `str_c()` juga dapat digunakan untuk membuat vector dengan pattern yang
 str_c("Laporan", c(2017:2020),"Q1",sep = "-")
 ```
 
-10. Apa perbedaan dari function `str_replace()` dan `str_replace_all()`?
+**10. Apa perbedaan dari function `str_replace()` dan `str_replace_all()`?**
 
 ```{r}
 dat <- c("data","science","algoritma")
@@ -222,12 +214,13 @@ Ketika menggunakan function `str_replace()` akan mengubah pattern pertama yang d
 ```{r}
 str_replace(dat,"[aiueo]","-")
 ```
+
 Sedangkan function `str_replace_all()` akan mengubah semua pattern yang ditemui pada vector, sebagai berikut:
 ```{r}
 str_replace_all(dat,"[aiueo]","-")
 ```
 
-11. Bagaimana cara untuk memisahkan element pada setiap observasi ke dalam beberapa kolom?
+**11. Bagaimana cara untuk memisahkan beberapa nilai pada 1 baris/observasi di kolom tertentu ke dalam beberapa kolom?**
 
 Berikut ini kita memiliki variabel product yang berisikan berbagai macam product yang dibeli oleh customer, bagaimana cara kita untuk memisahkan variabel tersebut menjadi beberapa kolom untuk setiap product yang dibeli?
 ```{r, echo=FALSE}
@@ -247,9 +240,9 @@ dat %>%
            sep = ", ")
 ```
 
-12. Bagaimana mengatasi missing value pada data?
+**12. Bagaimana cara mengatasi missing value pada data?**
 
-Salah satu penanganan missing value dengan melakukan *inputation* atau mengisi missing value dengan suatu nilai. Package `tidyr` menyediakan function `fill()` yang bekerja dengan mengisi missing value menggunakan nilai observasi berikutnya atau sebelumnya.
+Salah satu cara menangani missing value adalah melakukan *imputation* atau mengisi missing value dengan suatu nilai. Package `tidyr` menyediakan function `fill()` yang berfungsi untuk mengisi missing value menggunakan nilai observasi berikutnya atau sebelumnya.
 
 ```{r, echo=FALSE}
 treatment <- tribble(
@@ -268,9 +261,9 @@ treatment %>%
   fill(person,.direction = "down")
 ```
 
-Tentunya penanganan missing value tersebut tidak dapat diterapkan untuk semua data, penanganan ini cocok untuk format data yang memiliki nilai tidak berulang.
+Tentunya penanganan tersebut tidak dapat diterapkan untuk semua data, penanganan ini dapat digunakan untuk format data yang memiliki nilai tidak berulang.
 
-13. Apa perbedaan dari `left_join`, `right_join`, `full_join`, dan `inner_join`?
+**13. Apa perbedaan dari `left_join`, `right_join`, `full_join`, dan `inner_join`?**
 
 - Function `left_join()` akan mempertahankan observasi X
 - Function `right_join()` akan mempertahankan observasi Y
