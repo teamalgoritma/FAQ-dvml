@@ -1,0 +1,58 @@
+# Practical Statistics
+
+```{r setup, include=FALSE}
+# clear-up the environment
+rm(list = ls())
+
+# chunk options
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  comment = "#>"
+)
+
+# scientific notation
+options(scipen = 9999)
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+# libraries
+```
+
+**1. Kekurangan mean adalah sensitif terhadap outlier (data yang ekstrim). Apakah terdapat kekurangan dari median?**
+
+- Median jarang digunakan dalam inferensial statistik dikarenakan tidak melibatkan semua data, sedangkan dalam mengambil keputusan dengan menggunakan tes/uji statistik semua data harus dilibatkan.
+- Sebenarnya mean dan median bukan merupakan sesuatu yang harus dipilih. Keduanya bisa saja digunakan dalam proses exploratory data. Ketika kita melihat summary dari data dan ternyata nilai mean jauh berbeda dengan nilai mediannya, maka hal tersebut dapat dijadikan salah satu indikator adanya data outlier.
+ 
+**2. Apakah modus dapat digunakan untuk data numerik?**
+
+Bisa, hanya saja informasi yang diperoleh kurang representatif untuk data numerik kontinu (desimal).
+
+**3. Apakah bisa menggunakan nilai mutlak/absolut saat menghitung variance, sebagai pengganti kuadrat?**
+
+Apabila menggunakan nilai mutlak/absolut saat menjumlahkan jarak dari tiap observasi ke pusat data (mean), maka ukuran tersebut disebut sebagai mean absolute deviation (rata-rata absolut deviasi).
+
+$$\frac{\sum \left | x - \bar{x} \right |}{n}$$
+
+**4. Saat menghitung variance, kita menggunakan mean untuk pusat datanya. Ketika ada data outlier, bukankah lebih tepat pusat datanya menggunakan median untuk menghitung variance?**
+
+Sesuai rumus variance, pusat data yang digunakan adalah mean. Tidak menjadi masalah apabila ada data outlier, karena nilai variance juga akan semakin membesar. Hal tersebut menunjukkan bahwa data kita semakin beragam/bervariasi karena adanya data outlier.
+
+
+**5. Apabila data populasi tidak berdistribusi normal, apakah berpengaruh terhadap sampling rata-rata?**
+
+Central Limit Theorem (CLT) menyatakan bahwa bagaimanapun bentuk distribusi populasi, ketika dilakukan sampling dengan jumlah yang cukup banyak dan berulang kali, maka distribusi rata-rata sampel akan mendekati distribusi normal. Sehingga, ketika data populasi tidak berdistribusi normal, tidak akan berpengaruh terhadap distribusi rata-rata sampel selama jumlah sampel cukup (umumnya di atas 30) dan berulang kali.
+
+**6. Contoh kegunaan Probability Mass Function dalam dunia nyata?**
+
+- Mengetahui proporsi jumlah produk yang cacat dalam proses produksi
+- Mengetahui proporsi nasabah yang pengajuan pinjamannya disetujui
+- Mengetahui distribusi banyaknya pelanggan yang datang ke toko setiap jamnya
+- Mengetahui distribusi antrian di setiap kasir pada suatu toko
+
+
+
+
+
+

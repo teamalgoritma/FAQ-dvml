@@ -279,4 +279,19 @@ knitr::include_graphics("assets/01-DW/join-outer.png")
 ```{r, echo=FALSE, out.width="70%", fig.align="center"}
 knitr::include_graphics("assets/01-DW/join-inner.png")
 ```
+
 [Inner join](https://r4ds.had.co.nz/relational-data.html)
+
+**14. Bagaimana cara menghilangkan bahasa latin pada data?**
+
+Untuk menghilangkan bahasa latin pada data dapat menggunakan fungsi `stri_trans_general()` dari library `stringi`
+```{r}
+dat <- "Special,  satisfação, Happy, Sad, Potential, für"
+dat
+```
+
+```{r}
+library(stringi)
+stri_trans_general(dat, "latin-ascii")
+```
+
