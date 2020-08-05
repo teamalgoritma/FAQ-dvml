@@ -1,7 +1,7 @@
 --- 
 title: "FAQ"
 author: "Team Algoritma"
-date: "July 13, 2020"
+date: "August  5, 2020"
 documentclass: book
 ---
 
