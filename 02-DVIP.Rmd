@@ -57,9 +57,15 @@ laporan <- read.csv("data/02-DVIP/data-bugdet.csv")
 
 ## Data Visualization
 
+### Base Plot
+
+#### **Bagaimana cara mengatur interval nilai sumbu x untuk visualisasi histogram?**
+
+#### **mba atur scale y di boxplot gmn?**
+
 ### Geom
 
-1. Bagaimana cara menambahkan separator (,) untuk memisahkan angka ribuan pada label `geom_text()`/`geom_label()` yang terletak pada setiap batang (bar) di bar plot ?
+#### **Bagaimana cara menambahkan separator (,) untuk memisahkan angka ribuan pada label `geom_text()`/`geom_label()` yang terletak pada setiap batang (bar) di bar plot?**
 
 Untuk menambahkan separator (,) dengan tujuan  memisahkan angka ribuan pada label `geom_text()`/`geom_label()` yang terletak pada setiap batang di bar plot, bisa menggunakan fungsi `comma()` dari package `scales`.
 ```{r}
@@ -85,7 +91,7 @@ ggplot(vids1, aes(x = total.likes,y = reorder(channel_title, total.likes))) +
   theme_minimal()
 ```
 
-2. Bagaimana cara untuk mengurutkan batang (bar) saat menggunakan `geom_bar()`?
+#### **Bagaimana cara untuk mengurutkan batang (bar) saat menggunakan `geom_bar()`?**
 
 ```{r, echo=FALSE}
 vids.u <- vids[match(x = unique(vids$title),table = vids$title),]
@@ -99,7 +105,7 @@ ggplot(data = vids.u, mapping = aes(y = fct_rev(fct_infreq(category_id))))+
         y = "Total Video")
 ```
 
-3. Bagaimana cara mengubah urutan kategori pada legend?
+#### **Bagaimana cara mengubah urutan kategori pada legend?**
 
 ```{r}
 ggplot(data = iris, aes(x = Species,y = Sepal.Length))+
@@ -128,7 +134,7 @@ ggplot(data = iris, aes(x = Species,y = Sepal.Length))+
 
 ```
 
-4. Bagaimana cara membuat lebih dari satu line pada satu grafik dengan menggunakan `geom_line`?
+#### **Bagaimana cara membuat lebih dari satu line pada satu grafik dengan menggunakan `geom_line`?**
 
 ```{r, echo=FALSE}
 set.seed(100)
@@ -154,7 +160,7 @@ ggplot(data = data_viz, aes(x = date,y = value, group = market)) +
   geom_line()
 ```
 
-5. Bagaimana cara untuk menampilkan nilai (value) pada stacked bar?
+#### **Bagaimana cara untuk menampilkan nilai (value) pada stacked bar?**
 
 Berikut ini merupakan data yang akan digunakan untuk visualisasi:
 ```{r, echo = FALSE}
@@ -176,7 +182,7 @@ ggplot(dat_cat, aes(x = year,y = freq)) +
             position = position_stack(vjust = 0.5))
 ```
 
-6. Bagaimana cara membuat secondary axis pada `ggplot2`?
+#### **Bagaimana cara membuat secondary axis pada `ggplot2`?**
 
 ```{r, echo=FALSE}
 weather <- ReadAxfBOM::ReadAxfBOM("http://www.bom.gov.au/fwo/IDV60901/IDV60901.94866.axf") %>% 
@@ -192,7 +198,7 @@ ggplot(data = weather, aes(x = Timestamp,y = air_temp))+
                                          name = "Relative Humidity [%]"))
 ```
 
-7. Bagaimana cara membuat multi row axis label pada ggplot?
+#### **Bagaimana cara membuat multi row axis label pada ggplot?**
 
 ```{r, echo = FALSE}
 set.seed(100)
@@ -229,7 +235,7 @@ ggplot(data = dat_quarter, aes(x = interaction(year, quarter, lex.order = T),
         panel.grid.minor.x = element_blank())
 ```
 
-8. Bagaimana cara untuk membuat scatterplot dengan histogram marginal?
+#### **Bagaimana cara untuk membuat scatterplot dengan histogram marginal?**
 
 ```{r}
 set.seed(100)
@@ -246,7 +252,7 @@ p <- ggplot(data = df, aes(x = Var1,y = Var2))+
 ggExtra::ggMarginal(p, type = "histogram")
 ```
 
-9. Bagaimana cara membuat spatial map menggunakan `ggplot2`? 
+#### **Bagaimana cara membuat spatial map menggunakan `ggplot2`?**
 
 Untuk membuat spatial map dengan `ggplot2` kita bisa menggunakan `geom_sf()` sebagai berikut:
 
@@ -296,7 +302,7 @@ ggplotly(interactive_map, tooltip = "text")
 
 ### Scale
 
-1. Bagaimana cara memberi big mark pada axis plot?
+#### **Bagaimana cara memberi big mark pada axis plot?**
 
 ```{r, echo=FALSE}
 vids3 <- vids %>% 
@@ -312,11 +318,11 @@ ggplot(vids3, aes(views, likes)) +
   scale_x_continuous(labels = comma)
 ```
 
-2. Apakah pengaturan label baik pada sumbu x ataupun y dapat dilakukan secara terpisah? misal kita ingin memeberikan label ribuan (1 ribu, 2 ribu, dst). Namun, pada angka 0 tidak ingin diikuti oleh "ribuan".
+#### **Apakah pengaturan label baik pada sumbu x ataupun y dapat dilakukan secara terpisah? misal kita ingin memeberikan label ribuan (1 ribu, 2 ribu, dst). Namun, pada angka 0 tidak ingin diikuti oleh "ribuan".**
 
 Tidak bisa dilakukan secara terpisah, karena parameter `labels` pada fungsi `scale_y_continous` akan menambahkan satuan pada semua nilai label. Alternatif lain yang dapat dilakukan adalah membuat judul (title) pada sumbu x ataupun y dengan disertai oleh satuan. Misal, "Dislikes (Ribu)", kemudian membuat skalanya menjadi lebih kecil (50000 menjadi 50 saja).
 
-3. Bagaimana mengatasi axis yang memiliki satuan besar seperti berikut ini?
+#### **Bagaimana mengatasi axis yang memiliki satuan besar seperti berikut ini?**
 
 ```{r, echo = FALSE}
 data_agg <- laporan %>% 
@@ -329,7 +335,6 @@ data_agg <- laporan %>%
   arrange(desc(belanja_daerah)) %>% 
   head(10)
 ```
-
 
 ```{r}
 ggplot(data_agg, aes(x = belanja_daerah, y = reorder(daerah, belanja_daerah))) +
@@ -368,7 +373,7 @@ ggplot(data_agg, aes(x = belanja_daerah, y = reorder(daerah, belanja_daerah))) +
 
 Setelah diaplikasikan label pada axis text terlihat lebih mudah dipahami informasi yang disampaikan pada grafik tersebut.
 
-4. Bagaimana cara untuk mewarnai dan memberi label pada bar tertentu pada plot?
+#### **Bagaimana cara untuk mewarnai dan memberi label pada bar tertentu pada plot?**
 
 Misalkan, pada data top 10 trending channel akan dibentuk bar plot dan kita akan membedakan warna pada top 3 channel tersebut. Untuk pewarnaan dari top 3 channel kita memerlukan `geom_col()` tambahan yang berisi 3 data awal yang akan ditampilkan, begitupun pada `geom_label()` pada parameter data kita define observasi mana saja yang ingin diberikan label.
 ```{r, echo = FALSE}
@@ -398,7 +403,7 @@ ggplot(data = vids.top,mapping = aes(x = total,
 
 ### Theme
 
-**1. Secara umum elemen-elemen apa saja yang dapat diatur/disesuaikan pada fungsi `theme()`?**
+#### **Secara umum elemen-elemen apa saja yang dapat diatur/disesuaikan pada fungsi `theme()`?**
 
 Berikut adalah gambaran elemen-elemen apa saja yang dapat diatur/disesuaikan dengan fungsi `theme()`
 
@@ -434,7 +439,7 @@ Berikut adalah gambaran elemen-elemen apa saja yang dapat diatur/disesuaikan den
 
   - `legend.text`: digunakan untuk menyesuaikan/mengatur elemen yang berkaitan dengan tulisan pada bagian legend. Digunakan dengan menambahkan parameter `element_text()` untuk mengatur spesifikasi tulisan yang diinginkan mulai dari ukuran (`size`), rata kiri-kanan/alignment (`hjust`), cetak tebal/miring (`face`), dll.
 
-**2. Bagaimana cara mengatur posisi legend secara manual (selain menggunakan position default "none", "left", "right", "bottom", dan "top") supaya posisnya berada di dalam kanvas plotnya?**
+#### **Bagaimana cara mengatur posisi legend secara manual (selain menggunakan position default "none", "left", "right", "bottom", dan "top") supaya posisnya berada di dalam kanvas plotnya?**
 
 Untuk mengatur posisi legend secara manual dapat menambahakan parameter `legend.position` pada `theme` seperti berikut ini: 
 ```{r}
@@ -475,7 +480,7 @@ ggplot(vids3, aes(views, likes)) +
 
 ## Interactive plotting 
 
-**1. Contoh penggunaan echarts4r untuk beberapa plot sederhana**
+#### **Contoh penggunaan echarts4r untuk beberapa plot sederhana**
 
 ```{r}
 library(echarts4r)
@@ -562,7 +567,7 @@ retail.agg2 %>%
   e_title("Treemap charts")
 ```
 
-**2. Bagaimana cara membuat echarts menjadi interaktif?**
+#### **Bagaimana cara membuat echarts menjadi interaktif?**
 
 ```{r}
 vids1 %>% 
@@ -574,7 +579,7 @@ vids1 %>%
             axisPointer = list(type = "cross"))
 ```
 
-**3. Contoh penggunaan highcharter untuk beberapa plot sederhana:**
+#### **Contoh penggunaan highcharter untuk beberapa plot sederhana:**
 
 ```{r}
 library(highcharter)
@@ -600,7 +605,7 @@ hchart(vids2, "line", hcaes(x = trending_date, y = total.video, group = category
   hc_title(text = "Trend Total Video Trending based on Category")
 ```
 
-**4. Bagaimana cara untuk menampilkan popup informasi dari grafik?**
+#### **Bagaimana cara untuk menampilkan popup informasi dari grafik?**
 
 Untuk membuat plot menjadi interactive, kita dapat menggunakan package `glue` dan `plotly`. 
 
@@ -645,7 +650,7 @@ p <- ggplot(data_viz, aes(x = belanja_daerah, y = reorder(daerah, belanja_daerah
 ggplotly(p, tooltip = "text")
 ```
 
-**5. Apakah plotly juga dapat diatur/disesuaikan (custom) secara terpisah dari `ggplot2`? bagaimana caranya?**
+#### **Apakah plotly juga dapat diatur/disesuaikan (custom) secara terpisah dari `ggplot2`? bagaimana caranya?**
 
 Bisa, berikut beberapa contoh pengaturan pada `plotly`: 
 
@@ -674,7 +679,6 @@ ggplotly(p, tooltip = "text") %>%
   config(displayModeBar = F, scrollzoom = T) %>% 
   layout(dragmode = "pan")
 ```
-
 
 ## Leaflet
 

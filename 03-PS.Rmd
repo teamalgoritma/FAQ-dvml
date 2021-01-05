@@ -18,38 +18,152 @@ options(scipen = 9999)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 # libraries
+
 ```
 
-**1. Kekurangan mean adalah sensitif terhadap outlier (data yang ekstrim). Apakah terdapat kekurangan dari median?**
+## Statistika Deskriptif
 
-- Median jarang digunakan dalam inferensial statistik dikarenakan tidak melibatkan semua data, sedangkan dalam mengambil keputusan dengan menggunakan tes/uji statistik semua data harus dilibatkan.
-- Sebenarnya mean dan median bukan merupakan sesuatu yang harus dipilih. Keduanya bisa saja digunakan dalam proses exploratory data. Ketika kita melihat summary dari data dan ternyata nilai mean jauh berbeda dengan nilai mediannya, maka hal tersebut dapat dijadikan salah satu indikator adanya data outlier.
+### **Kekurangan nilai rata-rata (mean) adalah sensitif terhadap data ekstrim (outlier). Apakah kekurangan dari median?**
+
+- Median jarang digunakan dalam inferensial statistik karena tidak melibatkan semua data, sedangkan dalam mengambil keputusan dengan menggunakan tes/uji statistik semua data harus dilibatkan.
+- Sebenarnya mean dan median bukan merupakan sesuatu yang harus dipilih. Keduanya bisa saja digunakan dalam proses eksplorasi data. Ketika kita melihat ringkasan dari data dan ternyata nilai mean jauh berbeda dengan nilai mediannya, maka hal tersebut dapat dijadikan salah satu indikator adanya outlier.
  
-**2. Apakah modus dapat digunakan untuk data numerik?**
+### **Apakah modus dapat digunakan untuk data bertipe numerik?**
 
-Bisa, hanya saja informasi yang diperoleh kurang representatif untuk data numerik kontinu (desimal).
+Bisa, hanya saja informasi yang diperoleh kurang representatif pada data bertipe numerik kontinu (desimal).
 
-**3. Apakah bisa menggunakan nilai mutlak/absolut saat menghitung variance, sebagai pengganti kuadrat?**
+### **Apakah bisa menggunakan nilai mutlak/absolut saat menghitung variance, sebagai pengganti kuadrat?**
 
-Apabila menggunakan nilai mutlak/absolut saat menjumlahkan jarak dari tiap observasi ke pusat data (mean), maka ukuran tersebut disebut sebagai mean absolute deviation (rata-rata absolut deviasi).
+Apabila menggunakan nilai mutlak/absolut saat menjumlahkan jarak dari setiap observasi ke pusat data (mean), maka ukuran tersebut disebut sebagai mean absolute deviation (rata-rata absolut deviasi).
 
 $$\frac{\sum \left | x - \bar{x} \right |}{n}$$
 
-**4. Saat menghitung variance, kita menggunakan mean untuk pusat datanya. Ketika ada data outlier, bukankah lebih tepat pusat datanya menggunakan median untuk menghitung variance?**
+### **Saat menghitung variance, kita menggunakan nilai mean sebagai pusat datanya. Ketika terdapat outlier, bukankah lebih tepat jika pusat datanya menggunakan median untuk menghitung variance?**
 
-Sesuai rumus variance, pusat data yang digunakan adalah mean. Tidak menjadi masalah apabila ada data outlier, karena nilai variance juga akan semakin membesar. Hal tersebut menunjukkan bahwa data kita semakin beragam/bervariasi karena adanya data outlier.
+Sesuai rumus variance, pusat data yang digunakan adalah mean. Tidak masalah walaupun terdapat outlier, karena nilai variance juga akan semakin membesar. Hal tersebut menunjukkan bahwa data kita semakin beragam/bervariasi karena adanya outlier.
 
+### **Bagaimana menentukan suatu observasi merupakan outlier secara objektif?**
 
-**5. Apabila data populasi tidak berdistribusi normal, apakah berpengaruh terhadap sampling rata-rata?**
+Salah satu cara yang dapat digunakan untuk menentukan suatu observasi merupakan outlier/tidak adalah dengan menggunakan boxplot (melihat apakah suatu observasi berada di luar interval batas bawah (Q1 - 1.5 IQR) dan batas atas (Q3 + 1.5 IQR))
 
-Central Limit Theorem (CLT) menyatakan bahwa bagaimanapun bentuk distribusi populasi, ketika dilakukan sampling dengan jumlah yang cukup banyak dan berulang kali, maka distribusi rata-rata sampel akan mendekati distribusi normal. Sehingga, ketika data populasi tidak berdistribusi normal, tidak akan berpengaruh terhadap distribusi rata-rata sampel selama jumlah sampel cukup (umumnya di atas 30) dan berulang kali.
+### **Apakah terdapat korelasi/keterkaitan antara mean dengan standar deviasi?**
 
-**6. Contoh kegunaan Probability Mass Function dalam dunia nyata?**
+Tidak ada, karena mean adalah nilai yang menggambarkan pusat data (nilai yang merangkum keseluruhan data). Sedangkan, standar deviasi adalah nilai yang mengambarkan persebaran data (apakah data cenderung bervariasi/beragam)
+
+### **Apakah pada R terdapat fungsi yang dapat digunakan untuk menentukan apakah dua variabel numerik memiliki hubungan linier atau tidak?**
+
+Kita dapat menggunakan fungsi `cor()` untuk menghitung nilai korelasi dan `cor.test()` untuk melakukan tes/uji statistik untuk mengetahui apakah dua variabel numerik saling berhubungan linier atau tidak dengan hipotesis sebagai berikut:
+
+- H0: Nilai korelasi = 0, berarti antara x dan y tidak memiliki hubungan linier 
+- H1: Nilai korelasi != 0,  berarti antara x dan y memiliki hubungan linier
+
+### **Apa fungsi yang digunakan untuk menghitung nilai- rata-rata geometrik dan terboboti pada R?**
+
+Kita dapat menggunakan fungsi `geometric.mean()` dan `weighted.mean()`, untuk lebih jelasnya dapat membaca dokumentasi pada link berikut:
+ 
+- [Geometric Mean in R (2 Examples)](https://statisticsglobe.com/geometric-mean-in-r#:~:text=mean%20Function%20of%20psych%20R,useful%20functions%2C%20contains%20the%20geometric.&text=By%20the%20way%3A%20The%20geometric,computation%20of%20the%20geometric%20mean.)
+- [weighted.mean](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/weighted.mean)
+
+### **Apa yang dimaksud dengan outlier? Jelaskan!**
+
+Observasi yang nilainya sangat jauh berbeda dengan observasi lainnya baik sebagai variabel tunggal ataupun kombinasi.
+
+## Statistika Inferensial
+
+### **Apabila data populasi tidak berdistribusi normal, apakah berpengaruh terhadap sampling rata-rata?**
+
+Central Limit Theorem (CLT) menyatakan bahwa apapun bentuk distribusi data populasi, ketika dilakukan sampling dengan jumlah yang cukup banyak dan dilakukan berulang kali, maka distribusi rata-rata sampel akan mendekati distribusi normal. Sehingga, ketika data populasi tidak berdistribusi normal, tidak akan berpengaruh terhadap distribusi rata-rata sampel selama jumlah sampel cukup (umumnya di atas 30) dan dilakukan berulang kali.
+
+### **Contoh kegunaan Probability Mass Function dalam dunia nyata?**
 
 - Mengetahui proporsi jumlah produk yang cacat dalam proses produksi
 - Mengetahui proporsi nasabah yang pengajuan pinjamannya disetujui
 - Mengetahui distribusi banyaknya pelanggan yang datang ke toko setiap jamnya
 - Mengetahui distribusi antrian di setiap kasir pada suatu toko
+
+### **Dalam ilmu statistik berapa minimal jumlah sampel dapat dikatakan cukup?**
+
+Berdasarkan Central Limit Theorem (CLT) jumlah sampel sudah dikatakan cukup jika sudah mencapai 30 observasi.
+
+### **Apakah hipotesis nol (H0) pasti merupakan dugaan/hipotesa negatif?**
+
+Tidak, tergantung kasus yang akan diuji. Hipotesis nol (H0) mengindikasikan keadaan awal atau kedaan yang tidak mengalami perubahan respon walaupun telah dilakukan suatu perlakuan.
+
+### **Bagaimana cara melakukan tes/uji hipotesis ketika sampel data tidak berdistribusi normal?**
+
+Kita tetap dapat melakukan tes/uji hipotesis menggunakan tes/uji non-parametrik yang tidak mengharuskan sampel data berdistribusi normal, seperti Wilcoxon test untuk tes/uji hipotesis 1 sampel dan Mann-Whitney test untuk tes/uji hipotesis 2 sampel.
+
+### **Jika ingin mengetahui pengaruh sistem kerja WFH terhadap kinerja karyawan menimbulkan efek positif/negatif/tidak ada efek, bagaiamana penentuan hipotesisnya?**
+
+- H0: Sistem kerja WFH tidak berpengaruh terhadap kinerja karyawan
+- H1: Sistem kerja WFH berpengaruh terhadap kinerja karyawan (dapat berupa pengaruh positif ataupun negatif)
+
+### **Perbedaan fungsi `pnorm()` dan `qnorm()`?**
+
+- Fungsi `pnorm()` digunakan untuk memperoleh nilai peluang ketika diketahui nilai z-score (z-score -> peluang). Sedangkan, 
+- fungsi `qnorm()` kebalikan dari fungsi `pnorm()`, digunakan untuk memperoleh nilai z-score ketika diketahui nilai peluang (peluang -> z-score)
+
+### **Apa maksud dari pernyataan "Gagal tolak H0 != Terima H0 dan Tolak H0 != Terima H1"?**
+
+Ketika kita melakukan tes/uji hipotesis, hal yang kita peroleh sebenarnya adalah melihat bahwa data sampel yang dimiliki "menyimpang sangat ekstrem". Sehingga, kita hendak mengambil kesimpulan bahwa sampel "dapat dikatakan signifikan".
+
+Pada tes/uji hipotesis, menolak H0 dapat dikatakan sebagai pemberian bukti sementara penerimaan H1. Secara absolut hanya dapat dilakukan ketika kita sudah mengecek data populasi , tetapi hal tersebut hampir tidak mungkin dilakukan. Sehingga, penggunaan bahasa yang tepat adalah "menolak H0" bukan bearti "menerima H1"
+
+### **Berapa batasan nilai korelasi dikatakan kuat dan lemah?**
+
+Semakin mendekati 0, berarti korelasi cenderung lemah dan sebalikanya. Semakin mendekati 1, berarti korelasi cnderung kuat. Pada umumnya, jika nilai korelasi di bawah 0.5, berarti korelasi cenderung lemah dan sebaliknya. Jika nilai korelasi di atas 0.5, berarti korelasi cenderung kuat. Untuk mengetahui apakah nilai korelasi di bawah 0.5, sebenarnya berkorelasi lemah atau tidak berkorelasi dapat dipastikan dengan melakukan tes/uji statistik menggunakan fungsi `cor.test()`
+
+### **Jika sampel data tidak berdistribusi normal, apakah z-score standarization dengan fungsi `scale()` masih tetap dapat digunakan?**
+
+Jika tujuannya hanya untuk melakukan scaling pada data (memperkecil interval pada data bertipe numerik) kita tetap dapat menggunakan z-score standarization walaupun sampel data tidak bersitribusi normal. Tetapi, ketika tujuannya adalah menghitung peluang, maka perhitungan z-score kurang tepat digunakan.
+
+### **Jika nilai p-value yang diperoleh sama dengan nilai alpha yang digunakan, apakah kesimpulan yang dipilih tolak H0 atau gagal tolak H0?**
+
+Pada kasus nilai p-value sama dengan nilai alpha, secara aplikatif umumnya kesimpulan yang dipilih adalah tolak H0. Namun, ada baiknya menambah jumlah sampel untuk memperoleh dan memastikan kesimpulan yang diambil tidak menimbulkan kondisi yang ambigu.
+
+### **Terdapat sumber yang mengatakan bahwa formula untuk menghitung z-score adalah $z = \frac{\bar{x} - \mu_{0}}{\frac{\sigma}{\sqrt{n}}}$, apakah formula tersebut benar?**
+
+Formula tersebut benar untuk menghitung z-score tes/uji hipotesis rata-rata 1 sampel.
+
+### **Bagaimana cara melakukan tes/uji hipotesis untuk proporsi?**
+
+Fungsi yang digunakan masih sama seperti melakukan tes/uji hipotesis rata-rata, yaitu `pnorm()`, namun formula untuk menghitung z-score yang digunakan berbeda. Sehingga, harus dilakukan perhitungan z-score terlebih dahulu dengan formula 
+
+$$z = \frac{\hat{p} - p_{0}}{\sqrt{\frac{p_{0}(1-p_{0})}{n}}}$$ 
+
+Dengan $p^$ adalah proporsi sampel, $p0$ adalah proporsi populasi, dan $n$ adalah jumlah sampel yang diuji/dites. Selanjutnya nilai z-score tersebut yang di-input pada fungsi `pnorm()`.
+
+### **Mengapa jika tingkat alpha pada confidence interval semakin mendekati 0 (confidence interval 100%), selisih nilai batas bawah dan batas atas semakin besar?**
+
+Semakin kecil tingkat alpha, maka interval/selisih batas bawah dan batas atas pada confidence interval akan semakin besar, yang artinya rentang nilai prediksi semakin lebar. Secara sederhana, jika error yang ditoleransi mendekati 0%, maka nilai prediksi harus berada dalam interval/selisih batas bawah dan batas atas pada confidence interval. Supaya memenuhi syarat tersebut, maka interval harus dibuat semakin lebar untuk memastikan bahwa nilai prediksi berada di dalam interval tersebut. 
+
+### **Apakah taraf kepercayaan pada confidence interval selalu 95%?**
+
+Taraf kepercayaan 95% atau alpha 5% adalah taraf kepercayaan atau alpha yang sering digunakan oleh user. Taraf kepercayaan ataupun alpha yang digunakan sebenarnya boleh di angka berapa pun bergantung pada sudut pandan bisnis dan pemrasalahan yang dianalisis. Misal, untuk permasalahan di bidang kesehatan atau transportasi diharapkan error yang dihasilkan sekecil mungkin karena berkaitan dengan jiwa seseorang, maka biasanya digunakan taraf kepercayaan 99% atau alpha 1%.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Metode Sampling
+
+
+
 
 
 
