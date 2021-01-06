@@ -56,7 +56,6 @@ vids <- vids %>%
 
 ```{r, echo=FALSE, rows.print = 6}
 laporan <- read.csv("data/01-DW/data-bugdet.csv")
-paged_table(laporan)
 ```
 
 ## Regular Expression
@@ -79,6 +78,10 @@ names(vids) %>%
 ### **Bagaimana cara mengubah nama kolom dengan bentuk (pattern) tertentu?**
 
 Pada data laporan kita memiliki kolom "hasil_pajak_daerah", "hasil_retribusi_daerah", "hasil_pengelolaan_kekayaan_daerah_yang_dipisahkan". Berikut ini kita akan mengubah nama kolom yang memiliki pattern `hasil_` diubah menjadi `total_` menggunakan function `str_replace()`
+
+```{r}
+paged_table(laporan)
+```
 
 ```{r}
 names(laporan) %>% 

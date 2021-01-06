@@ -26,7 +26,7 @@ library(zoo)
 library(fpp2)
 ```
 
-## Data Wrangling
+## Data Preprocessing
 
 ### **Data time series yang digunakan untuk forecasting harus terurut, lengkap, dan tidak diperkenakan terdapat missaing value (NA). Bagaimana cara melengkapkan urutan waktu yang hilang pada data time series?**
 

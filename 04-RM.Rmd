@@ -22,8 +22,6 @@ library(tidyverse)
 library(fastDummies)
 ```
 
-## Data Wrangling
-
 ## Linear Regression
 
 ### **Bagaimana model regresi linier dengan fungsi `lm()` bekerja jika terdapat prediktor bertipe kategorik?**
