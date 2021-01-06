@@ -242,7 +242,7 @@ Beberapa fakta tentang R-square ($R^2$):
 - $R^2$ adalah persentase total keragaman suatu target variabel yang dapat dijelaskan oleh model regresi  
 - $0 \leq R^2 \leq 1$  
 
-Namun, penggunaan R-square sringkali keliru karena adanya batasan dalam penggunaan metrik ini. R-square cenderung meningkat setiap penambahan variabel prediktor, walaupun variabel prediktor tersebut tidak mempengaruhi variabel target secara signifikan. Akibatnya, model dengan variabel prediktor yang lebih banyak mungkin tampak lebih baik hanya karena memiliki lebih banyak variabel prediktor saja.
+Namun, penggunaan R-square seringkali keliru karena adanya batasan dalam penggunaan metrik ini. R-square cenderung meningkat setiap penambahan variabel prediktor, walaupun variabel prediktor tersebut tidak mempengaruhi variabel target secara signifikan. Akibatnya, model dengan variabel prediktor yang lebih banyak mungkin tampak lebih baik hanya karena memiliki lebih banyak variabel prediktor saja.
 
 Berbeda dengan **Adjusted R-square** yang tidak mengalami peningkatan setiap penambahan variabel prediktor karena adjusted R-square meningkat hanya ketika variabel prediktor baru benar-benar mengarah ke prediksi yang lebih baik (signifikan mempengaruhi variabel target).
 
@@ -250,7 +250,7 @@ Formula adjusted R-squared:
 
 $$R^2_{adj} = 1-(1-R^2)\frac{n-1}{n-p-1}$$
 
-Di mana $n$ adalah jumlah pengamatan dan $p$ adalah jumlah prediktor. Perhatikan bahwa ketika $p$ meningkat, $\frac{n-1}{n-p-1}$ akan mengecil dan mendorong nilai adjusted R-square secara keseluruhan menjadi kecil.
+Dimana $n$ adalah jumlah pengamatan dan $p$ adalah jumlah prediktor. Perhatikan bahwa ketika $p$ meningkat, $\frac{n-1}{n-p-1}$ akan mengecil dan mendorong nilai adjusted R-square secara keseluruhan menjadi kecil.
 
 Salah satu alat statistik yang dapat digunakan untuk mengecek ada/tidak multicolinearity adalah **Variance Inflation Factor** (VIF). VIF mengukur peningkatan estimasi koefisien beta, jika antar prediktor saling berkorelasi. Secara matematis, nilai VIF diperoleh dengan meregresikan setiap prediktor dengan prediktor lain. Contoh: diketahui terdapat $X1, X2, ..., Xn$, nilai VIF untuk $X1$ diperoleh dari hasil regresi $X1$ dengan $X2, ..., Xn$, dst. Hasil regresi tersebut kemudian diterapkan pada formula berikut:
 

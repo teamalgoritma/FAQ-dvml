@@ -66,7 +66,7 @@ laporan <- read.csv("data/01-DW/data-bugdet.csv")
 names(vids)
 ```
 
-Untuk membuat tampilan visualisai menjadi lebih rapi kita dapat mengubah nama kolom menggunakan function `str_replace()` dan `str_to_title()`. Function `str_replace()` akan mengubah nama kolom dengan menghapus pattern "_". Sedangkan function `str_to_title()` akan membuat huruf awal setiap kata menjadi *uppercase*.
+Untuk membuat tampilan visualisasi menjadi lebih rapih kita dapat mengubah nama kolom menggunakan function `str_replace()` dan `str_to_title()`. Function `str_replace()` akan mengubah nama kolom dengan menghapus pattern "_". Sedangkan function `str_to_title()` akan membuat huruf awal setiap kata menjadi *uppercase*.
 
 ```{r}
 names(vids) %>% 

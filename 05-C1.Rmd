@@ -279,7 +279,7 @@ Apabila kedua metric Recall dan Precision sama-sama ingin diharapkan tinggi, dap
 
 $$F = 2 \times \frac{Precision \times Recall}{Precision + Recall}$$
 
-### **Bagaimana cara melakukan penggeseran threshold pada kasus binary classification?**
+### **Bagaimana cara melakukan perubahan threshold pada kasus binary classification?**
 
 Secara default, fungsi `predict()` menggunakan nilai 0.5 sebagai threshold dalam mengklasifikasi kelas positif dan negatif. Kita dapat menggeser nilai threshold tersebut untuk mendapatkan nilai Precision-Recall yang kita inginkan.
 
