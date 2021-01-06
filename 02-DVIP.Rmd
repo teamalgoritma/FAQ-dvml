@@ -59,10 +59,6 @@ laporan <- read.csv("data/02-DVIP/data-bugdet.csv")
 
 ### Base Plot
 
-#### **Bagaimana cara mengatur interval nilai sumbu x untuk visualisasi histogram?**
-
-#### **mba atur scale y di boxplot gmn?**
-
 ### Geom
 
 #### **Bagaimana cara menambahkan separator (,) untuk memisahkan angka ribuan pada label `geom_text()`/`geom_label()` yang terletak pada setiap batang (bar) di bar plot?**
@@ -113,7 +109,7 @@ ggplot(data = iris, aes(x = Species,y = Sepal.Length))+
   scale_color_manual(values = c("red","blue","green"))
 ```
 
-Secara default katgori pada legend akan diurutkan berdasarkan urutan level/kategori:
+Secara default kategori pada legend akan diurutkan berdasarkan urutan level/kategori:
 
 ```{r}
 levels(iris$Species)
@@ -154,7 +150,7 @@ data_viz <- datline %>%
 head(data_viz)
 ```
 
-Setelah data dimanimpulasi, selanjutnya kita dapat melakukan visualisasi seperti biasa. Karena kita ingin membedakan grafik line berdasarkan kategori, kita bisa menggunakan parameter `group` untuk membedakan grafik line berdasarkan category.
+Setelah data dimanipulasi, selanjutnya kita dapat melakukan visualisasi seperti biasa. Karena kita ingin membedakan grafik line berdasarkan kategori, kita bisa menggunakan parameter `group` untuk membedakan grafik line berdasarkan category.
 ```{r}
 ggplot(data = data_viz, aes(x = date,y = value, group = market)) +
   geom_line()
@@ -244,7 +240,7 @@ df <- data.frame(Var1 = rnorm(1000, 50, 10),
 head(df)
 ```
 
-Untuk membuat histogram marginal, kita dapat menggunakan function `ggMarginal()` dari package `ggExtra`. Kita dapat mengatur type grafik sesuai kebutuhan, type yang tersedia yaitu density, histogram, boxplot, violin, dan densigram.
+Untuk membuat histogram marginal, kita dapat menggunakan function `ggMarginal()` dari package `ggExtra`. Kita dapat mengatur tipe grafik sesuai kebutuhan, tipe yang tersedia yaitu density, histogram, boxplot, violin, dan densigram.
 ```{r}
 p <- ggplot(data = df, aes(x = Var1,y = Var2))+
   geom_point()+
@@ -439,7 +435,7 @@ Berikut adalah gambaran elemen-elemen apa saja yang dapat diatur/disesuaikan den
 
   - `legend.text`: digunakan untuk menyesuaikan/mengatur elemen yang berkaitan dengan tulisan pada bagian legend. Digunakan dengan menambahkan parameter `element_text()` untuk mengatur spesifikasi tulisan yang diinginkan mulai dari ukuran (`size`), rata kiri-kanan/alignment (`hjust`), cetak tebal/miring (`face`), dll.
 
-#### **Bagaimana cara mengatur posisi legend secara manual (selain menggunakan position default "none", "left", "right", "bottom", dan "top") supaya posisnya berada di dalam kanvas plotnya?**
+#### **Bagaimana cara mengatur posisi legend secara manual (selain menggunakan position default "none", "left", "right", "bottom", dan "top") supaya posisinya berada di dalam kanvas plotnya?**
 
 Untuk mengatur posisi legend secara manual dapat menambahakan parameter `legend.position` pada `theme` seperti berikut ini: 
 ```{r}
@@ -567,7 +563,7 @@ retail.agg2 %>%
   e_title("Treemap charts")
 ```
 
-#### **Bagaimana cara membuat echarts menjadi interaktif?**
+#### **Bagaimana cara membuat e-charts menjadi interaktif?**
 
 ```{r}
 vids1 %>% 
@@ -605,7 +601,7 @@ hchart(vids2, "line", hcaes(x = trending_date, y = total.video, group = category
   hc_title(text = "Trend Total Video Trending based on Category")
 ```
 
-#### **Bagaimana cara untuk menampilkan popup informasi dari grafik?**
+#### **Bagaimana cara untuk menampilkan pop-up informasi dari grafik?**
 
 Untuk membuat plot menjadi interactive, kita dapat menggunakan package `glue` dan `plotly`. 
 
@@ -632,7 +628,7 @@ data_viz <- data_agg %>%
 head(data_viz)
 ```
 
-Untuk memberikan hovertext pada setiap bar, kita dapat gunakan parameter text dan isi dengan nama kolom yang akan ditampilkan. Selanjutkan, gunakan function `ggplotly()` untuk membuat plot menjadi interactive, parameter tooltip digunakan untuk mengatur informasi yang akan ditampilkan. Secara default, dia akan menampilkan semua informasi yang ada pada parameter aes, ketika kita define "text" artinya kita akan menampilkan informasi dari parameter text.
+Untuk memberikan hovertext pada setiap bar, kita dapat gunakan parameter text dan isi dengan nama kolom yang akan ditampilkan. Selanjutkan, gunakan function `ggplotly()` untuk membuat plot menjadi interactive, parameter tooltip digunakan untuk mengatur informasi yang akan ditampilkan. Secara default, dia akan menampilkan semua informasi yang ada pada parameter `aes`, ketika kita define "text" artinya kita akan menampilkan informasi dari parameter text.
 ```{r}
 # Visualization
 p <- ggplot(data_viz, aes(x = belanja_daerah, y = reorder(daerah, belanja_daerah))) +
@@ -650,7 +646,7 @@ p <- ggplot(data_viz, aes(x = belanja_daerah, y = reorder(daerah, belanja_daerah
 ggplotly(p, tooltip = "text")
 ```
 
-#### **Apakah plotly juga dapat diatur/disesuaikan (custom) secara terpisah dari `ggplot2`? bagaimana caranya?**
+#### **Apakah plotly juga dapat diatur/disesuaikan secara terpisah dari `ggplot2`? **
 
 Bisa, berikut beberapa contoh pengaturan pada `plotly`: 
 

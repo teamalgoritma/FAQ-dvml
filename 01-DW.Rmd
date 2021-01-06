@@ -60,7 +60,7 @@ laporan <- read.csv("data/01-DW/data-bugdet.csv")
 
 ## Regular Expression
 
-### **Bagaimana cara membuat nama kolom menjadi lebih rapi saat dilakukan visualisasi?**
+### **Bagaimana cara membuat nama kolom menjadi lebih rapih saat dilakukan visualisasi?**
 
 ```{r}
 names(vids)
@@ -249,28 +249,6 @@ dat %>%
            sep = ", ")
 ```
 
-### **Bagaimana cara mengatasi missing value pada data?**
-
-Salah satu cara menangani missing value adalah melakukan *imputation* atau mengisi missing value dengan suatu nilai. Package `tidyr` menyediakan function `fill()` yang berfungsi untuk mengisi missing value menggunakan nilai observasi berikutnya atau sebelumnya.
-
-```{r, echo=FALSE}
-treatment <- tribble(
-  ~ person,           ~ treatment, ~response,
-  "Derrick Whitmore", 1,           7,
-  NA,                 2,           10,
-  NA,                 3,           9,
-  "Katherine Burke",  1,           4
-)
-treatment
-```
-
-Function `fill()` memiliki parameter `direction` untuk mengatur arah nilai yang akan diisi. Parameter direction terdiri dari "down", "up", "downup", dan "updown".
-```{r}
-treatment %>% 
-  fill(person,.direction = "down")
-```
-
-Tentunya penanganan tersebut tidak dapat diterapkan untuk semua data, penanganan ini dapat digunakan untuk format data yang memiliki nilai tidak berulang.
 
 ### **Apa perbedaan dari `left_join`, `right_join`, `full_join`, dan `inner_join`?**
 
@@ -305,5 +283,160 @@ stri_trans_general(dat, "latin-ascii")
 ```
 
 ## Handling Missing Value
+
+### **Bagaimana cara mengatasi missing value pada data?**
+
+Salah satu cara menangani missing value adalah melakukan *imputation* atau mengisi missing value dengan suatu nilai. Package `tidyr` menyediakan function `fill()` yang berfungsi untuk mengisi missing value menggunakan nilai observasi berikutnya atau sebelumnya.
+
+```{r, echo=FALSE}
+treatment <- tribble(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+treatment
+```
+
+Function `fill()` memiliki parameter `direction` untuk mengatur arah nilai yang akan diisi. Parameter direction terdiri dari "down", "up", "downup", dan "updown".
+```{r}
+treatment %>% 
+  fill(person,.direction = "down")
+```
+
+Tentunya penanganan tersebut tidak dapat diterapkan untuk semua data, penanganan ini dapat digunakan untuk format data yang memiliki nilai tidak berulang.
+
+## DB Connections
+
+**Bagaimana mengkoneksikan database ke R?**
+
+### MySQL
+
+[Connecting to MySQL from R](https://stackoverflow.com/questions/50544230/connecting-to-mysql-from-r/50544442)
+
+```{r eval=FALSE}
+# 1. Library
+library(RMySQL)
+
+# 2. Settings
+db_user <- 'mydatabase_admin'
+db_password <- 'bintang123#'
+db_name <- 'iris'
+db_table <- 'irisData'
+db_host <- '127.0.0.1' # for local access
+db_port <- 3306
+
+mydb <-  dbConnect(MySQL(), 
+                   user = db_user, 
+                   password = db_password,
+                   dbname = db_name, 
+                   host = db_host, 
+                   port = db_port)
+
+# 3. Read data from db
+# SELECT * FROM irisData LIMIT 5
+s <- paste0("select * from ", db_table, " limit 5")
+rs <- dbSendQuery(mydb, s)
+df <-  fetch(rs)
+on.exit(dbDisconnect(mydb))
+```
+
+### SQL Server
+
+[Connecting to SQL Server from R](https://db.rstudio.com/getting-started/connect-to-database/)
+
+```{r eval=FALSE}
+# 1. Library
+library(DBI)
+library(odbc)
+
+# list driver
+sort(unique(odbcListDrivers()[[1]]))
+
+# 2. Settings
+conn <- dbConnect(odbc(),
+                  Driver = "SQL Server", # check your odbcinst.ini
+                  Server = "localhost\\SQLEXPRESS", # server ip address
+                  Port = 3306, 
+                  UID = "mydatabase_admin", # username
+                  PWD = "bintang123#", # password
+                  Database = "iris") # database name
+```
+
+### SQLite
+
+[Connecting to SQLite from R](https://db.rstudio.com/databases/sqlite/)
+
+1. database
+```{r eval=F}
+# 1. Library
+library(RSQLite)
+library(DBI)
+
+# 2. Settings
+conn <- dbConnect(SQLite(), 
+                  host = '127.0.0.1', # for local host 
+                  port = 3306,
+                  user = 'mydatabase_admin',
+                  password = 'bintang123#',
+                  db = 'iris')
+```
+
+2. local file
+```{r, eval = FALSE}
+# 1. Library
+library(RSQLite)
+library(DBI)
+
+# 2. Settings
+connection <- dbConnect(SQLite(), "data_input/flights.db")
+
+# 3. Read data from db (local file)
+dbListTables(connection)
+
+s <- "select * from airports limit 5"
+rs <- dbSendQuery(connection, s)
+df <-  fetch(rs, n = -1)
+```
+
+### Oracle
+
+- [Connecting to Oracle from R](https://db.rstudio.com/databases/oracle/)
+- [R to Oracle Database Connectivity](https://blogs.oracle.com/r/r-to-oracle-database-connectivity%3a-use-roracle-for-both-performance-and-scalability)
+- [How to Connect to Database in R](http://rprogramming.net/connect-to-database-in-r/)
+
+```{r eval=FALSE}
+# 1. Library
+library(DBI)
+library(odbc)
+library(RODBC)
+
+# 2. Settings
+con <- dbConnect(odbc(),
+                 Driver = "[your driver's name]",
+                 Host   = "[your server's path]",
+                 SVC    = "[your schema's name]",
+                 UID    = "Database user",
+                 PWD    = "Database password",
+                 Port   = 1521)
+```
+
+```{r eval=FALSE}
+# 1. Library
+library(DBI)
+library(odbc)
+library(RJDBC)
+
+# 2. Settings
+drv <- JDBC("oracle.jdbc.OracleDriver",
+classPath="…tklocal/instantclient_11_2/ojdbc5.jar"," ")
+con <- dbConnect(Driver = drv, 
+                 Host = " jdbc:oracle:thin:@myHost:1521:db", 
+                 UID = "user",
+                 PWD = "pass")
+```
+
+
 
 
