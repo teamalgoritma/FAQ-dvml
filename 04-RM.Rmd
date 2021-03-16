@@ -84,6 +84,24 @@ Hipotesis:
 	
 Nilai p-value tersebut harus dibandingkan dengan alpha yang digunakan (p-value < alpha: prediktor signifikan mempengaruhi target variabel) untuk menarik kesimpulan apakah prediktor signifikan mempengaruhi target atau tidak. Namun, hasil summary model regresi linier di R sudah dilengkapi oleh simbol bintang yang mempermudah user untuk menarik kesimpulan. Jika minimal terdapat satu simbol bintang, maka prediktor signifikan mempengaruhi target variabel dengan alpha 5% (p-value < 0.05).
 
+### **Bagaimana cara menampilkan nilai p-value pada output linear model (regresi linier)?**
+
+Output dari fungsi `lm()` di R dapat dilihat melalui fungsi `summary()`. Output tersebut berupa list yang dapat diakses sesuai dengan aturan indexing dan subsetting pada list. 
+```{r}
+lm_mtcars <- lm(mpg ~ cyl, mtcars)
+summary(lm_mtcars)
+```
+
+Untuk mengambil nilai pada index `coefficient`, dapat menggunakan fungsi `summary(model)$coefficient` yang akan menghasilkan output berupa matrix
+```{r}
+summary(lm_mtcars)$coefficient
+```
+
+Kemudian untuk mengambil p-value dari matrix di atas dapat menggunakan aturan indexing dan subsetting pada matrix, dimana nilai yang ingin diambil berada pada kolom ke-4
+```{r}
+summary(lm_mtcars)$coefficient[, 4]
+```
+
 ## Evaluation
 
 ### **Apakah nilai AIC bisa negatif?**

@@ -315,6 +315,47 @@ fviz_pca_biplot(pca_USArrest, habillage = 5, addEllipses = T)
 
 Dari plot di atas terlihat bahwa antar cluster saling tumpang tindih, namun kenyataannya antar cluster pasti memiliki observasi/individu yang unik. Hal tersebut terjadi karena kita mencoba untuk memvisualisasikan cluster yang dibentuk dari 4 dimensi menjadi 2 dimensi saja.
 
+### **Bagaimana memberikan penamaan label dari hasil clustering?**
+
+Algoritma clustering hanya memberikan label 1 sampai $k$, di mana $k$ adalah banyaknya cluster yang terbentuk. Untuk melakukan cluster profiling atau pemberian nama cluster harus berdasarkan hasil interpretasi manusia. Alat bantu cluster profiling yang dapat digunakan adalah:
+
+- Melalui visualisasi PCA - biplot menggunakan `fviz_pca_biplot()`
+- Melihat rangkuman nilai rata-rata (centroid) untuk masing-masing cluster
+
+Sebagai contoh, dari hasil sebelumnya, didapatkan 5 clusters untuk mengelompokkan negara bagian US berdasarkan tingkat kriminalitas dan besar populasinya. Berikut interpretasi clusternya:
+
+```{r}
+USArrests_clean %>% 
+  group_by(cluster) %>% 
+  summarize_all(mean)
+```
+
+- Cluster 1: HIGH crime rate, but MODERATE population -> "HIGH-MODERATE"
+- Cluster 2: LOW crime rate, but HIGH population -> "LOW-HIGH"
+- Cluster 3: LOWEST crime rate and population -> "LOWEST"
+- Cluster 4: HIGHEST crime rate and population -> "HIGHEST"
+- Cluster 5: MODERATE crime rate and population -> "MODERATE"
+
+Menyiapkan dataframe berisi pemetaan dari nomor cluster menjadi label yang diinginkan:
+
+```{r}
+mapping_label <- data.frame(cluster = 1:5,
+                            label = c("HIGH-MODERATE", "LOW-HIGH", 
+                                      "LOWEST", "HIGHEST",
+                                      "MODERATE"))
+
+mapping_label
+```
+
+Melakukan join table `USArrests_clean` dan `mapping_label` dengan fungsi `join()` dari library `plyr`:
+
+```{r}
+USArrests_clean %>% 
+  rownames_to_column("State") %>% 
+  plyr::join(mapping_label) %>% 
+  select(State, label)
+```
+
 ## Mathematics Concept
 
 ### Principal Component Analysis

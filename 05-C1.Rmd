@@ -256,6 +256,20 @@ iris_pred_prob <- predict(iris_multi,
 data.frame(iris_pred_prob) %>% round(8)
 ```
 
+### **Mengapa fungsi `glm()` menghitung log of odds pada saat proses training model regresi logistik?**
+
+Secara sederhana fungsi log yang diterapkan pada nilai odds berguna untuk membuat jarak semula (0) sama untuk kedua peluang, yaitu peluang kelas 0 dan peluang kelas 1. Untuk lebih detailnya Anda dapat membaca referensi berikut [WHAT and WHY of Log Odds](https://towardsdatascience.com/https-towardsdatascience-com-what-and-why-of-log-odds-64ba988bf704)
+
+## K-Neaest Neighbor
+
+### **Bagaimana cara menghitung jarak eucledian dari multiple prediktor (lebih dari 2 prediktor)?**
+
+Tetap dilakukan menggunakan penghitungan eucledian distance, misal menghitung jarak euclidian dari prediktor (a, b, dan c) 
+
+$$e^{2} =  a^{2} + b^{2} + c^{2}$$
+
+Untuk lebih detailnya Anda dapat membaca referensi berikut [Euclidean Distance In 'n'-Dimensional Space](https://hlab.stanford.edu/brian/euclidean_distance_in.html#:~:text=Euclidean%20distance%20is%20a%20measure,two%20points%20in%20Euclidean%20space.&text=In%20an%20example%20where%20there,cell1%20%2D%20xcell2%20)
+
 ## Model Evaluation
 
 ### **Apa yang dimaksud dengan False Positive dan False Negative?**
@@ -318,3 +332,7 @@ confusionMatrix(data = pred_class,
                 reference = model$actual_label,
                 positive = "spam")
 ```
+
+### **Apa kegunaan p-value pada hasil confusionmatrix dari library `caret`?**
+
+Digunakan untuk menguji apakah accuracy yang diperoleh lebih baik dibandingkan proporsi dari data kelas majority. Untuk lebih detailnya Anda dapat membaca referensi berikut [Definition of p-value in carets confusion matrix method](https://stats.stackexchange.com/questions/154479/definition-of-p-value-in-carets-confusion-matrix-method)   
