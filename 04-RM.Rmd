@@ -143,6 +143,51 @@ Nilai AIC memiliki interval dari -inf sampai +inf, sehingga tidak ada ketentuan 
 
 ## Assumption
 
+### **Bagaimana menguji asumsi pada linear regression menggunakan uji statistik?**
+
+**1. Normality of Residuals **
+
+Model linear regression diharapkan menghasilkan **error yang berdistribusi normal**. Dengan begitu, error lebih banyak berkumpul di sekitar angka nol. Asumsi normalitas dapat diuji menggunakan `shapiro.test()`, dengan uji hipotesis sebagai berikut:
+
+* H0: error berdistribusi normal
+* H1: error tidak berdistribusi normal
+
+```{r,  eval=FALSE}
+shapiro.test(model$residuals)
+```
+
+Kondisi yang diharapkan adalah error berdistribusi normal (H0 tidak ditolak), yaitu p-value > 0.05 (tingkat error). 
+
+**2. Homoscedasticity of Residuals**
+
+Diharapkan error yang dihasilkan oleh model menyebar secara acak atau dengan variasi konstan. Apabila divisualisasikan maka error tidak berpola. Kondisi ini disebut juga sebagai homoscedasticity. Homoscedasticity dapat dicek dengan uji statistik `bptest()` dari package `lmtest`
+
+Uji hipotesis Breusch-Pagan:
+
+* H0: error menyebar konstan atau homoscedasticity
+* H1: error menyebar TIDAK konstan atau heteroscedasticity
+
+```{r, eval=FALSE}
+library(lmtest)
+bptest(model)
+```
+
+Kondisi yang diharapkan adalah error menyebar konstan (H0 tidak ditolak), yaitu p-value > 0.05 (tingkat error). 
+
+**3. No Multicollinearity**
+
+Multicollinearity adalah kondisi adanya korelasi antar prediktor yang kuat. Hal ini tidak diinginkan karena menandakan prediktor redundan pada model, yang seharusnya dapat dipilih salah satu saja dari variabel yang hubungannya amat kuat tersebut. Harapannya tidak terjadi multicollinearity
+
+Uji VIF (Variance Inflation Factor) dengan fungsi `vif()` dari package `car`:
+
+```{r, eval=FALSE}
+library(car)
+vif(model_backward)
+```
+
+* nilai VIF > 10: terjadi multicollinearity pada model
+* nilai VIF < 10: tidak terjadi multicollinearity pada model
+
 ### **Mengapa pada asumsi normality yang harus berdistribusi normal adalah error/residual?**
 
 Nilai error/residual yang diharapkan untuk setiap analisis termasuk regrsi linier adalah 0, untuk memastikan bahwa hasil prediksi untuk setiap observasi mendekati atau sama dengan 0, maka diharapkan error/residual berdistribusi normal dimana nilai rata-rata error/residual sama dengan 0. Error/residual pada regresi linier seringkali tidak berdistribusi normal disebabkan oleh beberap faktor, yaitu:
